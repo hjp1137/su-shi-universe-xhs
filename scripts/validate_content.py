@@ -121,9 +121,13 @@ def validate():
         if d.get("review_status") not in ["approved", "published"]:
             errors.append(f"daily-dongpo [{d.get('id')}] 审核状态不合格 ({d.get('review_status')})")
 
-    print("[3/4] 检查跨实体外键引用完整性...")
-    # 1. 检查 works
+    print("[3/4] 检查跨实体外键引用完整性与史料来源深度绑定...")
+    # 1. 检查 works (必须包含有效 source_ids 与 original_text)
     for wid, w in works.items():
+        if not w.get("source_ids"):
+            errors.append(f"work [{wid}] 缺少 source_ids 史料依据，禁止无来源作品上线")
+        if not w.get("original_text") or not isinstance(w.get("original_text"), str) or len(w.get("original_text").strip()) < 10:
+            errors.append(f"work [{wid}] original_text 缺失或过短，无法作为作品正文展示")
         for stid in w.get("station_ids", []):
             if stid not in stations:
                 errors.append(f"work [{wid}] 引用了不存在的 station_id: {stid}")
@@ -131,17 +135,24 @@ def validate():
             if s_id not in sources:
                 errors.append(f"work [{wid}] 引用了不存在的 source_id: {s_id}")
 
-    # 2. 检查 quotes
+    # 2. 检查 quotes (必须包含非空 text 与 source_ids)
     for qid, q in quotes.items():
+        q_text = q.get("text")
+        if not q_text or not isinstance(q_text, str) or len(q_text.strip()) < 4:
+            errors.append(f"quote [{qid}] text 为空或过短，无法作为苏轼原文展示")
+        if not q.get("source_ids"):
+            errors.append(f"quote [{qid}] 缺少 source_ids 史料依据，禁止伪苏轼诗句上线")
         w_id = q.get("work_id")
-        if w_id and w_id not in works:
-            errors.append(f"quote [{qid}] 引用了不存在的 work_id: {w_id}")
+        if not w_id or w_id not in works:
+            errors.append(f"quote [{qid}] 缺失或引用了不存在的 work_id: {w_id}")
         for s_id in q.get("source_ids", []):
             if s_id not in sources:
                 errors.append(f"quote [{qid}] 引用了不存在的 source_id: {s_id}")
 
-    # 3. 检查 events
+    # 3. 检查 events (必须包含有效 source_ids)
     for eid, ev in events.items():
+        if not ev.get("source_ids"):
+            errors.append(f"event [{eid}] 缺少 source_ids 史料依据，生平事件必须可考")
         for stid in ev.get("station_ids", []):
             if stid not in stations:
                 errors.append(f"event [{eid}] 引用了不存在的 station_id: {stid}")
@@ -152,11 +163,13 @@ def validate():
             if s_id not in sources:
                 errors.append(f"event [{eid}] 引用了不存在的 source_id: {s_id}")
 
-    # 4. 检查 stations
+    # 4. 检查 stations (必须包含有效 source_ids)
     if len(stations) != 9:
         errors.append(f"人生站点数量不正确，必须为 9 个，当前为 {len(stations)} 个")
 
     for stid, st in stations.items():
+        if not st.get("source_ids"):
+            errors.append(f"station [{stid}] 缺少 source_ids 史料依据，人生站点必须具备正史/年谱支持")
         for wid in st.get("work_ids", []):
             if wid not in works:
                 errors.append(f"station [{stid}] 引用了不存在的 work_id: {wid}")
@@ -215,13 +228,16 @@ def validate():
     if unreachable_moods:
         errors.append(f"测试题库中存在不可达状态 (无任何选项能给该状态加分): {unreachable_moods}")
 
-    print("[4/4] 敏感词与风险用语扫描...")
+    print("[4/4] 敏感词、高风险心理医疗用语与虚假承诺严格扫描...")
+    # 医疗干预/心理诊断违规词列表
+    strict_forbidden_words = ["治愈", "治疗", "诊断", "抑郁症", "焦虑症", "心理疗法", "处方", "药到病除", "包治", "医学保证"]
+
     def scan_risk_words(text, location):
         if not isinstance(text, str):
             return
-        for rw in RISK_WORDS:
+        for rw in strict_forbidden_words:
             if rw in text:
-                warnings.append(f"{location} 包含高风险/敏感词: '{rw}'，请人工复核是否构成违规疗效承诺")
+                errors.append(f"{location} 包含医疗化/心理干预违规词: '{rw}'，严禁做出心理诊断或疗效承诺！")
 
     for mid, m in moods.items():
         scan_risk_words(m.get("summary", ""), f"mood [{mid}].summary")
@@ -230,6 +246,10 @@ def validate():
     for d in daily_items:
         scan_risk_words(d.get("dongpo_view", ""), f"daily [{d['id']}].dongpo_view")
         scan_risk_words(d.get("today_action", ""), f"daily [{d['id']}].today_action")
+
+    for stid, st in stations.items():
+        scan_risk_words(st.get("dongpo_view", ""), f"station [{stid}].dongpo_view")
+        scan_risk_words(st.get("today_action", ""), f"station [{stid}].today_action")
 
     # 输出结果
     print("\n================ 校验结果汇总 ================")
