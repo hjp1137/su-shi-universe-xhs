@@ -35,11 +35,68 @@ html, body {
   max-width: 480px;
   margin: 0 auto;
   overflow: hidden;
-  /* 现代水墨意境渐变：月光晕染 + 深水墨底色 */
+  background-color: var(--bg-cosmos-deep);
+}
+
+/* 全局东方诗词宇宙背景层 (解耦架构：预留任务15.1 WebGL挂载点 + 现代CSS微光降级) */
+.universe-bg-fx {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: var(--z-bg-fx);
+  overflow: hidden;
+}
+
+/* Layer 1: 远山与云雾层 */
+.cosmos-mist-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background:
-    radial-gradient(circle at 50% 0%, rgba(111, 175, 194, 0.16) 0%, transparent 60%),
-    radial-gradient(circle at 100% 85%, rgba(217, 185, 120, 0.08) 0%, transparent 45%),
-    linear-gradient(180deg, var(--color-bg-deep) 0%, var(--color-bg-mid) 100%);
+    radial-gradient(ellipse at 50% -5%, rgba(92, 178, 199, 0.18) 0%, transparent 65%),
+    radial-gradient(circle at 85% 30%, rgba(229, 178, 99, 0.08) 0%, transparent 40%),
+    linear-gradient(180deg, var(--bg-cosmos-deep) 0%, var(--bg-cosmos-mid) 60%, var(--bg-cosmos-deep) 100%);
+  opacity: 0.9;
+}
+
+/* Layer 2: 微星轨与微星点 (纯 CSS 点阵生成，零外链，零资源) */
+.cosmos-stars-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    radial-gradient(1px 1px at 20px 30px, rgba(238, 243, 250, 0.6), transparent),
+    radial-gradient(1.5px 1.5px at 120px 80px, rgba(229, 178, 99, 0.5), transparent),
+    radial-gradient(1px 1px at 240px 150px, rgba(92, 178, 199, 0.5), transparent),
+    radial-gradient(1.2px 1.2px at 320px 60px, rgba(238, 243, 250, 0.5), transparent),
+    radial-gradient(1px 1px at 80px 240px, rgba(238, 243, 250, 0.4), transparent),
+    radial-gradient(1.5px 1.5px at 280px 310px, rgba(229, 178, 99, 0.45), transparent);
+  background-repeat: repeat;
+  background-size: 360px 420px;
+  opacity: 0.55;
+  animation: starsDrift 60s linear infinite alternate;
+}
+
+@keyframes starsDrift {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-15px, 20px, 0); }
+}
+
+/* Layer 3: 江水微澜反光 */
+.cosmos-ripple-layer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 45%;
+  background: linear-gradient(180deg, transparent 0%, rgba(92, 178, 199, 0.05) 50%, rgba(8, 12, 20, 0.85) 100%);
 }
 
 /* 顶部安全区容器 */

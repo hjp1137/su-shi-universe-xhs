@@ -50,20 +50,20 @@
       title.textContent = '苏轼宇宙';
       hero.appendChild(title);
 
+      var question = document.createElement('div');
+      question.className = 'home-question';
+      question.textContent = '你的人生正在东坡哪一站？';
+      hero.appendChild(question);
+
       var slogan = document.createElement('p');
       slogan.className = 'home-slogan';
       slogan.textContent = '遇到烦心事，先去东坡那里坐一会儿。';
       hero.appendChild(slogan);
 
-      var subdesc = document.createElement('p');
-      subdesc.className = 'home-subdesc';
-      subdesc.textContent = '7道生活化小题 · 看看你更像走在东坡哪一站';
-      hero.appendChild(subdesc);
-
       // 第一主操作 CTA 按钮 (首屏内一览无遗)
       var ctaBox = document.createElement('div');
       ctaBox.className = 'home-cta-box';
-      var mainBtn = UI.createPrimaryButton('看看我的人生正在东坡哪一站', function () {
+      var mainBtn = UI.createPrimaryButton('进入我的东坡时刻', function () {
         Router.navigate('quiz');
       }, 'home-main-cta');
       ctaBox.appendChild(mainBtn);
@@ -167,7 +167,7 @@
       var quizCard = UI.createInkCard(quizCardContent, true, function () {
         Router.navigate('quiz');
       });
-      quizCard.classList.add('home-nav-card', 'nav-quiz');
+      quizCard.classList.add('home-nav-card', 'nav-quiz', 'ink-card-station');
       navList.appendChild(quizCard);
 
       // 路径 2: 逛一逛
@@ -190,7 +190,7 @@
       var univCard = UI.createInkCard(univCardContent, true, function () {
         Router.navigate('universe');
       });
-      univCard.classList.add('home-nav-card', 'nav-universe');
+      univCard.classList.add('home-nav-card', 'nav-universe', 'ink-card-narrative');
       navList.appendChild(univCard);
 
       // 路径 3: 坐一会 (消费统一 Daily 稳定映射结果)
@@ -230,7 +230,7 @@
       var dailyCard = UI.createInkCard(dailyCardContent, true, function () {
         Router.navigate('daily');
       });
-      dailyCard.classList.add('home-nav-card', 'nav-daily');
+      dailyCard.classList.add('home-nav-card', 'nav-daily', 'ink-card-daily');
       navList.appendChild(dailyCard);
 
       wrap.appendChild(navList);
@@ -335,9 +335,9 @@
           stage.removeChild(stage.firstChild);
         }
 
-        // 题目卡片
+        // 题目卡片 (四大语义卡片：叙事解读卡)
         var qCard = document.createElement('div');
-        qCard.className = 'quiz-question-card';
+        qCard.className = 'quiz-question-card ink-card-narrative';
         var qTitle = document.createElement('h2');
         qTitle.className = 'quiz-q-title';
         qTitle.textContent = currentQ.title;
@@ -515,10 +515,11 @@
 
       var wrap = document.createElement('div');
       wrap.className = 'view-wrapper result-narrative-container';
+      wrap.setAttribute('data-station-id', station.id || 'station_huangzhou');
 
       // --- 第 1 层：你到了哪里？ (结果揭晓卡) ---
       var heroCard = document.createElement('div');
-      heroCard.className = 'ink-card result-hero-card';
+      heroCard.className = 'ink-card ink-card-station result-hero-card';
 
       var momentBadge = document.createElement('div');
       momentBadge.className = 'result-moment-badge';
@@ -547,7 +548,7 @@
 
       // --- 第 2 层：苏轼当时怎么了？ (历史现场真实史实卡) ---
       var factCard = document.createElement('div');
-      factCard.className = 'ink-card';
+      factCard.className = 'ink-card ink-card-narrative';
       var factBadge = document.createElement('div');
       factBadge.className = 'result-card-badge';
       factBadge.textContent = '第一幕 · 历史现场';
@@ -565,7 +566,7 @@
 
       // --- 第 3 层：他写下了什么？ (诗句作品卡) ---
       var quoteCard = document.createElement('div');
-      quoteCard.className = 'ink-card';
+      quoteCard.className = 'ink-card ink-card-poem';
       var quoteBadge = document.createElement('div');
       quoteBadge.className = 'result-card-badge';
       quoteBadge.textContent = '第二幕 · 诗词共鸣';
@@ -592,7 +593,7 @@
 
       // --- 第 4 层：他后来怎么过？ (生活实践卡) ---
       var storyCard = document.createElement('div');
-      storyCard.className = 'ink-card';
+      storyCard.className = 'ink-card ink-card-narrative';
       var storyBadge = document.createElement('div');
       storyBadge.className = 'result-card-badge';
       storyBadge.textContent = '第三幕 · 生活实践';
@@ -610,7 +611,7 @@
 
       // --- 第 5 层：今天给你一句话 (现代生活理解) ---
       var sayingCard = document.createElement('div');
-      sayingCard.className = 'ink-card result-saying-card';
+      sayingCard.className = 'ink-card ink-card-narrative result-saying-card';
       var sayingBadge = document.createElement('div');
       sayingBadge.className = 'result-card-badge';
       sayingBadge.textContent = '第四幕 · 现代启发';
@@ -633,7 +634,7 @@
 
       // --- 第 6 层：今天做一件小事 (日常践行卡) ---
       var actionCard = document.createElement('div');
-      actionCard.className = 'ink-card result-action-card';
+      actionCard.className = 'ink-card ink-card-daily result-action-card';
       var actionBadge = document.createElement('div');
       actionBadge.className = 'result-card-badge';
       actionBadge.textContent = '第五幕 · 日常践行';
@@ -819,7 +820,7 @@
             if (c) lastUniverseScrollTop = c.scrollTop;
             Router.navigate('station', { station_id: st.id });
           });
-          card.classList.add('universe-node-card');
+          card.classList.add('universe-node-card', 'ink-card-station');
           item.appendChild(card);
           riverTimeline.appendChild(item);
         })(stations[i], i);
@@ -1158,7 +1159,7 @@
       // --- 4.2 第一幕：人生背景（苏轼当时在哪里、经历什么）---
       if (work.life_background || work.creation_context) {
         var bgCard = document.createElement('div');
-        bgCard.className = 'work-narrative-card';
+        bgCard.className = 'work-narrative-card ink-card-narrative';
         var bgBadge = document.createElement('div');
         bgBadge.className = 'work-narrative-badge';
         bgBadge.textContent = '第一幕 · 真实人生境遇';
@@ -1178,7 +1179,7 @@
       // --- 4.3 第二幕：代表名句与诗词全文（带展开/折叠）---
       if (work.lead_quote) {
         var quoteBox = document.createElement('div');
-        quoteBox.className = 'work-quote-feature';
+        quoteBox.className = 'work-quote-feature ink-card-poem';
         var qMark1 = document.createElement('div');
         qMark1.className = 'work-quote-mark';
         qMark1.textContent = '“';
@@ -1387,9 +1388,14 @@
       dateHeader.appendChild(stampBadge);
       wrap.appendChild(dateHeader);
 
-      // 书法名句卡片
+      // 书法名句卡片 (四大语义卡片：今日东坡每日签)
       var quoteCard = document.createElement('div');
-      quoteCard.className = 'daily-quote-card';
+      quoteCard.className = 'daily-quote-card ink-card-daily';
+
+      var sealStamp = document.createElement('div');
+      sealStamp.className = 'daily-seal-stamp';
+      sealStamp.textContent = '东坡\n小笺';
+      quoteCard.appendChild(sealStamp);
 
       var qMark1 = document.createElement('div');
       qMark1.className = 'work-quote-mark';

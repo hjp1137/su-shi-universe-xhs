@@ -1,53 +1,77 @@
 /**
- * 苏轼宇宙小红书小工具 - Design Tokens 规范
+ * 苏轼宇宙小红书小工具 - Design Tokens 2.0 规范 (docs/11)
  * 遵循基线：Chrome 61 / ES2017 / Skill 1.6.0
- * 视觉主题：现代水墨 × 深靛蓝 × 月色 × 江水 × 暖灯火
+ * 视觉主题：现代水墨 × 深靛蓝 × 月色 × 江水 × 微星图 × 人间烟火
  */
 
 :root {
-  /* 1. 色彩系统 - 背景与主基调 */
-  --color-bg-deep: #0E1830;
-  --color-bg-mid: #162441;
-  --color-bg-card: rgba(255, 255, 255, 0.07);
-  --color-bg-card-hover: rgba(255, 255, 255, 0.12);
-  --color-bg-elevated: rgba(22, 36, 65, 0.95);
+  /* 1. 四层空间深度系统 (Space Depth Layers) */
+  --bg-cosmos-deep: #080c14;                      /* 极夜墨底 */
+  --bg-cosmos-mid: #0f1728;                       /* 深靛蓝江水 */
+  --bg-cosmos-light: #172238;                     /* 山岚薄暮 */
+  --bg-mist-layer: rgba(76, 160, 180, 0.07);      /* 远山云雾层 */
+  --bg-moon-glow: rgba(238, 243, 250, 0.09);      /* 月影水光微晕 */
 
-  /* 2. 色彩系统 - 文本与层级 */
-  --color-moon: #F4F0E6;
-  --color-text-primary: #F6F3EA;
-  --color-text-secondary: rgba(246, 243, 234, 0.75);
-  --color-text-muted: rgba(246, 243, 234, 0.45);
+  /* 2. 兼容旧色彩定义并升级色阶 */
+  --color-bg-deep: var(--bg-cosmos-deep);
+  --color-bg-mid: var(--bg-cosmos-mid);
+  --color-bg-card: rgba(22, 34, 56, 0.65);
+  --color-bg-card-hover: rgba(30, 46, 74, 0.78);
+  --color-bg-elevated: rgba(15, 23, 40, 0.96);
 
-  /* 3. 色彩系统 - 意象高亮与情绪点缀 */
-  --color-river: #6FAFC2;
-  --color-river-dim: rgba(111, 175, 194, 0.2);
-  --color-jade: #82B6A2;
-  --color-warm: #D9B978;
-  --color-warm-dim: rgba(217, 185, 120, 0.18);
+  /* 3. 东方月色文本层级 */
+  --color-moon: #EEF3FA;                          /* 澄明月白 */
+  --color-text-primary: #F4F7FC;                  /* 月白主文 */
+  --color-text-secondary: #B6C3D9;                /* 霁蓝次文 */
+  --color-text-muted: #73839E;                    /* 烟青说明文 */
 
-  /* 4. 色彩系统 - 边框与分割线 */
-  --color-divider: rgba(255, 255, 255, 0.10);
-  --color-border-subtle: rgba(255, 255, 255, 0.12);
-  --color-border-active: rgba(111, 175, 194, 0.55);
+  /* 4. 水墨江流与生活暖金 */
+  --color-river: #5CB2C7;                         /* 青蓝江水 */
+  --color-river-dim: rgba(92, 178, 199, 0.22);
+  --color-warm: #E5B263;                          /* 暖金灯火与希望 */
+  --color-warm-dim: rgba(229, 178, 99, 0.20);
+  --color-jade: #7EBAA2;                          /* 青玉山色 */
 
-  /* 5. 字体栈与字阶 */
+  /* 5. 九大人生站点专属情绪色彩 (Station Mood Colors) */
+  --station-meishan: #4A9D80;                     /* 01 眉山 · 苍翠青山 */
+  --station-jingshi: #D4A74E;                     /* 02 京师 · 盛世金芒 */
+  --station-mizhou: #6B8BA4;                      /* 03 密州 · 荒原寒月 */
+  --station-wutai: #4F5E75;                       /* 04 乌台 · 幽暗墨雨 */
+  --station-huangzhou: #E2A850;                   /* 05 黄州 · 江月新生 (核心转折) */
+  --station-hangzhou: #3B988F;                    /* 06 杭州 · 湖山晴雨 */
+  --station-huizhou: #BA7752;                     /* 07 惠州 · 岭南暖泥 */
+  --station-danzhou: #3D7CA8;                     /* 08 儋州 · 天涯星海 */
+  --station-changzhou: #7A8296;                   /* 09 常州 · 静水微澜 */
+
+  /* 6. 四大语义卡片视觉质感 (Card Tokens) */
+  --card-station-border: rgba(92, 178, 199, 0.28);
+  --card-poem-border: rgba(229, 178, 99, 0.32);
+  --card-daily-seal: #C44C3A;                     /* 朱砂印泥色 */
+  --card-narrative-border: rgba(238, 243, 250, 0.14);
+
+  /* 7. 边框与分割线 */
+  --color-divider: rgba(238, 243, 250, 0.08);
+  --color-border-subtle: rgba(238, 243, 250, 0.12);
+  --color-border-active: rgba(92, 178, 199, 0.55);
+
+  /* 8. 字体栈与文学排版字阶 */
   --font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
                       "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
   --font-size-brand: 28px;
   --font-size-h1: 24px;
   --font-size-h2: 20px;
   --font-size-h3: 18px;
-  --font-size-body: 16px;
-  --font-size-caption: 14px;
+  --font-size-body: 15px;
+  --font-size-caption: 13px;
   --font-size-tag: 12px;
 
-  /* 6. 行高规范 */
+  /* 9. 行高体系 */
   --line-height-tight: 1.25;
   --line-height-normal: 1.5;
   --line-height-body: 1.75;
-  --line-height-poem: 2.0;
+  --line-height-poem: 2.1;
 
-  /* 7. 4pt/8pt 间距体系 */
+  /* 10. 4pt/8pt 间距 */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -58,29 +82,31 @@
   --space-12: 48px;
   --space-16: 64px;
 
-  /* 8. 圆角体系 */
+  /* 11. 圆角体系 */
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 16px;
   --radius-xl: 24px;
   --radius-pill: 9999px;
 
-  /* 9. 阴影与微光 */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
-  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.35);
-  --shadow-button: 0 4px 16px rgba(111, 175, 194, 0.3);
-  --shadow-glow: 0 0 24px rgba(111, 175, 194, 0.25);
+  /* 12. 阴影与水墨光晕 */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-card: 0 6px 24px rgba(0, 0, 0, 0.45);
+  --shadow-button: 0 4px 18px rgba(92, 178, 199, 0.35);
+  --shadow-glow: 0 0 28px rgba(92, 178, 199, 0.28);
+  --shadow-warm-glow: 0 0 28px rgba(229, 178, 99, 0.26);
 
-  /* 10. 动效时长与缓动 (克制、低频、60fps硬件加速) */
+  /* 13. 动效时长与微动效 */
   --motion-fast: 150ms ease;
   --motion-normal: 250ms ease;
   --motion-slow: 400ms ease;
   --motion-enter: 280ms cubic-bezier(0.16, 1, 0.3, 1);
-  --motion-breathe: 4800ms ease-in-out infinite alternate;
+  --motion-breathe: 5200ms ease-in-out infinite alternate;
   --motion-drift: 12000ms ease-in-out infinite alternate;
   --motion-pulse: 2600ms cubic-bezier(0.25, 0.8, 0.25, 1) infinite;
 
-  /* 11. 层级管理 */
+  /* 14. 层级管理 */
+  --z-bg-fx: 0;
   --z-base: 1;
   --z-card: 10;
   --z-nav: 50;
@@ -88,10 +114,9 @@
   --z-modal: 500;
   --z-toast: 1000;
 
-  /* 12. 容器安全区双兼容 (Skill 1.6.0 规范) */
+  /* 15. 安全区双兼容 */
   --safe-area-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
   --safe-area-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
   --safe-area-left: var(--safe-area-inset-left, env(safe-area-inset-left, 0px));
   --safe-area-right: var(--safe-area-inset-right, env(safe-area-inset-right, 0px));
 }
-

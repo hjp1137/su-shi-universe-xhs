@@ -14,6 +14,13 @@
 </head>
 <body>
   <div class="app-shell">
+    <!-- 全局东方诗词宇宙背景层 (解耦架构：纯CSS微光水墨降级 + 预留任务15.1 WebGL挂载点) -->
+    <div id="universe-bg-fx" class="universe-bg-fx" aria-hidden="true">
+      <div class="cosmos-stars-layer"></div>
+      <div class="cosmos-mist-layer"></div>
+      <div class="cosmos-ripple-layer"></div>
+    </div>
+
     <!-- 统一顶部导航栏 (双安全区) -->
     <header id="app-header" class="app-header">
       <div class="nav-bar">

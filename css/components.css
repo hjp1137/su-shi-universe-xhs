@@ -154,7 +154,7 @@
   transform: scale(0.97);
 }
 
-/* 6. InkCard 水墨质感卡片 */
+/* 6. InkCard 水墨质感通用卡片基类 */
 .ink-card {
   position: relative;
   background-color: var(--color-bg-card);
@@ -165,6 +165,52 @@
   margin-bottom: var(--space-4);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+}
+
+/* 6.1 语义卡片一：人生站点卡 (.ink-card-station) */
+.ink-card-station {
+  background: linear-gradient(135deg, rgba(23, 34, 56, 0.85) 0%, rgba(15, 23, 40, 0.92) 100%);
+  border: 1px solid var(--card-station-border);
+  border-left: 4px solid var(--color-river);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(238, 243, 250, 0.08);
+}
+
+/* 6.2 语义卡片二：诗词名作卡 (.ink-card-poem) */
+.ink-card-poem {
+  background: radial-gradient(circle at 50% 0%, rgba(92, 178, 199, 0.12) 0%, rgba(15, 23, 40, 0.90) 80%);
+  border: 1px solid var(--card-poem-border);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.48), 0 0 18px rgba(92, 178, 199, 0.12);
+  text-align: center;
+  padding: var(--space-6) var(--space-5);
+}
+
+.ink-card-poem::before,
+.ink-card-poem::after {
+  content: "";
+  display: block;
+  width: 48px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--color-warm), transparent);
+  margin: 0 auto;
+}
+.ink-card-poem::before { margin-bottom: var(--space-3); }
+.ink-card-poem::after { margin-top: var(--space-3); }
+
+/* 6.3 语义卡片三：今日东坡每日签 (.ink-card-daily) */
+.ink-card-daily {
+  background: linear-gradient(180deg, rgba(28, 40, 64, 0.88) 0%, rgba(18, 27, 44, 0.95) 100%);
+  border: 1px solid rgba(229, 178, 99, 0.35);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5), inset 0 0 24px rgba(229, 178, 99, 0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 6.4 语义卡片四：叙事与生活解读卡 (.ink-card-narrative) */
+.ink-card-narrative {
+  background: rgba(18, 28, 48, 0.72);
+  border: 1px solid var(--card-narrative-border);
+  border-left: 3px solid var(--color-warm);
+  box-shadow: var(--shadow-card);
 }
 
 .ink-card-interactive {
