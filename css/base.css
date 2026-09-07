@@ -1,0 +1,107 @@
+/**
+ * 苏轼宇宙小红书小工具 - 全局基线与样式重置
+ * 遵循基线：Chrome 61 / ES2017 / Skill 1.6.0
+ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background-color: var(--color-bg-deep);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+/* 统一 App Shell 容器 (弹性双安全区 + 最大宽度居中) */
+.app-shell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  overflow: hidden;
+  /* 现代水墨意境渐变：月光晕染 + 深水墨底色 */
+  background:
+    radial-gradient(circle at 50% 0%, rgba(111, 175, 194, 0.16) 0%, transparent 60%),
+    radial-gradient(circle at 100% 85%, rgba(217, 185, 120, 0.08) 0%, transparent 45%),
+    linear-gradient(180deg, var(--color-bg-deep) 0%, var(--color-bg-mid) 100%);
+}
+
+/* 顶部安全区容器 */
+.app-header {
+  flex-shrink: 0;
+  z-index: var(--z-header);
+  padding-top: var(--safe-area-top);
+  padding-left: var(--safe-area-left);
+  padding-right: var(--safe-area-right);
+  background: rgba(14, 24, 48, 0.75);
+  border-bottom: 1px solid var(--color-divider);
+}
+
+/* 主内容可滚动区域 */
+.app-main {
+  flex: 1;
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding-left: var(--safe-area-left);
+  padding-right: var(--safe-area-right);
+}
+
+/* 底部安全区容器 */
+.app-footer {
+  flex-shrink: 0;
+  z-index: var(--z-nav);
+  padding-bottom: var(--safe-area-bottom);
+  padding-left: var(--safe-area-left);
+  padding-right: var(--safe-area-right);
+  background: rgba(14, 24, 48, 0.75);
+  border-top: 1px solid var(--color-divider);
+}
+
+/* Chrome 61 兼容层：flex-gap 回退基线 */
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.gap-sm > * + * {
+  margin-top: var(--space-2);
+}
+.gap-md > * + * {
+  margin-top: var(--space-4);
+}
+.gap-lg > * + * {
+  margin-top: var(--space-6);
+}
+
+.flex-row.gap-sm > * + * {
+  margin-top: 0;
+  margin-left: var(--space-2);
+}
+.flex-row.gap-md > * + * {
+  margin-top: 0;
+  margin-left: var(--space-4);
+}

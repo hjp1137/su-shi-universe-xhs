@@ -1,0 +1,160 @@
+/**
+ * 苏轼宇宙小红书小工具 - 8 个核心逻辑视图样式规范
+ * 遵循基线：Chrome 61 / ES2017 / Skill 1.6.0
+ */
+
+/* 视图公共包装容器 */
+.view-wrapper {
+  padding: var(--space-4) var(--space-4) var(--space-8);
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 1. 首页 Home 样式 */
+.home-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--space-6) 0 var(--space-4);
+}
+
+.home-badge {
+  font-size: var(--font-size-tag);
+  letter-spacing: 2px;
+  color: var(--color-river);
+  border: 1px solid rgba(111, 175, 194, 0.35);
+  border-radius: var(--radius-pill);
+  padding: 3px 12px;
+  background-color: rgba(14, 24, 48, 0.6);
+  margin-bottom: var(--space-4);
+}
+
+.home-logo {
+  width: 72px;
+  height: 72px;
+  display: block;
+  filter: drop-shadow(0 4px 16px rgba(111, 175, 194, 0.25));
+  margin-bottom: var(--space-3);
+}
+
+.home-title {
+  font-size: var(--font-size-brand);
+  font-weight: 600;
+  letter-spacing: 4px;
+  color: var(--color-moon);
+  margin-bottom: var(--space-2);
+}
+
+.home-slogan {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-normal);
+  letter-spacing: 1px;
+  margin-bottom: var(--space-6);
+}
+
+.home-nav-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.home-nav-list > * + * {
+  margin-top: var(--space-3);
+}
+
+.nav-card-title {
+  font-size: var(--font-size-h3);
+  font-weight: 600;
+  color: var(--color-moon);
+  margin-bottom: var(--space-1);
+}
+
+.nav-card-desc {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
+}
+
+/* 2. 测试页 Quiz 样式 */
+.quiz-question-box {
+  margin-bottom: var(--space-6);
+}
+
+.quiz-option-list > * + * {
+  margin-top: var(--space-3);
+}
+
+.quiz-option-card {
+  padding: var(--space-4) var(--space-5);
+  border-left: 3px solid transparent;
+}
+
+.quiz-option-card:hover, .quiz-option-card:active {
+  border-left-color: var(--color-river);
+}
+
+/* 3. 结果页 Result 样式 */
+.result-header-card {
+  text-align: center;
+  padding: var(--space-6) var(--space-4);
+}
+
+.result-station-name {
+  font-size: var(--font-size-brand);
+  color: var(--color-moon);
+  letter-spacing: 2px;
+  margin-bottom: var(--space-2);
+}
+
+.result-station-mood {
+  font-size: var(--font-size-body);
+  color: var(--color-river);
+  margin-bottom: var(--space-4);
+}
+
+.result-actions > * + * {
+  margin-top: var(--space-3);
+}
+
+/* 4. 宇宙页 Universe 生命线样式 */
+.timeline-container {
+  position: relative;
+  padding-left: var(--space-6);
+  border-left: 2px solid rgba(111, 175, 194, 0.3);
+  margin-left: var(--space-3);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: var(--space-5);
+}
+
+.timeline-dot {
+  position: absolute;
+  left: calc(-1 * var(--space-6) - 5px);
+  top: 14px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-river);
+  box-shadow: 0 0 8px var(--color-river);
+}
+
+/* 5. 分享卡预览 Share-Card 样式 */
+.share-preview-card {
+  border: 1px solid rgba(244, 240, 230, 0.25);
+  background: linear-gradient(180deg, rgba(22, 36, 65, 0.9) 0%, rgba(14, 24, 48, 0.95) 100%);
+  padding: var(--space-6) var(--space-5);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  margin-bottom: var(--space-6);
+  text-align: center;
+}
+
+.share-brand-tag {
+  font-size: var(--font-size-tag);
+  color: var(--color-text-muted);
+  letter-spacing: 2px;
+  margin-top: var(--space-4);
+}

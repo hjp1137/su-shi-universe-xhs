@@ -226,7 +226,7 @@ def main():
     if not run_official_audits():
         sys.exit(1)
     print(f"\n==========================================")
-    print(f"任务 2 数据底座与官方双重审计全部完成！")
+    print(f"苏轼宇宙离线 H5 构建与官方双重审计全部完成！")
     print(f"产物目录: {DIST_DIR}")
     print(f"ZIP 产物: {ZIP_OUTPUT}")
     print(f"==========================================")

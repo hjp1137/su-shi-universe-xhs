@@ -1,7 +1,6 @@
 /**
- * 苏轼宇宙小红书小工具 - 主业务逻辑入口
+ * 苏轼宇宙小红书小工具 - 主业务入口与 App Shell 协同器
  * 遵循基线：ES2017 / Chrome 61 / Classic Script
- * 依赖关系：须在 namespace.js, data.js, bridge.js 之后加载
  */
 
 (function () {
@@ -9,80 +8,87 @@
 
   var root = typeof window !== 'undefined' ? window : this;
   var SuShi = root.SuShiUniverse || {};
+  var Router = SuShi.Router;
+  var UI = SuShi.UI;
 
-  var currentIndex = 0;
-  var btnExplore = null;
-  var feedbackText = null;
+  var viewTitles = {
+    'home': '苏轼宇宙',
+    'quiz': '人生问答',
+    'result': '东坡站点',
+    'universe': '宇宙生命线',
+    'station': '站点详情',
+    'work': '作品赏析',
+    'daily': '今日东坡',
+    'share-card': '卡片预览',
+    'error-demo': '系统状态'
+  };
 
-  // 默认备选文案（数据未加载时的兜底）
-  var fallbackQuotes = [
-    '莫听穿林打叶声，何妨吟啸且徐行。',
-    '人间有味是清欢。',
-    '万里归来颜愈少，微笑，笑时犹带岭梅香。',
-    '小舟从此逝，江海寄余生。',
-    '且将新火试新茶，诗酒趁年华。'
-  ];
+  var navTitleEl = null;
+  var navLeftEl = null;
 
-  function getDailyList() {
-    if (SuShi.Data && Array.isArray(SuShi.Data.dailyDongpo) && SuShi.Data.dailyDongpo.length > 0) {
-      return SuShi.Data.dailyDongpo;
+  function handleViewChange(info) {
+    if (!navTitleEl || !navLeftEl) {
+      navTitleEl = document.getElementById('nav-title');
+      navLeftEl = document.getElementById('nav-left');
     }
-    return null;
+
+    // 1. 动态更新顶部标题
+    if (navTitleEl) {
+      var titleText = viewTitles[info.name] || '苏轼宇宙';
+      navTitleEl.textContent = titleText;
+    }
+
+    // 2. 动态管理返回按钮
+    if (navLeftEl) {
+      while (navLeftEl.firstChild) {
+        navLeftEl.removeChild(navLeftEl.firstChild);
+      }
+
+      if (info.canBack && info.name !== 'home') {
+        var backBtn = UI.createBackButton(function () {
+          Router.back();
+        });
+        navLeftEl.appendChild(backBtn);
+      }
+    }
   }
 
   function init() {
-    btnExplore = document.getElementById('btn-explore');
-    feedbackText = document.getElementById('feedback-text');
+    navTitleEl = document.getElementById('nav-title');
+    navLeftEl = document.getElementById('nav-left');
 
-    if (btnExplore) {
-      btnExplore.addEventListener('click', handleExploreClick);
+    // 监听逻辑路由变化
+    if (Router && typeof Router.onViewChange === 'function') {
+      Router.onViewChange(handleViewChange);
     }
 
-    // 检查并确认本地数据底座装载状态
+    // 校验离线数据底座装载状态
     if (SuShi.Data && SuShi.Data.stations) {
-      console.log('[SuShiUniverse] 本地数据底座装载成功：' +
-                  SuShi.Data.stations.length + ' 个站点，' +
-                  SuShi.Data.works.length + ' 部作品，' +
-                  SuShi.Data.quotes.length + ' 条诗句。');
+      console.log('[SuShiUniverse] 离线数据底座就绪：' +
+                  SuShi.Data.stations.length + ' 站点，' +
+                  SuShi.Data.works.length + ' 作品，' +
+                  SuShi.Data.quotes.length + ' 诗句');
     } else {
-      console.warn('[SuShiUniverse] 未检测到离线数据底座，使用兜底逻辑');
+      console.warn('[SuShiUniverse] 离线数据底座未就绪');
     }
 
-    // 探测官方容器环境
-    var bridge = SuShi.Bridge;
-    if (bridge && bridge.isAvailable()) {
-      console.log('[SuShiUniverse] 运行在小红书官方 Native 容器内');
+    // 探测小红书官方 Native Bridge
+    if (SuShi.Bridge && SuShi.Bridge.isAvailable()) {
+      console.log('[SuShiUniverse] 官方容器 Native Bridge 已连接');
     } else {
-      console.log('[SuShiUniverse] 运行在离线 H5 本地预览环境中');
+      console.log('[SuShiUniverse] 运行于离线 H5 预览环境');
+    }
+
+    // 初始导航至首页视图
+    if (Router && typeof Router.navigate === 'function') {
+      Router.navigate('home', {}, true);
     }
   }
 
-  function handleExploreClick() {
-    var dailyList = getDailyList();
-    var displayText = '';
-
-    if (dailyList) {
-      var item = dailyList[currentIndex % dailyList.length];
-      currentIndex += 1;
-      // 联动查询 quote 原文
-      var quoteObj = SuShi.Data.getQuoteById(item.quote_id);
-      var quoteText = quoteObj ? quoteObj.text : item.quote_id;
-      displayText = '“' + quoteText + '” —— ' + item.dongpo_view;
-    } else {
-      displayText = fallbackQuotes[currentIndex % fallbackQuotes.length];
-      currentIndex += 1;
-    }
-
-    if (feedbackText) {
-      feedbackText.textContent = displayText;
-    }
-  }
-
-  // 挂载至应用命名空间
+  // 挂载至命名空间
   SuShi.App.init = init;
-  SuShi.App.handleExploreClick = handleExploreClick;
 
-  // 页面加载启动
+  // DOM 就绪后启动
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {

@@ -15,5 +15,8 @@
   root.SuShiUniverse.Bridge = root.SuShiUniverse.Bridge || {};
   root.SuShiUniverse.Data = root.SuShiUniverse.Data || {};
   root.SuShiUniverse.Store = root.SuShiUniverse.Store || {};
+  root.SuShiUniverse.UI = root.SuShiUniverse.UI || {};
+  root.SuShiUniverse.Router = root.SuShiUniverse.Router || {};
+  root.SuShiUniverse.Views = root.SuShiUniverse.Views || {};
   root.SuShiUniverse.App = root.SuShiUniverse.App || {};
 })();
