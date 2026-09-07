@@ -3,210 +3,516 @@
     "id": "work_xingshang_lun",
     "title": "刑赏忠厚之至论",
     "genre": "文",
-    "station_ids": ["station_jingshi"],
+    "station_ids": [
+      "station_jingshi"
+    ],
     "creation_context": "嘉祐二年（1057）苏轼在京师参加进士考试时所作试策，深受欧阳修赏识，一举成名。",
     "why_related": "苏轼青年时代才华被天下看见的重要转折节点代表作。",
-    "source_ids": ["source_sswj_cb", "source_songshi_sushi"],
-    "review_status": "approved"
+    "source_ids": [
+      "source_sswj_cb",
+      "source_songshi_sushi"
+    ],
+    "review_status": "approved",
+    "time_label": "嘉祐二年（1057）",
+    "place_label": "汴京礼部贡院",
+    "lead_quote": "可以赏可以无赏，赏之过乎仁；可以罚可以无罚，罚之不若过乎义。",
+    "lead_guide": "二十岁名动京华的策论之作，奠定苏轼一生仁厚宽舒的政治哲学底色。",
+    "life_background": "嘉祐二年，二十岁的苏轼随父苏洵、弟苏辙初次出蜀赴京参加礼部进士考试。主考官欧阳修读到此篇《刑赏忠厚之至论》，大为惊叹其文气磅礴、说理透辟，甚至怀疑为同僚曾巩所作，极力向天下推重。",
+    "original_text": "尧、舜、禹、汤、文、武、成、康之际，何其爱民之深，忧民之切，而待天下以君子长者之道也！思其第，亦无以加矣。\n可以赏可以无赏，赏之过乎仁；可以罚可以无罚，罚之不若过乎义。过乎仁，不失为君子；过乎义，陵迟而至于奸，故刑不可不慎也。\n诗曰：『君子如祉，乱庶遄已。君子如怒，乱庶遄沮。』夫君子岂不能怒？但以忠厚为主，不以怒为威耳。",
+    "why_at_this_moment": "青年苏轼以古喻今，回答如何在国家治理中拿捏赏罚尺度，体现出不以威势压人、以忠厚为本的远大器量。",
+    "how_it_responds": "面对功名试场，苏轼并未迎合世俗权谋机巧，而是坚持『当行于所当行，止于所不可不止』的宽厚文风与政治品格。",
+    "modern_meaning": "在评价他人或面对争议时，宁可失之于仁厚，也不要失之于刻薄。给他人留余地，也是给自己的人生留空间。",
+    "source_note": "原文见《苏轼文集·卷二》，史料参《宋史·苏轼传》及孔凡礼《苏轼年谱》。"
   },
   {
     "id": "work_jiangchengzi_mizhou",
     "title": "江城子·密州出猎",
     "genre": "词",
-    "station_ids": ["station_mizhou"],
+    "station_ids": [
+      "station_mizhou"
+    ],
     "creation_context": "熙宁八年（1075）冬苏轼任密州知州时出猎所作，开豪放词派先河。",
     "why_related": "体现中年苏轼面对边患国事与自身际遇时的豪迈担当之气。",
-    "source_ids": ["source_dply_cb", "source_ssnp_kfl"],
-    "review_status": "approved"
+    "source_ids": [
+      "source_dply_cb",
+      "source_ssnp_kfl"
+    ],
+    "review_status": "approved",
+    "time_label": "熙宁八年（1075）冬",
+    "place_label": "密州常山（诸城）",
+    "lead_quote": "老夫聊发少年狂，左牵黄，右擎苍，锦帽貂裘，千骑卷平冈。",
+    "lead_guide": "中年知州的意气风发，在边地苦寒与天灾肆虐中挺身而出的昂扬担当。",
+    "life_background": "熙宁八年，苏轼任密州知州。当时密州蝗旱交加、盗贼蜂起、民生困顿，西北边境又有辽与西夏的战云笼罩。苏轼在此率领官民捕蝗抗旱、抚恤弃儿，冬日出猎常山演习骑射。",
+    "original_text": "老夫聊发少年狂，左牵黄，右擎苍，锦帽貂裘，千骑卷平冈。为报倾城随太守，亲射虎，看孙郎。\n酒酣胸胆尚开张。鬓微霜，又何妨！持节云中，何日遣冯唐？会挽雕弓如满月，西北望，射天狼。",
+    "why_at_this_moment": "苏轼年近四十，两鬓渐染微霜，但面对地方困顿与国家危局，胸中报国壮志从未熄灭，打破了当时宋词专写儿女情长的柔靡之风，首开豪放词派先河。",
+    "how_it_responds": "以狂放豪迈的姿态冲破现实的重压，以主动作为的精气神对抗中年疲惫与边地苦寒。",
+    "modern_meaning": "人到中年，即使头上有了白发、肩上有千斤重担，心里依然可以保留一股少年般的意气与热烈，敢于直面生活的硬仗。",
+    "source_note": "原文见《东坡乐府笺》，史料参孔凡礼《苏轼年谱》。"
   },
   {
     "id": "work_shuidiaogetou_mingyue",
     "title": "水调歌头·明月几时有",
     "genre": "词",
-    "station_ids": ["station_mizhou"],
+    "station_ids": [
+      "station_mizhou"
+    ],
     "creation_context": "丙辰中秋（1076），苏轼在密州欢饮达旦，兼怀子由所作。",
     "why_related": "中秋怀亲与人生哲思之巅，体现从人事离合到天地通达的心境跃迁。",
-    "source_ids": ["source_dply_cb", "source_ssnp_kfl"],
-    "review_status": "approved"
+    "source_ids": [
+      "source_dply_cb",
+      "source_ssnp_kfl"
+    ],
+    "review_status": "approved",
+    "time_label": "熙宁九年（1076）中秋",
+    "place_label": "密州超然台",
+    "lead_quote": "人有悲欢离合，月有阴晴圆缺，此事古难全。但愿人长久，千里共婵娟。",
+    "lead_guide": "千古中秋绝唱，从个人离愁飞升到宇宙哲思，在接纳不完美中释怀。",
+    "life_background": "熙宁九年丙辰中秋，苏轼与胞弟苏辙已分别六七年未能相聚。苏轼在密州官舍超然台欢饮达旦，望月怀人，深感仕途风波与骨肉天各一方之苦。",
+    "original_text": "丙辰中秋，欢饮达旦，大醉，作此篇，兼怀子由。\n明月几时有？把酒问青天。不知天上宫阙，今夕是何年。我欲乘风归去，又恐琼楼玉宇，高处不胜寒。起舞弄清影，何似在人间。\n转朱阁，低绮户，照无眠。不应有恨，何事长向别时圆？人有悲欢离合，月有阴晴圆缺，此事古难全。但愿人长久，千里共婵娟。",
+    "why_at_this_moment": "四十岁的人生关口，面对朝政纷扰与至亲相隔，苏轼没有陷入怨尤，而是将目光投向浩瀚明月，探寻人与天地的终极关系。",
+    "how_it_responds": "借宇宙自然规律参透人事聚散：月圆月缺本是自然常态，悲欢离合亦是人生必然，唯有坦然接纳缺憾，才能生发跨越时空的深情祝愿。",
+    "modern_meaning": "完美本是人生的奢望，聚散皆有定数。接纳不完满，不把遗憾变成内耗，把最真诚的心意送给远方在意的人。",
+    "source_note": "原文见《东坡乐府笺》，胡仔《苕溪渔隐丛话》赞其『中秋词自东坡水调歌头一出，余词尽废』。"
   },
   {
     "id": "work_jiangchengzi_yimao",
     "title": "江城子·乙卯正月二十日夜记梦",
     "genre": "词",
-    "station_ids": ["station_mizhou"],
+    "station_ids": [
+      "station_mizhou"
+    ],
     "creation_context": "熙宁八年（1075）正月，苏轼在密州梦见亡妻王弗，醒后悲痛写下此词。",
     "why_related": "苏轼深沉深情人生面向的代表作，千古悼亡绝唱。",
-    "source_ids": ["source_dply_cb"],
-    "review_status": "approved"
+    "source_ids": [
+      "source_dply_cb"
+    ],
+    "review_status": "approved",
+    "time_label": "熙宁八年（1075）正月二十日",
+    "place_label": "密州官舍",
+    "lead_quote": "十年生死两茫茫，不思量，自难忘。千里孤坟，无处话凄凉。",
+    "lead_guide": "宋词悼亡第一名篇。真挚深沉的平实之语，道尽生死阻隔的人间深情。",
+    "life_background": "苏轼结发妻子王弗于治平二年（1065）病逝于京师，归葬眉山祖茔。十年之后（1075），苏轼在密州知州任上夜梦亡妻，醒后无限凄怆写下此词。",
+    "original_text": "十年生死两茫茫，不思量，自难忘。千里孤坟，无处话凄凉。纵使相逢应不识，尘满面，鬓如霜。\n夜来幽梦忽归乡，小轩窗，正梳妆。相顾无言，惟有泪千行。料得年年肠断处，明月夜，短松冈。",
+    "why_at_this_moment": "十年沧桑，世事翻覆。苏轼从意气风发的青年才俊历经官场倾轧与边地磨折，内心的柔软与思念在梦境中毫无防备地奔涌而出。",
+    "how_it_responds": "不加雕琢，以近乎口语的白描直书其事，展现苏轼在坚毅豪迈之外，对爱人矢志不渝的温润深情。",
+    "modern_meaning": "真正的深情不需要时刻挂在嘴边，它沉淀在时间的骨子里。允许自己脆弱与流泪，接纳生命中那些无法弥补的告别。",
+    "source_note": "原文见《东坡乐府笺》，陈廷焯《白雨斋词话》评其『有声有泪，是一往情深』。"
   },
   {
     "id": "work_yuzhong_ziyou",
     "title": "狱中寄子由二首",
     "genre": "诗",
-    "station_ids": ["station_wutai"],
+    "station_ids": [
+      "station_wutai"
+    ],
     "creation_context": "元丰二年（1079）苏轼深陷乌台诗案御史台狱中，自料必死时给弟弟苏辙的绝笔诗。",
     "why_related": "苏轼一生最深沉的生死考验与患难兄弟情谊之真实记录。",
-    "source_ids": ["source_sssc_cb", "source_songshi_sushi"],
-    "review_status": "approved"
+    "source_ids": [
+      "source_sssc_cb",
+      "source_songshi_sushi"
+    ],
+    "review_status": "approved",
+    "time_label": "元丰二年（1079）十二月",
+    "place_label": "汴京御史台狱中（乌台）",
+    "lead_quote": "是处青山可埋骨，他年夜雨独伤神。与君世世为兄弟，更结来生未了因。",
+    "lead_guide": "人生至暗之时的生死绝笔，在命悬一线的绝境中托付灵魂与至爱。",
+    "life_background": "元丰二年，苏轼因诗作被言官罗织罪名，逮捕入御史台狱受审百余日（乌台诗案）。一日狱卒送饭偶换鱼肉，苏轼误以为朝廷已决意处死自己，遂写下二诗托狱吏转交苏辙。",
+    "original_text": "其一：\n圣主如天万物春，小臣愚暗自亡身。\n百年未满先偿债，十口无归更累人。\n是处青山可埋骨，他年夜雨独伤神。\n与君世世为兄弟，更结来生未了因。\n\n其二：\n柏台霜气夜凄凄，风动琅珰月向低。\n梦绕云山心似鹿，魂飞汤火命如鸡。\n眼中厚眷消何日？眼中清辉到几时？\n独夜长鸣天不语，一池秋水照清羸。",
+    "why_at_this_moment": "在生死未卜、肉体受刑、尊严受辱的至暗时刻，苏轼直面死亡的降临，心中最放不下的是家小的安顿和与苏辙的手足之情。",
+    "how_it_responds": "没有怨天尤人，而是将兄弟相约『夜雨对床』的夙愿托付给来生，展现出穿透死亡的生命挚爱与尊严。",
+    "modern_meaning": "当外界的狂风暴雨夺走一切确定性时，唯有内心最真挚的爱与牵挂，能成为撑住一个人不至崩溃的最终支柱。",
+    "source_note": "原文见《苏轼诗集·卷二十》，史料参《宋史·苏轼传》及朋九万《东坡乌台诗案》。"
   },
   {
     "id": "work_chudao_huangzhou",
     "title": "初到黄州",
     "genre": "诗",
-    "station_ids": ["station_huangzhou"],
+    "station_ids": [
+      "station_huangzhou"
+    ],
     "creation_context": "元丰三年（1080）苏轼贬谪初抵黄州所作，写下初到荒僻小城的清贫与从容安顿。",
     "why_related": "记录低谷起点，展现不怨尤、先安顿日常的生活姿态。",
-    "source_ids": ["source_sssc_cb", "source_ssnp_kfl"],
-    "review_status": "approved"
+    "source_ids": [
+      "source_sssc_cb",
+      "source_ssnp_kfl"
+    ],
+    "review_status": "approved",
+    "time_label": "元丰三年（1080）二月",
+    "place_label": "黄州定惠院",
+    "lead_quote": "自笑平生为口忙，老来事业转荒唐。长江绕郭知鱼美，好竹连山觉笋香。",
+    "lead_guide": "劫后余生初抵蛮荒贬所，以幽默自嘲和寻常鱼笋安顿受惊的灵魂。",
+    "life_background": "元丰三年正月初一，苏轼走出乌台死狱，被贬为黄州团练副使，本州安置，不得签书公事。二月携长子苏迈初抵黄州，寄居在城东定惠院寓所。",
+    "original_text": "自笑平生为口忙，老来事业转荒唐。\n长江绕郭知鱼美，好竹连山觉笋香。\n逐客不妨员外置，诗人例作水曹郎。\n只惭无补丝毫事，尚费官家俸禄粮。",
+    "why_at_this_moment": "大难不死，一身疲惫，官职微末且受监视。初到偏远小城黄州，苏轼面临从名满天下到政治弃儿的巨大心理落差。",
+    "how_it_responds": "以『自笑』破局，把视线从政治挫败迅速转向江水之鱼、山间之竹，在最日常的烟火滋味里找回对生活的触感。",
+    "modern_meaning": "跌入低谷时，别急着证明什么。先吃好一顿饭，看清眼前的花草山水，把生活的发条慢慢重新上紧。",
+    "source_note": "原文见《苏轼诗集·卷二十一》，史料参孔凡礼《苏轼年谱》。"
   },
   {
     "id": "work_dingfengbo_moting",
     "title": "定风波·莫听穿林打叶声",
     "genre": "词",
-    "station_ids": ["station_huangzhou"],
+    "station_ids": [
+      "station_huangzhou"
+    ],
     "creation_context": "元丰五年（1082）春三月，苏轼在黄州沙湖道中遇雨，同行皆狼狈，独苏轼缓行吟啸。",
     "why_related": "苏轼人生哲学最核心的凝练，直面风雨、徐行旷达的标志性名篇。",
-    "source_ids": ["source_dply_cb", "source_ssnp_kfl"],
-    "review_status": "approved"
+    "source_ids": [
+      "source_dply_cb",
+      "source_ssnp_kfl"
+    ],
+    "review_status": "approved",
+    "time_label": "元丰五年（1082）三月七日",
+    "place_label": "黄州沙湖道中",
+    "lead_quote": "莫听穿林打叶声，何妨吟啸且徐行。竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。",
+    "lead_guide": "苏轼旷达哲学的最高凝练，风雨中缓步徐行，归来也无风雨也无晴。",
+    "life_background": "元丰五年三月七日，苏轼在沙湖看田，途中突降大雨，同行者皆因无雨具而狼狈奔逃，唯独苏轼泰然处之，拄杖缓行吟啸。不久雨过天晴，写下此词。",
+    "original_text": "三月七日，沙湖道中遇雨。雨具先去，同行皆狼狈，余独不觉。已而遂晴，故作此词。\n莫听穿林打叶声，何妨吟啸且徐行。竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。\n料峭春风吹酒醒，微冷，山头斜照却相迎。回首向来萧瑟处，归去，也无风雨也无晴。",
+    "why_at_this_moment": "在黄州开荒东坡、躬耕自食三年之后，苏轼已经彻底完成内心重构，自然界的一场骤雨成为了他人生哲学的最佳外化隐喻。",
+    "how_it_responds": "不让外界的声音乱了内心的节拍，把避无可避的逆境当作人生的常态，以平常心跨越晴雨顺逆。",
+    "modern_meaning": "生活里的突发变故，往往就像路上一场猝不及防的阵雨。既然躲不开，何不停下奔跑，按照自己的步调安步徐行。",
+    "source_note": "原文见《东坡乐府笺》，小序及正文均经朱祖谋校勘。"
   },
   {
     "id": "work_chibi_fu",
     "title": "赤壁赋",
     "genre": "赋",
-    "station_ids": ["station_huangzhou"],
+    "station_ids": [
+      "station_huangzhou"
+    ],
     "creation_context": "元丰五年（1082）秋，苏轼与客泛舟游黄州赤壁之下，感叹江月造化与人生短促。",
     "why_related": "在江上清风与山间明月中安顿生命，将挫折升华为主客双清的豁达生命观。",
-    "source_ids": ["source_sswj_cb", "source_ssnp_kfl"],
-    "review_status": "approved"
+    "source_ids": [
+      "source_sswj_cb",
+      "source_ssnp_kfl"
+    ],
+    "review_status": "approved",
+    "time_label": "元丰五年（1082）七月十六日",
+    "place_label": "黄州赤壁矶下长江",
+    "lead_quote": "寄蜉蝣于天地，渺沧海之一粟。惟江上之清风，与山间之明月，是造物者之无尽藏也，而吾与子之所共适。",
+    "lead_guide": "中国文赋巅峰之作。在水月流转与天地造化中，参透生命的虚无与丰盈。",
+    "life_background": "元丰五年秋，苏轼与好友客饮赤壁之下。月白风清，客人吹箫发吊古之哀，感叹英雄湮灭、人生短促如蜉蝣。苏轼借水月之变与不变，展开主客问答释怀。",
+    "original_text": "壬戌之秋，七月既望，苏子与客泛舟游于赤壁之下。清风徐来，水波不兴。举酒属客，诵明月之诗，歌窈窕之章。少焉，月出于东山之上，徘徊于斗牛之间。白露横江，水光接天。纵一苇之所如，凌万顷之茫然。浩浩乎如冯虚御风，而不知其所止；飘飘乎如遗世独立，羽化而登仙。\n于是饮酒乐甚，扣舷而歌之。歌曰：『桂棹兮兰桨，击空明兮溯流光。渺渺兮予怀，望美人兮天一方。』客有吹洞箫者，倚歌而和之。其声呜呜然，如怨如慕，如泣如诉，余音袅袅，不绝如缕。舞幽壑之潜蛟，泣孤舟之嫠妇。\n苏子愀然，正襟危坐而问客曰：『何为其然也？』客曰：『「月明星稀，乌鹊南飞」，此非曹孟德之诗乎？西望夏口，东望武昌，山川相缪，郁乎苍苍，此非孟德之困于周郎者乎？方其破荆州，下江陵，顺流而东也，舳舻千里，旌旗蔽空，酾酒临江，横槊赋诗，固一世之雄也，而今安在哉？况吾与子渔樵于江渚之上，侣鱼虾而友麋鹿，驾一叶之扁舟，举匏樽以相属。寄蜉蝣于天地，渺沧海之一粟。哀吾生之须臾，羡长江之无穷。挟飞仙以遨游，抱明月而长终。知不可乎骤得，托遗响于悲风。』\n苏子曰：『客亦知夫水与月乎？逝者如斯，而未尝往也；盈虚者如彼，而卒莫消长也。盖将自其变者而观之，则天地曾不能以一瞬；自其不变者而观之，则物与我皆无尽也，而又何羡乎！且夫天地之间，物各有主，苟非吾之所有，虽一毫而莫取。惟江上之清风，与山间之明月，耳得之而为声，目遇之而成色，取之无禁，用之不竭，是造物者之无尽藏也，而吾与子之所共适。』\n客喜而笑，洗盏更酌。肴核既尽，杯盘狼籍。相与枕藉乎舟中，不知东方之既白。",
+    "why_at_this_moment": "经历了政治风暴后，苏轼对世俗功名有了根本性的反思。赤壁的浩荡江流成为他安放生命有限性与宇宙无限性的最佳场域。",
+    "how_it_responds": "从『变』中看到人生的无常短促，又从『不变』中看到个体内在精神与天地的永恒相通，最终在不贪恋外物、尽享当下清风明月中实现心灵的自足。",
+    "modern_meaning": "很多时候我们的焦虑源于既想抓住抓不住的过去，又想占有占不了的未来。天地间最好的清风明月与当下心安，其实从来不需要花钱去争抢。",
+    "source_note": "原文见《苏轼文集·卷一》，元丰五年手稿真迹藏于台北故宫博物院。"
   },
   {
     "id": "work_niannujiao_chibi",
     "title": "念奴娇·赤壁怀古",
     "genre": "词",
-    "station_ids": ["station_huangzhou"],
+    "station_ids": [
+      "station_huangzhou"
+    ],
     "creation_context": "元丰五年（1082）苏轼泛舟赤壁矶所作，抒发对三国英雄风流的追慕与自省。",
     "why_related": "大江东去淘尽风波，将个人际遇置于浩荡历史长河中释怀。",
-    "source_ids": ["source_dply_cb"],
-    "review_status": "approved"
+    "source_ids": [
+      "source_dply_cb"
+    ],
+    "review_status": "approved",
+    "time_label": "元丰五年（1082）秋",
+    "place_label": "黄州赤壁矶",
+    "lead_quote": "大江东去，浪淘尽，千古风流人物。人生如梦，一尊还酹江月。",
+    "lead_guide": "宋词豪放第一词。把个人一时的成败得失，投入千古历史长河中一笑释怀。",
+    "life_background": "元丰五年秋，四十七岁的苏轼在黄州赤壁矶眺望滚滚长江，回想三国周瑜谈笑破曹的雄姿，对比自己头生白发、贬谪闲居的处境，写下豪放词名篇。",
+    "original_text": "大江东去，浪淘尽，千古风流人物。故垒西边，人道是，三国周郎赤壁。乱石穿空，惊涛拍岸，卷起千堆雪。江山如画，一时多少豪杰。\n遥想公瑾当年，小乔初嫁了，雄姿英发。羽扇纶巾，谈笑间，樯橹灰飞烟灭。故国神游，多情应笑我，早生华发。人生如梦，一尊还酹江月。",
+    "why_at_this_moment": "赤壁战场的雄伟历史与个体的衰老失意形成强烈张力。苏轼通过对英雄壮举的追慕，照见自我内心的执念与解脱。",
+    "how_it_responds": "不沉湎于感伤自怜，而是把视野放大到万古时空——再伟大的英雄也会被浪花淘尽，何苦为一时的坎坷耿耿于怀？",
+    "modern_meaning": "当我们觉得当下的坎过不去时，不妨把时间轴拉长到十年、百年。天地如此辽阔，把眼光放宽，给自己敬一杯当下的月光。",
+    "source_note": "原文见《东坡乐府笺》，胡仔《苕溪渔隐丛话》录入。"
   },
   {
     "id": "work_linjiangxian_lingao",
     "title": "临江仙·夜归临皋",
     "genre": "词",
-    "station_ids": ["station_huangzhou"],
+    "station_ids": [
+      "station_huangzhou"
+    ],
     "creation_context": "元丰五年（1082）九月，苏轼夜饮东坡醒复醉，归家门闭倚杖听江声所作。",
     "why_related": "静夜面对长江流水，寻找心灵真正归宿与自由的安然姿态。",
-    "source_ids": ["source_dply_cb"],
-    "review_status": "approved"
+    "source_ids": [
+      "source_dply_cb"
+    ],
+    "review_status": "approved",
+    "time_label": "元丰五年（1082）九月",
+    "place_label": "黄州临皋亭",
+    "lead_quote": "长恨此身非我有，何时忘却营营。夜阑风静縠纹平。小舟从此逝，江海寄余生。",
+    "lead_guide": "深夜归家被闭于门外，不恼不怒，倚杖听江声中探寻精神归宿。",
+    "life_background": "元丰五年九月，苏轼在东坡雪堂夜饮，半醉归临皋寓所，家童已酣睡鼾声如雷，叩门不应。苏轼索性信步走到江边，倚杖静听江水声。",
+    "original_text": "夜饮东坡醒复醉，归来仿佛三更。家童鼻息已雷鸣。敲门都不应，倚杖听江声。\n长恨此身非我有，何时忘却营营。夜阑风静縠纹平。小舟从此逝，江海寄余生。",
+    "why_at_this_moment": "在世俗生活与官场枷锁之间，静夜的江面映照出苏轼对精神彻底自由的永恒向往。",
+    "how_it_responds": "进不去门便不去硬敲，把尴尬转变为静坐听江声的幽独美感，把对现实束缚的喟叹化为开阔的精神寄托。",
+    "modern_meaning": "在忙碌琐碎的社会角色之外，留一个属于自己的深夜十分钟。放下必须达成的执念，允许自己的心灵在辽阔处透口气。",
+    "source_note": "原文见《东坡乐府笺》，叶梦得《避暑录话》记次日黄州谣传东坡脱屣泛舟去。"
   },
   {
     "id": "work_zhurou_song",
     "title": "猪肉颂",
     "genre": "文",
-    "station_ids": ["station_huangzhou"],
+    "station_ids": [
+      "station_huangzhou"
+    ],
     "creation_context": "元丰年间苏轼在黄州自创慢火煨炖红烧肉，并作此趣味文赋记之。",
     "why_related": "在微贱食材与朴素厨房中找寻至味，以美食化解困顿的烟火实践。",
-    "source_ids": ["source_sswj_cb"],
-    "review_status": "approved"
+    "source_ids": [
+      "source_sswj_cb"
+    ],
+    "review_status": "approved",
+    "time_label": "元丰三年至五年（1080—1082）",
+    "place_label": "黄州",
+    "lead_quote": "净洗铛，少著水，柴头罨烟焰不起。待他自熟莫催他，火候足时他自美。",
+    "lead_guide": "慢火煨出至味，用朴素厨房的一碗红烧肉，把苦日子过出活色生香。",
+    "life_background": "黄州物产丰饶而价廉，当地富贵人不肯吃猪肉，贫穷人又不会烹调。贬官无权俸薄的苏轼，便买来便宜猪肉，自创小火慢炖秘诀，作诙谐打油诗记之。",
+    "original_text": "净洗铛，少著水，柴头罨烟焰不起。\n待他自熟莫催他，火候足时他自美。\n黄州好猪肉，价贱如泥土。\n贵者不肯吃，贫者不解煮。\n早晨起来打两碗，饱得自家君莫管。",
+    "why_at_this_moment": "在经济拮据、生活困窘的贬谪岁月里，苏轼展现出极高的生活造诣，不以物贱而鄙薄，以双手创造日常幸福。",
+    "how_it_responds": "『待他自熟莫催他』既是烹饪秘籍，更是面对人生困境的心法——耐得住性子慢慢熬，水到自然渠成。",
+    "modern_meaning": "无论生活处在什么低谷，先把厨房的热气升起来。很多事情急不得，火候到了，滋味自然会出来。",
+    "source_note": "原文见《苏轼文集·卷六十五》，后世著名的『东坡肉』烹饪理论源头。"
   },
   {
     "id": "work_yinhushang_chuning",
     "title": "饮湖上初晴后雨二首·其二",
     "genre": "诗",
-    "station_ids": ["station_hangzhou"],
+    "station_ids": [
+      "station_hangzhou"
+    ],
     "creation_context": "熙宁六年（1073）苏轼任杭州通判时泛舟西湖所作，将西湖比作西子。",
     "why_related": "无论晴天或雨天皆能领略天地之美，从容做事与享受生活的完美融合。",
-    "source_ids": ["source_sssc_cb", "source_ssnp_kfl"],
-    "review_status": "approved"
+    "source_ids": [
+      "source_sssc_cb",
+      "source_ssnp_kfl"
+    ],
+    "review_status": "approved",
+    "time_label": "熙宁六年（1073）正、二月间",
+    "place_label": "杭州西湖",
+    "lead_quote": "水光潋滟晴方好，山色空蒙雨亦奇。欲把西湖比西子，淡妆浓抹总相宜。",
+    "lead_guide": "晴也好，雨也奇。以包容万物的审美眼光，看见世间一切境遇的美丽。",
+    "life_background": "熙宁六年，苏轼任杭州通判。一日与客泛舟西湖饮酒，恰逢天气由晴转雨，湖光山色在晴雨变幻间各具姿态，苏轼随兴赋下这首千古名诗。",
+    "original_text": "水光潋滟晴方好，山色空蒙雨亦奇。\n欲把西湖比西子，淡妆浓抹总相宜。",
+    "why_at_this_moment": "远离了汴京变法争斗的漩涡，杭州优美的湖山与深厚的江南民风，极大地抚慰了苏轼的心灵，激发其盎然生机。",
+    "how_it_responds": "不因下雨而扫兴，反而从雨幕中发现『山色空蒙』的别样奇趣。把对天气的随缘欣赏，升华为对生命常态的接纳。",
+    "modern_meaning": "顺风顺水固然明艳，跌宕起伏亦是风景。换一种眼光看生活，晴有晴的欢欣，雨有雨的意境。",
+    "source_note": "原文见《苏轼诗集·卷九》，奠定西湖『西子湖』美称的奠基之作。"
   },
   {
     "id": "work_wanghulong_zuishu",
     "title": "望湖楼醉书五绝·其一",
     "genre": "诗",
-    "station_ids": ["station_hangzhou"],
+    "station_ids": [
+      "station_hangzhou"
+    ],
     "creation_context": "熙宁五年（1072）苏轼在杭州望湖楼饮酒时遇骤雨骤晴所作。",
     "why_related": "白雨跳珠忽又风卷云开，象征世间风云来去匆匆，水天自有一色从容。",
-    "source_ids": ["source_sssc_cb"],
-    "review_status": "approved"
+    "source_ids": [
+      "source_sssc_cb"
+    ],
+    "review_status": "approved",
+    "time_label": "熙宁五年（1072）六月二十七日",
+    "place_label": "杭州望湖楼",
+    "lead_quote": "黑云翻墨未遮山，白雨跳珠乱入船。卷地风来忽吹散，望湖楼下水如天。",
+    "lead_guide": "骤雨忽来忽去，风云过眼皆空。面对生活突来的雷雨，静待水天一色。",
+    "life_background": "熙宁五年夏，苏轼在杭州西湖望湖楼上饮酒。湖上骤起黑云暴雨，雨点狂跳入船，随即大风疾吹，阴霾骤散，天水复归澄明。",
+    "original_text": "黑云翻墨未遮山，白雨跳珠乱入船。\n卷地风来忽吹散，望湖楼下水如天。",
+    "why_at_this_moment": "苏轼敏锐捕捉大自然迅疾的动态生机，将雷霆万钧与风平浪静并置于极短篇幅中。",
+    "how_it_responds": "暴风雨看似遮天蔽日，但终究会被一阵风卷散。无论经历多大的波澜，世界最终都会回归平静。",
+    "modern_meaning": "情绪上头或突遭变故时，记住这只是一阵疾风骤雨。不必慌张奔逃，坐看云起云散，很快又是水如青天。",
+    "source_note": "原文见《苏轼诗集·卷八》，纪晓岚评其『写骤雨奇景，神妙莫测』。"
   },
   {
     "id": "work_wangjiangnan_chaoran",
     "title": "望江南·超然台作",
     "genre": "词",
-    "station_ids": ["station_mizhou"],
+    "station_ids": [
+      "station_mizhou"
+    ],
     "creation_context": "熙宁九年（1076）春，苏轼登密州超然台，兼怀故园所作。",
     "why_related": "且将新火试新茶，诗酒趁年华，表达立足当下珍惜当下的生命热情。",
-    "source_ids": ["source_dply_cb"],
-    "review_status": "approved"
+    "source_ids": [
+      "source_dply_cb"
+    ],
+    "review_status": "approved",
+    "time_label": "熙宁九年（1076）暮春",
+    "place_label": "密州超然台",
+    "lead_quote": "休对故人思故国，且将新火试新茶。诗酒趁年华。",
+    "lead_guide": "不沉缅于不可挽回的过往，点燃新火试新茶，立足当下珍惜年华。",
+    "life_background": "熙宁九年暮春，苏轼登密州城北超然台（苏辙所命名，取老子『虽有荣观，燕处超然』之意）眺望，春寒料峭，杨柳飞花，思乡感怀而作。",
+    "original_text": "春未老，风细柳斜斜。试上超然台上看，半壕春水一城花。烟雨暗千家。\n寒食后，酒醒却咨嗟。休对故人思故国，且将新火试新茶。诗酒趁年华。",
+    "why_at_this_moment": "在思乡与政治困境的双重郁积下，苏轼登上超然台，以俯瞰的超脱视野劝慰自己与故人。",
+    "how_it_responds": "『休对』是一种主动的心态决断——与其对不可逆的过去长吁短叹，不如把握眼前的一壶新茶与当下时光。",
+    "modern_meaning": "别总在回忆里后悔过去，也不要在担忧中透支明天。烧一壶水，泡一杯新茶，把今天的好天气认认真真过完。",
+    "source_note": "原文见《东坡乐府笺》，孔凡礼《苏轼年谱》系于熙宁九年暮春。"
   },
   {
     "id": "work_huizhou_shilichi",
     "title": "惠州一绝 / 食荔枝",
     "genre": "诗",
-    "station_ids": ["station_huizhou"],
+    "station_ids": [
+      "station_huizhou"
+    ],
     "creation_context": "绍圣三年（1096）苏轼贬谪惠州时尝岭南荔枝所作。",
     "why_related": "日啖荔枝三百颗，不辞长作岭南人，体现惊人的环境适应力与生活乐观度。",
-    "source_ids": ["source_sssc_cb", "source_ssnp_kfl"],
-    "review_status": "approved"
+    "source_ids": [
+      "source_sssc_cb",
+      "source_ssnp_kfl"
+    ],
+    "review_status": "approved",
+    "time_label": "绍圣三年（1096）四月",
+    "place_label": "惠州",
+    "lead_quote": "日啖荔枝三百颗，不辞长作岭南人。",
+    "lead_guide": "六十岁远贬烟瘴之地，以一颗饱满甘甜的荔枝，消解一切苦难与流放。",
+    "life_background": "绍圣元年苏轼被新党一贬再贬，远逐岭南惠州。当时岭南被视作瘴疠之乡、九死一生之地，而年届花甲的苏轼却在绍圣三年尝到鲜美的荔枝后作此诗。",
+    "original_text": "罗浮山下四时春，卢橘杨梅次第新。\n日啖荔枝三百颗，不辞长作岭南人。",
+    "why_at_this_moment": "面对政敌将自己置之死地的恶意惩罚，苏轼以惊人的乐观和随遇而安，将流放地过成了水土丰美的乐园。",
+    "how_it_responds": "用具体的美味对抗抽象的苦难，用对当地水土的热爱打破被贬逐的受害者心态。",
+    "modern_meaning": "不管被命运抛到多偏僻、多不情愿的处境里，总能找到属于那里的独特甜意。心怀坦荡，哪里都能安家。",
+    "source_note": "原文见《苏轼诗集·卷三十九》，清代查慎行评此诗『达观妙语，非东坡不能道』。"
   },
   {
     "id": "work_dingfengbo_nanhaigui",
     "title": "定风波·南海归赠王定国侍人寓娘",
     "genre": "词",
-    "station_ids": ["station_huizhou"],
+    "station_ids": [
+      "station_huizhou"
+    ],
     "creation_context": "元丰六年（1083）苏轼感念王巩之妾柔奴随行岭南历尽艰辛却面容愈少而作。",
     "why_related": "此心安处是吾乡，从他人的坚韧中映照出心安即归所的博大情怀。",
-    "source_ids": ["source_dply_cb"],
-    "review_status": "approved"
+    "source_ids": [
+      "source_dply_cb"
+    ],
+    "review_status": "approved",
+    "time_label": "元丰六年（1083）",
+    "place_label": "黄州",
+    "lead_quote": "试问岭南应不好，却道：此心安处是吾乡。",
+    "lead_guide": "千古心安之问。不论身在何处，只要内心澄澈安定，哪里都是故乡。",
+    "life_background": "苏轼好友王巩（字定国）因乌台诗案株连被贬极南宾州，其歌妓柔奴（寓娘）毅然随行数年。元丰六年王巩北归途经黄州访苏轼，苏轼问柔奴岭南风土如何，柔奴答以『此心安处，便是吾乡』，苏轼大受触动作此词。",
+    "original_text": "常羡人间琢玉郎，天应乞与点酥娘。尽道清愁茹不得，翻宿，暗香浮动月黄昏。\n万里归来颜愈少，微笑，笑时犹带岭梅香。试问岭南应不好，却道：此心安处是吾乡。",
+    "why_at_this_moment": "苏轼从柔奴的从容安详中，看到了超越性别与阶层的坚韧力量，为自己后来贬谪惠州、儋州奠定了深厚的心境底色。",
+    "how_it_responds": "将地理上的流放与漂泊，转化为精神上的自足与安详。真正决定一个人苦乐的不是外部环境，而是内心的安顿程度。",
+    "modern_meaning": "我们常常在漂泊与内卷中追寻安全感。但最好的归属感不在别处，而在能守住自己本心的平静内在。",
+    "source_note": "原文见《东坡乐府笺》，小序及题注详见龙榆生校订本。"
   },
   {
     "id": "work_liuyue_duhai",
     "title": "六月二十日夜渡海",
     "genre": "诗",
-    "station_ids": ["station_danzhou"],
+    "station_ids": [
+      "station_danzhou"
+    ],
     "creation_context": "元符三年（1100）苏轼遇赦北归，夜渡琼州海峡时所作。",
     "why_related": "九死南荒吾不恨，兹游奇绝冠平生。晚年跨越生死磨砺后的终极释怀与达观。",
-    "source_ids": ["source_sssc_cb", "source_ssnp_kfl"],
-    "review_status": "approved"
+    "source_ids": [
+      "source_sssc_cb",
+      "source_ssnp_kfl"
+    ],
+    "review_status": "approved",
+    "time_label": "元符三年（1100）六月二十日夜",
+    "place_label": "琼州海峡舟中",
+    "lead_quote": "九死南荒吾不恨，兹游奇绝冠平生。",
+    "lead_guide": "六十五岁遇赦渡海北归，将九死一生的荒蛮流放，视作平生最奇绝的馈赠。",
+    "life_background": "绍圣四年苏轼被贬琼州儋耳（海南岛），元符三年徽宗即位大赦，苏轼得以渡海北归。在深夜跨越琼州海峡的舟船上，回望三年天涯岁月，写下这首壮美史诗。",
+    "original_text": "参横斗转欲三更，苦雨终风也解晴。\n云散月明谁点缀？天容海色本澄清。\n空余鲁叟乘桴意，粗识轩辕奏乐声。\n九死南荒吾不恨，兹游奇绝冠平生。",
+    "why_at_this_moment": "跨越人生最险绝的生死关头，历尽苦难北归，老人的心中没有半点仇恨与戾气，唯有天海般澄澈明净的生命气象。",
+    "how_it_responds": "把命运的摧折完全重塑为生命的奇遇与财富——『天容海色本澄清』，外界的苦雨终风终究动摇不了天地的本色与自性的清白。",
+    "modern_meaning": "走过最艰难的泥泞坎坷后，回过头来看，那些曾以为过不去的坎，最终都变成了丰盈生命厚度的奇绝体验。",
+    "source_note": "原文见《苏轼诗集·卷四十四》，纪晓岚称此诗『天风海涛，骨格苍劲』。"
   },
   {
     "id": "work_bie_hainan",
     "title": "别海南黎民表",
     "genre": "诗",
-    "station_ids": ["station_danzhou"],
+    "station_ids": [
+      "station_danzhou"
+    ],
     "creation_context": "元符三年（1100）苏轼离开儋州时与当地百姓深情惜别所作。",
     "why_related": "在天涯绝域传播中原文教，与底层黎民结下真挚友谊的博大仁爱体现。",
-    "source_ids": ["source_sssc_cb"],
-    "review_status": "approved"
+    "source_ids": [
+      "source_sssc_cb"
+    ],
+    "review_status": "approved",
+    "time_label": "元符三年（1100）六月",
+    "place_label": "儋州桄榔庵",
+    "lead_quote": "我本海南民，寄生西蜀州。苦竹掩茅屋，余龄安得留。",
+    "lead_guide": "在天涯绝域传播文教，与黎民结下骨肉深情，把异乡当成自己的故土。",
+    "life_background": "苏轼在海南三年，办学堂、教读书、挖东坡井、劝农医病，打破了海南百年来无人中进士的蛮荒局面。北归临行前，海南黎汉百姓扶老携幼洒泪相送，苏轼感念万千作此诗。",
+    "original_text": "我本海南民，寄生西蜀州。\n苦竹掩茅屋，余龄安得留。\n行穿避蛇草，病饮化毒酒。\n三年寄绝岛，万里还中州。\n岂独乡井别，翻同骨肉分。\n更深不能寐，坐听落海流。",
+    "why_at_this_moment": "在最边缘蛮荒之地，苏轼没有自怨自艾，而是将大爱与文教种子撒向人间，收获了天下最真挚淳朴的深情回馈。",
+    "how_it_responds": "把异乡百姓视作骨肉同胞，以诚相待，超越地域、族群与政治身份的隔阂。",
+    "modern_meaning": "无论身处多不起眼的角落，只要怀着善意认真对待身边的人与事，任何冷漠的荒原都能开出温暖的花来。",
+    "source_note": "原文见《苏轼诗集·卷四十四》，史料参苏辙《亡兄子瞻端明墓志铭》。"
   },
   {
     "id": "work_ziti_jinshan",
     "title": "自题金山画像",
     "genre": "诗",
-    "station_ids": ["station_changzhou"],
+    "station_ids": [
+      "station_changzhou"
+    ],
     "creation_context": "建中靖国元年（1101）苏轼北归途经镇江金山寺，见李公麟所画自己肖像，病中题诗总结一生。",
     "why_related": "问汝平生功业，黄州惠州儋州。苏轼对自己坎坷却丰盛一生的终极概括与自嘲。",
-    "source_ids": ["source_sssc_cb", "source_ssnp_kfl"],
-    "review_status": "approved"
+    "source_ids": [
+      "source_sssc_cb",
+      "source_ssnp_kfl"
+    ],
+    "review_status": "approved",
+    "time_label": "建中靖国元年（1101）六月",
+    "place_label": "镇江金山寺",
+    "lead_quote": "问汝平生功业，黄州惠州儋州。",
+    "lead_guide": "生命终点前的终极自白，将三大贬谪绝地，视作自己一生最骄傲的勋章。",
+    "life_background": "建中靖国元年六月，病重的苏轼乘舟北归途经镇江金山寺，见好友李公麟当年为自己所绘的画像，回想平生起伏，提笔写下这首自挽绝笔诗。两月后苏轼在常州逝世。",
+    "original_text": "心似已灰之木，身如不系之舟。\n问汝平生功业，黄州惠州儋州。",
+    "why_at_this_moment": "六十六岁、生命已走到最后的倒计时，面对一生的荣辱沉浮与死亡阴影，苏轼用最凝练的二十字交出了一生的答卷。",
+    "how_it_responds": "不提金榜题名、不提高官显爵、不提天下文宗，偏偏将三次最惨烈的贬逐流放之地列为『平生功业』——在最难的地方活出了最丰满的人格。",
+    "modern_meaning": "衡量一个人一生的价值，不是看他顺风顺水时有多耀眼，而是看他在被摔碎在谷底时，如何一次次有尊严、有温度地重新站立起来。",
+    "source_note": "原文见《苏轼诗集·卷四十五》，苏轼生前最后一首总结平生的标志性名作。"
   },
   {
     "id": "work_chengtian_yeyou",
     "title": "记承天寺夜游",
     "genre": "文",
-    "station_ids": ["station_huangzhou"],
+    "station_ids": [
+      "station_huangzhou"
+    ],
     "creation_context": "元丰六年（1083）苏轼在黄州夜见月色入户，欣然起行寻张怀民同游所作小品文。",
     "why_related": "何夜无月？何处无竹柏？但少闲人如吾两人者耳。日常细微之美的最高发现力。",
-    "source_ids": ["source_sswj_cb"],
-    "review_status": "approved"
+    "source_ids": [
+      "source_sswj_cb"
+    ],
+    "review_status": "approved",
+    "time_label": "元丰六年（1083）十月十二日夜",
+    "place_label": "黄州承天寺",
+    "lead_quote": "何夜无月？何处无竹柏？但少闲人如吾两人者耳。",
+    "lead_guide": "八十五字小品文之冠。在清幽如积水空明的月色下，发现最珍贵的日常自由。",
+    "life_background": "元丰六年十月十二日夜，苏轼在黄州见月色入户欣然起行，想到贬谪黄州同样失意的友人张怀民，遂夜访承天寺，相与步于中庭赏月。",
+    "original_text": "元丰六年十月十二日夜，解衣欲睡，月色入户，欣然起行。念无与为乐者，遂至承天寺寻张怀民。怀民亦未寝，相与步于中庭。\n庭下如积水空明，水中藻、荇交横，盖竹柏影也。何夜无月？何处无竹柏？但少闲人如吾两人者耳。",
+    "why_at_this_moment": "被剥夺了政治权力的黄州贬谪生活，反而赋予了苏轼大段沉静而自由的时间，去观察一束月光和竹柏的影子。",
+    "how_it_responds": "将自我的贬谪身份自嘲地转化为『闲人』，以一种极高明的审美眼光，把闲暇与无为提升为生命的诗性时刻。",
+    "modern_meaning": "月亮每晚都有，树影随处可见。生活不缺美好的细节，缺的是一颗能偶尔慢下来、在平淡中发现诗意的心。",
+    "source_note": "原文见《苏轼文集·卷七十一》，入选统编语文教材经典篇目。"
   },
   {
     "id": "work_tixilinbi",
     "title": "题西林壁",
     "genre": "诗",
-    "station_ids": ["station_huangzhou"],
+    "station_ids": [
+      "station_huangzhou"
+    ],
     "creation_context": "元丰七年（1084）五月苏轼离开黄州赴汝州途中，游庐山西林寺所题壁诗。",
     "why_related": "不识庐山真面目，只缘身在此山中。换个视角看待人生与困局的经典哲理。",
-    "source_ids": ["source_sssc_cb", "source_ssnp_kfl"],
-    "review_status": "approved"
+    "source_ids": [
+      "source_sssc_cb",
+      "source_ssnp_kfl"
+    ],
+    "review_status": "approved",
+    "time_label": "元丰七年（1084）五月",
+    "place_label": "庐山西林寺",
+    "lead_quote": "不识庐山真面目，只缘身在此山中。",
+    "lead_guide": "千古哲理诗。跳出局限换个视角看人生与世界，困顿自能释然。",
+    "life_background": "元丰七年四月苏轼量移汝州，离开生活了四年多的黄州。五月途经九江游览庐山，在西林寺墙壁上题写下这首蕴含深刻认识论的哲理诗。",
+    "original_text": "横看成岭侧成峰，远近高低各不同。\n不识庐山真面目，只缘身在此山中。",
+    "why_at_this_moment": "告别黄州低谷、重新走向未知前程的关口，苏轼以山势的千变万化，隐喻世事认知的多维与局限。",
+    "how_it_responds": "不执着于单一视角的是非对错，认识到每个人因所处位置不同而看到的景象各异，获得思想上的彻底通透。",
+    "modern_meaning": "当你觉得自己被眼前的困境逼入死角时，不妨退后一步。你看不清全局，往往只是因为你陷在情绪和局部的山谷里太深了。",
+    "source_note": "原文见《苏轼诗集·卷二十三》，施宿《会稽志》录入。"
   }
 ]

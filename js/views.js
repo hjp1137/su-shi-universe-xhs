@@ -903,7 +903,7 @@
       storyCard.appendChild(sBody);
       wrap.appendChild(storyCard);
 
-      // 代表诗词与名作卡片
+      // 代表诗词与名作卡片（支持点击穿透进入作品体验）
       var quoteId = (station.quote_ids && station.quote_ids[0]) || '';
       if (quoteId) {
         var quoteObj = Data.getQuoteById(quoteId);
@@ -911,20 +911,66 @@
           var workObj = quoteObj.work_id ? Data.getWorkById(quoteObj.work_id) : null;
           var wTitle = workObj ? ('《' + workObj.title + '》') : '《东坡诗选》';
           var qCard = document.createElement('div');
-          qCard.className = 'ink-card';
+          qCard.className = workObj ? 'ink-card station-work-clickable' : 'ink-card';
           var qBadge = document.createElement('div');
           qBadge.className = 'result-card-badge';
           qBadge.textContent = '代表名作与诗句';
           qCard.appendChild(qBadge);
           qCard.appendChild(UI.createQuoteBlock(quoteObj.text, wTitle));
-          if (workObj && workObj.creation_context) {
+          if (workObj && (workObj.lead_guide || workObj.creation_context)) {
             var qContext = document.createElement('div');
             qContext.className = 'result-quote-context';
-            qContext.textContent = '背景：' + workObj.creation_context;
+            qContext.textContent = '背景导语：' + (workObj.lead_guide || workObj.creation_context);
             qCard.appendChild(qContext);
+          }
+          if (workObj) {
+            var hint = document.createElement('div');
+            hint.className = 'station-work-more-hint';
+            hint.textContent = '进入阅读诗词全文与人生现场 →';
+            qCard.appendChild(hint);
+            (function (targetWorkId, currentStationId) {
+              qCard.addEventListener('click', function () {
+                Router.navigate('work', { work_id: targetWorkId, from_station_id: currentStationId });
+              });
+            })(workObj.id, station.id);
           }
           wrap.appendChild(qCard);
         }
+      }
+
+      // 如果本站还有其他收录作品，展示作品导航流
+      var stationWorkIds = station.work_ids || [];
+      if (stationWorkIds.length > 1) {
+        var otherWorksCard = document.createElement('div');
+        otherWorksCard.className = 'ink-card';
+        var owBadge = document.createElement('div');
+        owBadge.className = 'result-card-badge';
+        owBadge.textContent = '本站收录诗文 (' + stationWorkIds.length + '篇)';
+        otherWorksCard.appendChild(owBadge);
+
+        var owList = document.createElement('div');
+        owList.style.display = 'flex';
+        owList.style.flexWrap = 'wrap';
+        owList.style.marginTop = '8px';
+
+        for (var wIdx = 0; wIdx < stationWorkIds.length; wIdx++) {
+          var otherWork = Data.getWorkById(stationWorkIds[wIdx]);
+          if (otherWork) {
+            var wChip = document.createElement('div');
+            wChip.className = 'work-station-badge';
+            wChip.style.marginRight = '8px';
+            wChip.style.marginBottom = '8px';
+            wChip.textContent = '《' + otherWork.title + '》';
+            (function (owId, currentStationId) {
+              wChip.addEventListener('click', function () {
+                Router.navigate('work', { work_id: owId, from_station_id: currentStationId });
+              });
+            })(otherWork.id, station.id);
+            owList.appendChild(wChip);
+          }
+        }
+        otherWorksCard.appendChild(owList);
+        wrap.appendChild(otherWorksCard);
       }
 
       // 东坡生活视角
@@ -988,14 +1034,30 @@
     }
   });
 
-  // 6. 作品阅读视图 Work
+  // 6. 作品阅读视图 Work（诗词与人生节点沉浸体验）
   Router.register('work', {
     render: function (params) {
       params = params || {};
-      var work = params.work_id ? Data.getWorkById(params.work_id) : (Data.works ? Data.works[0] : null);
+      var workId = params.work_id;
+      var fromStationId = params.from_station_id;
+
+      // 智能寻找目标作品或默认降级
+      var work = null;
+      if (workId) {
+        work = Data.getWorkById(workId);
+      } else if (fromStationId) {
+        var fromSt = Data.getStationById(fromStationId);
+        if (fromSt && fromSt.work_ids && fromSt.work_ids.length > 0) {
+          work = Data.getWorkById(fromSt.work_ids[0]);
+        }
+      }
+
+      if (!work) {
+        work = Data.getWorkById('work_dingfengbo_moting') || (Data.works ? Data.works[0] : null);
+      }
 
       var wrap = document.createElement('div');
-      wrap.className = 'view-wrapper';
+      wrap.className = 'view-wrapper work-detail-container';
 
       if (!work) {
         wrap.appendChild(UI.createEmptyState('这一页暂时被江雾遮住了', '未检索到该作品文本，请返回宇宙生命线。', '返回生命线', function () {
@@ -1004,18 +1066,261 @@
         return wrap;
       }
 
-      wrap.appendChild(UI.createSectionHeader(work.title, '体裁：' + work.genre));
+      // 关联站点信息
+      var primaryStationId = (work.station_ids && work.station_ids[0]) || fromStationId || '';
+      var stationObj = primaryStationId ? Data.getStationById(primaryStationId) : null;
 
-      var bgCard = UI.createInkCard([
-        UI.createSectionHeader('创作背景', work.creation_context),
-        UI.createSectionHeader('文学史价值', work.why_related)
-      ]);
-      wrap.appendChild(bgCard);
+      // --- 4.1 作品头部卡片 ---
+      var headerHero = document.createElement('div');
+      headerHero.className = 'work-header-hero';
 
-      var btnBackUniv = UI.createSecondaryButton('返回宇宙生命线', function () {
-        Router.navigate('universe');
+      var titleRow = document.createElement('div');
+      titleRow.className = 'work-title-row';
+
+      var titleEl = document.createElement('h2');
+      titleEl.className = 'work-title';
+      titleEl.textContent = '《' + work.title + '》';
+
+      var genreEl = document.createElement('span');
+      genreEl.className = 'work-genre-tag';
+      genreEl.textContent = work.genre || '名作';
+
+      titleRow.appendChild(titleEl);
+      titleRow.appendChild(genreEl);
+      headerHero.appendChild(titleRow);
+
+      // 元数据芯片：时间、地点、站点
+      var metaChips = document.createElement('div');
+      metaChips.className = 'work-meta-chips';
+
+      if (work.time_label) {
+        var timeChip = document.createElement('span');
+        timeChip.className = 'work-meta-chip';
+        timeChip.textContent = '创作时间：' + work.time_label;
+        metaChips.appendChild(timeChip);
+      }
+
+      if (work.place_label) {
+        var placeChip = document.createElement('span');
+        placeChip.className = 'work-meta-chip';
+        placeChip.textContent = '地点：' + work.place_label;
+        metaChips.appendChild(placeChip);
+      }
+
+      if (stationObj) {
+        var stBadge = document.createElement('span');
+        stBadge.className = 'work-station-badge';
+        stBadge.textContent = '所属站点：' + stationObj.name + ' →';
+        (function (sid) {
+          stBadge.addEventListener('click', function () {
+            Router.navigate('station', { station_id: sid });
+          });
+        })(stationObj.id);
+        metaChips.appendChild(stBadge);
+      }
+
+      headerHero.appendChild(metaChips);
+
+      if (work.lead_guide) {
+        var guideEl = document.createElement('div');
+        guideEl.className = 'work-lead-guide';
+        guideEl.textContent = work.lead_guide;
+        headerHero.appendChild(guideEl);
+      }
+
+      wrap.appendChild(headerHero);
+
+      // --- 4.2 第一幕：人生背景（苏轼当时在哪里、经历什么）---
+      if (work.life_background || work.creation_context) {
+        var bgCard = document.createElement('div');
+        bgCard.className = 'work-narrative-card';
+        var bgBadge = document.createElement('div');
+        bgBadge.className = 'work-narrative-badge';
+        bgBadge.textContent = '第一幕 · 真实人生境遇';
+        var bgTitle = document.createElement('h3');
+        bgTitle.className = 'work-narrative-title';
+        bgTitle.textContent = '苏轼当时经历着什么？';
+        var bgBody = document.createElement('p');
+        bgBody.className = 'work-narrative-body';
+        bgBody.textContent = work.life_background || work.creation_context;
+
+        bgCard.appendChild(bgBadge);
+        bgCard.appendChild(bgTitle);
+        bgCard.appendChild(bgBody);
+        wrap.appendChild(bgCard);
+      }
+
+      // --- 4.3 第二幕：代表名句与诗词全文（带展开/折叠）---
+      if (work.lead_quote) {
+        var quoteBox = document.createElement('div');
+        quoteBox.className = 'work-quote-feature';
+        var qMark1 = document.createElement('div');
+        qMark1.className = 'work-quote-mark';
+        qMark1.textContent = '“';
+        var qText = document.createElement('div');
+        qText.className = 'work-quote-text';
+        qText.textContent = work.lead_quote;
+        var qMark2 = document.createElement('div');
+        qMark2.className = 'work-quote-mark';
+        qMark2.textContent = '”';
+
+        quoteBox.appendChild(qMark1);
+        quoteBox.appendChild(qText);
+        quoteBox.appendChild(qMark2);
+        wrap.appendChild(quoteBox);
+      }
+
+      // 原文全貌与折叠交互
+      if (work.original_text) {
+        var fulltextSection = document.createElement('div');
+        fulltextSection.className = 'work-fulltext-section';
+
+        var ftHead = document.createElement('div');
+        ftHead.className = 'work-fulltext-head';
+        var ftTitle = document.createElement('span');
+        ftTitle.className = 'work-fulltext-title';
+        ftTitle.textContent = '诗词原文（审定文本）';
+        var ftGenre = document.createElement('span');
+        ftGenre.className = 'work-meta-chip';
+        ftGenre.textContent = work.genre || '原文';
+        ftHead.appendChild(ftTitle);
+        ftHead.appendChild(ftGenre);
+        fulltextSection.appendChild(ftHead);
+
+        var ftContent = document.createElement('div');
+        ftContent.className = 'work-fulltext-content is-collapsed';
+        ftContent.textContent = work.original_text;
+
+        var ftMask = document.createElement('div');
+        ftMask.className = 'work-fulltext-mask';
+
+        var toggleBtn = document.createElement('button');
+        toggleBtn.type = 'button';
+        toggleBtn.className = 'work-toggle-btn';
+        toggleBtn.textContent = '展开完整诗词 ↓';
+
+        var isExpanded = false;
+        toggleBtn.addEventListener('click', function () {
+          isExpanded = !isExpanded;
+          if (isExpanded) {
+            ftContent.classList.remove('is-collapsed');
+            toggleBtn.textContent = '收起全文 ↑';
+          } else {
+            ftContent.classList.add('is-collapsed');
+            toggleBtn.textContent = '展开完整诗词 ↓';
+          }
+        });
+
+        fulltextSection.appendChild(ftContent);
+        fulltextSection.appendChild(ftMask);
+        fulltextSection.appendChild(toggleBtn);
+        wrap.appendChild(fulltextSection);
+      }
+
+      // --- 4.4 第三幕：为什么在此时写出 & 作品如何回应处境 ---
+      if (work.why_at_this_moment || work.how_it_responds || work.why_related) {
+        var whyCard = document.createElement('div');
+        whyCard.className = 'work-narrative-card';
+        var whyBadge = document.createElement('div');
+        whyBadge.className = 'work-narrative-badge';
+        whyBadge.textContent = '第三幕 · 为什么在此时写出';
+        var whyTitle = document.createElement('h3');
+        whyTitle.className = 'work-narrative-title';
+        whyTitle.textContent = '这首作品如何回应现实困顿？';
+
+        whyCard.appendChild(whyBadge);
+        whyCard.appendChild(whyTitle);
+
+        if (work.why_at_this_moment) {
+          var p1 = document.createElement('p');
+          p1.className = 'work-narrative-body';
+          p1.textContent = work.why_at_this_moment;
+          whyCard.appendChild(p1);
+        }
+
+        if (work.how_it_responds) {
+          var p2 = document.createElement('p');
+          p2.className = 'work-narrative-body';
+          p2.style.marginTop = '8px';
+          p2.textContent = work.how_it_responds;
+          whyCard.appendChild(p2);
+        } else if (work.why_related && !work.why_at_this_moment) {
+          var pDefault = document.createElement('p');
+          pDefault.className = 'work-narrative-body';
+          pDefault.textContent = work.why_related;
+          whyCard.appendChild(pDefault);
+        }
+
+        wrap.appendChild(whyCard);
+      }
+
+      // --- 4.5 第四幕：今天可以怎样理解（当代生活解读，拒绝成功学）---
+      if (work.modern_meaning) {
+        var modernCard = document.createElement('div');
+        modernCard.className = 'work-narrative-card work-modern-card';
+        var mBadge = document.createElement('div');
+        mBadge.className = 'work-narrative-badge';
+        mBadge.textContent = '第四幕 · 当代生活启发';
+        var mTitle = document.createElement('h3');
+        mTitle.className = 'work-narrative-title';
+        mTitle.textContent = '今天我们可以怎样理解它？';
+        var mBody = document.createElement('p');
+        mBody.className = 'work-narrative-body';
+        mBody.textContent = work.modern_meaning;
+
+        var mDisclaimer = document.createElement('div');
+        mDisclaimer.className = 'work-modern-disclaimer';
+        mDisclaimer.textContent = '* 本解读为苏轼宇宙当代生活启发，围绕面对不可控、接受绕路与安顿日常展开，非古人原话。';
+
+        modernCard.appendChild(mBadge);
+        modernCard.appendChild(mTitle);
+        modernCard.appendChild(mBody);
+        modernCard.appendChild(mDisclaimer);
+        wrap.appendChild(modernCard);
+      }
+
+      // --- 4.6 第五幕：文献出处与知识档案 ---
+      if (work.source_note) {
+        var srcCard = document.createElement('div');
+        srcCard.className = 'work-source-card';
+        var srcLabel = document.createElement('div');
+        srcLabel.className = 'work-source-label';
+        srcLabel.textContent = '文献出处与史料版本';
+        var srcContent = document.createElement('div');
+        srcContent.className = 'work-source-content';
+        srcContent.textContent = work.source_note;
+
+        srcCard.appendChild(srcLabel);
+        srcCard.appendChild(srcContent);
+        wrap.appendChild(srcCard);
+      }
+
+      // --- 底部多向操作区 ---
+      var actBox = document.createElement('div');
+      actBox.className = 'result-actions';
+
+      if (stationObj) {
+        var btnBackSt = UI.createPrimaryButton('返回所属站点（' + stationObj.short_name + '）', function () {
+          Router.navigate('station', { station_id: stationObj.id });
+        });
+        actBox.appendChild(btnBackSt);
+      } else {
+        var btnHome = UI.createPrimaryButton('返回苏轼人生宇宙', function () {
+          Router.navigate('universe');
+        });
+        actBox.appendChild(btnHome);
+      }
+
+      var btnUniv = UI.createSecondaryButton('漫游苏轼人生生命线', function () {
+        Router.navigate('universe', stationObj ? { highlight_station_id: stationObj.id } : {});
       });
-      wrap.appendChild(btnBackUniv);
+      var btnQuiz = UI.createSecondaryButton('测测我的人生正在哪一站', function () {
+        Router.navigate('quiz');
+      });
+
+      actBox.appendChild(btnUniv);
+      actBox.appendChild(btnQuiz);
+      wrap.appendChild(actBox);
 
       return wrap;
     }

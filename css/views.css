@@ -751,7 +751,295 @@
   margin-top: var(--space-4);
 }
 
-/* 5. 分享卡预览 Share-Card 样式 */
+.station-work-clickable {
+  cursor: pointer;
+  transition: transform var(--motion-fast), border-color var(--motion-fast), background var(--motion-fast);
+}
+
+.station-work-clickable:active {
+  transform: scale(0.98);
+  border-color: var(--color-river);
+  background: rgba(43, 63, 90, 0.45);
+}
+
+.station-work-more-hint {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: var(--space-2);
+  font-size: var(--font-size-tag);
+  color: var(--color-river);
+  font-weight: 500;
+}
+
+/* 5. 作品详情 Work 视图样式 */
+.work-detail-container {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: var(--space-8);
+}
+
+.work-detail-container > * + * {
+  margin-top: var(--space-4);
+}
+
+.work-header-hero {
+  position: relative;
+  padding: var(--space-5) var(--space-4);
+  background: linear-gradient(180deg, rgba(30, 42, 60, 0.75) 0%, rgba(18, 26, 38, 0.85) 100%);
+  border: 1px solid rgba(217, 185, 120, 0.3);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.work-title-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: var(--space-2);
+}
+
+.work-title {
+  font-family: var(--font-family-title);
+  font-size: 22px;
+  color: var(--color-paper);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.work-genre-tag {
+  font-size: var(--font-size-tag);
+  padding: 2px 8px;
+  background: rgba(130, 182, 162, 0.2);
+  color: var(--color-jade);
+  border: 1px solid rgba(130, 182, 162, 0.4);
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+}
+
+.work-meta-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.work-meta-chip {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--font-size-tag);
+  color: var(--color-text-secondary);
+  background: rgba(244, 240, 230, 0.06);
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  margin-right: var(--space-2);
+  margin-bottom: var(--space-1);
+}
+
+.work-station-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--font-size-tag);
+  color: var(--color-warm);
+  background: rgba(217, 185, 120, 0.15);
+  border: 1px solid rgba(217, 185, 120, 0.3);
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--motion-fast);
+  margin-bottom: var(--space-1);
+}
+
+.work-station-badge:active {
+  background: rgba(217, 185, 120, 0.3);
+}
+
+.work-lead-guide {
+  font-size: var(--font-size-caption);
+  color: var(--color-warm);
+  line-height: var(--line-height-relaxed);
+  padding-left: var(--space-3);
+  border-left: 2px solid var(--color-warm);
+  margin-top: var(--space-2);
+}
+
+/* 代表名句卡片 */
+.work-quote-feature {
+  padding: var(--space-5) var(--space-4);
+  background: rgba(43, 63, 90, 0.3);
+  border: 1px solid rgba(120, 160, 195, 0.25);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.work-quote-mark {
+  font-family: Georgia, serif;
+  font-size: 28px;
+  line-height: 1;
+  color: var(--color-river);
+  opacity: 0.6;
+}
+
+.work-quote-text {
+  font-family: var(--font-family-title);
+  font-size: 17px;
+  color: var(--color-paper);
+  line-height: 1.7;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin: var(--space-2) 0;
+}
+
+/* 全文与折叠区域 */
+.work-fulltext-section {
+  position: relative;
+  background: rgba(20, 28, 42, 0.65);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.work-fulltext-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px dashed rgba(244, 240, 230, 0.15);
+}
+
+.work-fulltext-title {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
+  font-weight: 600;
+}
+
+.work-fulltext-content {
+  font-size: var(--font-size-body);
+  color: var(--color-text-primary);
+  line-height: 1.85;
+  white-space: pre-wrap;
+  word-break: break-word;
+  transition: max-height var(--motion-normal) ease-out;
+}
+
+.work-fulltext-content.is-collapsed {
+  max-height: 130px;
+  overflow: hidden;
+  position: relative;
+}
+
+.work-fulltext-mask {
+  display: none;
+}
+
+.work-fulltext-content.is-collapsed + .work-fulltext-mask {
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 48px;
+  height: 60px;
+  background: linear-gradient(180deg, rgba(20, 28, 42, 0) 0%, rgba(20, 28, 42, 0.95) 100%);
+  pointer-events: none;
+}
+
+.work-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: var(--space-2) 0;
+  margin-top: var(--space-2);
+  background: rgba(244, 240, 230, 0.05);
+  border: 1px solid rgba(244, 240, 230, 0.15);
+  border-radius: var(--radius-sm);
+  color: var(--color-river);
+  font-size: var(--font-size-caption);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--motion-fast);
+}
+
+.work-toggle-btn:active {
+  background: rgba(244, 240, 230, 0.12);
+}
+
+/* 叙事卡片系列 */
+.work-narrative-card {
+  position: relative;
+  padding: var(--space-4);
+  background: rgba(24, 34, 50, 0.6);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+}
+
+.work-narrative-badge {
+  display: inline-block;
+  font-size: var(--font-size-tag);
+  padding: 2px 6px;
+  background: rgba(217, 185, 120, 0.15);
+  color: var(--color-warm);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-2);
+}
+
+.work-narrative-title {
+  font-family: var(--font-family-title);
+  font-size: var(--font-size-title);
+  color: var(--color-paper);
+  margin-bottom: var(--space-2);
+}
+
+.work-narrative-body {
+  font-size: var(--font-size-body);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+}
+
+.work-modern-card {
+  border-left: 3px solid var(--color-jade);
+  background: rgba(26, 40, 48, 0.5);
+}
+
+.work-modern-card .work-narrative-badge {
+  background: rgba(130, 182, 162, 0.2);
+  color: var(--color-jade);
+}
+
+.work-modern-disclaimer {
+  margin-top: var(--space-2);
+  padding-top: var(--space-2);
+  border-top: 1px dashed rgba(130, 182, 162, 0.25);
+  font-size: var(--font-size-tag);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-normal);
+}
+
+/* 文献出处信息卡 */
+.work-source-card {
+  padding: var(--space-3) var(--space-4);
+  background: rgba(15, 20, 30, 0.6);
+  border: 1px solid rgba(244, 240, 230, 0.1);
+  border-radius: var(--radius-sm);
+}
+
+.work-source-label {
+  font-size: var(--font-size-tag);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-1);
+}
+
+.work-source-content {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-normal);
+}
+
+/* 6. 分享卡预览 Share-Card 样式 */
 .share-preview-card {
   border: 1px solid rgba(244, 240, 230, 0.25);
   background: linear-gradient(180deg, rgba(22, 36, 65, 0.9) 0%, rgba(14, 24, 48, 0.95) 100%);
