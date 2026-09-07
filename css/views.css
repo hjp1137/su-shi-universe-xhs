@@ -111,6 +111,13 @@
   font-size: var(--font-size-h3);
   letter-spacing: 2px;
   box-shadow: 0 4px 20px rgba(111, 175, 194, 0.35);
+  touch-action: manipulation;
+  transition: transform var(--motion-fast), box-shadow var(--motion-fast);
+}
+
+.home-main-cta:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 10px rgba(111, 175, 194, 0.2);
 }
 
 /* 今日东坡一句诗轻预览卡片 */
@@ -217,6 +224,12 @@
   position: relative;
   overflow: hidden;
   border-left-width: 4px;
+  touch-action: manipulation;
+  transition: transform var(--motion-fast), box-shadow var(--motion-fast);
+}
+
+.home-nav-card:active {
+  transform: scale(0.985);
 }
 
 .home-nav-card.nav-quiz {
@@ -348,9 +361,17 @@
   font-size: var(--font-size-caption);
   color: var(--color-text-secondary);
   cursor: pointer;
-  padding: 4px 8px;
+  padding: 6px 12px;
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border-radius: var(--radius-sm);
   transition: color var(--motion-fast);
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .quiz-nav-btn:hover, .quiz-nav-btn:active {
@@ -419,9 +440,27 @@
   margin-top: var(--space-3);
 }
 
+.quiz-option-list > *:nth-child(1) { animation: quizOptIn 200ms ease-out 0ms both; }
+.quiz-option-list > *:nth-child(2) { animation: quizOptIn 200ms ease-out 35ms both; }
+.quiz-option-list > *:nth-child(3) { animation: quizOptIn 200ms ease-out 70ms both; }
+.quiz-option-list > *:nth-child(4) { animation: quizOptIn 200ms ease-out 105ms both; }
+.quiz-option-list > *:nth-child(5) { animation: quizOptIn 200ms ease-out 140ms both; }
+
+@keyframes quizOptIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
 .quiz-option-item {
   display: flex;
   align-items: center;
+  min-height: 48px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
@@ -432,6 +471,7 @@
   user-select: none;
   -webkit-user-select: none;
   -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .quiz-option-item:active {
@@ -827,14 +867,26 @@
 
 .universe-node-card {
   border-left: 3px solid transparent;
-  transition: transform var(--motion-fast), border-color var(--motion-fast), background var(--motion-fast);
+  transition: transform var(--motion-fast), border-color var(--motion-fast), background var(--motion-fast), box-shadow var(--motion-fast);
   cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
+  touch-action: manipulation;
 }
 
 .universe-node-card:active {
   transform: scale(0.98);
+}
+
+.universe-node-item.is-in-view .universe-node-card {
+  box-shadow: 0 4px 16px rgba(14, 24, 48, 0.5);
+  border-color: rgba(92, 178, 199, 0.4);
+}
+
+.universe-node-item.is-in-view .universe-node-badge {
+  border-color: var(--color-warm);
+  color: var(--color-warm);
+  box-shadow: 0 0 10px rgba(217, 185, 120, 0.5);
 }
 
 .universe-node-item.is-highlighted .universe-node-card {
@@ -977,6 +1029,12 @@
 .work-detail-container > * + * {
   margin-top: var(--space-4);
 }
+
+.work-detail-container > *:nth-child(1) { animation: resultCardStagger 280ms cubic-bezier(0.16, 1, 0.3, 1) 0ms both; }
+.work-detail-container > *:nth-child(2) { animation: resultCardStagger 280ms cubic-bezier(0.16, 1, 0.3, 1) 50ms both; }
+.work-detail-container > *:nth-child(3) { animation: resultCardStagger 280ms cubic-bezier(0.16, 1, 0.3, 1) 100ms both; }
+.work-detail-container > *:nth-child(4) { animation: resultCardStagger 280ms cubic-bezier(0.16, 1, 0.3, 1) 150ms both; }
+.work-detail-container > *:nth-child(5) { animation: resultCardStagger 280ms cubic-bezier(0.16, 1, 0.3, 1) 200ms both; }
 
 .work-header-hero {
   position: relative;
@@ -1245,6 +1303,12 @@
   margin-top: var(--space-4);
 }
 
+.daily-container > *:nth-child(1) { animation: resultCardStagger 280ms cubic-bezier(0.16, 1, 0.3, 1) 0ms both; }
+.daily-container > *:nth-child(2) { animation: resultCardStagger 280ms cubic-bezier(0.16, 1, 0.3, 1) 50ms both; }
+.daily-container > *:nth-child(3) { animation: resultCardStagger 280ms cubic-bezier(0.16, 1, 0.3, 1) 100ms both; }
+.daily-container > *:nth-child(4) { animation: resultCardStagger 280ms cubic-bezier(0.16, 1, 0.3, 1) 150ms both; }
+.daily-container > *:nth-child(5) { animation: resultCardStagger 280ms cubic-bezier(0.16, 1, 0.3, 1) 200ms both; }
+
 .daily-date-header {
   display: flex;
   align-items: center;
@@ -1306,6 +1370,22 @@
   font-weight: 600;
   letter-spacing: 1px;
   background: rgba(196, 76, 58, 0.08);
+  animation: dailySealStampIn 360ms cubic-bezier(0.175, 0.885, 0.32, 1.275) 150ms both;
+}
+
+@keyframes dailySealStampIn {
+  0% {
+    opacity: 0;
+    transform: rotate(18deg) scale(1.6);
+  }
+  70% {
+    opacity: 0.95;
+    transform: rotate(6deg) scale(0.95);
+  }
+  100% {
+    opacity: 0.88;
+    transform: rotate(8deg) scale(1);
+  }
 }
 
 .daily-quote-text {

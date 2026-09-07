@@ -387,14 +387,19 @@
                 session.selectOption(currentQ.id, opt.id);
               }
 
+              var unlockTimer = setTimeout(function () {
+                isTransitioning = false;
+              }, 1200);
+
               setTimeout(function () {
+                clearTimeout(unlockTimer);
                 if (idx < total - 1) {
                   if (session) session.goNext(total);
                   renderQuestion();
                 } else {
                   showCalculatingState();
                 }
-              }, 200);
+              }, 220);
             });
 
             optList.appendChild(item);
@@ -682,8 +687,9 @@
     }
   });
 
-  // 滚动记忆变量
+  // 滚动记忆与视口节点观察者
   var lastUniverseScrollTop = 0;
+  var activeUniverseObserver = null;
 
   // 4. 宇宙生命线视图 Universe (江河星图纵向生命线、九大站点漫游、高亮定位)
   Router.register('universe', {
@@ -691,6 +697,22 @@
       params = params || {};
       var wrap = document.createElement('div');
       wrap.className = 'view-wrapper universe-container';
+
+      if (typeof IntersectionObserver !== 'undefined') {
+        if (activeUniverseObserver) {
+          try { activeUniverseObserver.disconnect(); } catch (e) {}
+        }
+        activeUniverseObserver = new IntersectionObserver(function (entries) {
+          for (var k = 0; k < entries.length; k++) {
+            var entry = entries[k];
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-in-view');
+            } else {
+              entry.target.classList.remove('is-in-view');
+            }
+          }
+        }, { threshold: 0.15 });
+      }
 
       wrap.appendChild(UI.createSectionHeader('苏轼宇宙生命线', '九大人生站点漫游 · 从眉山出发，行过天涯，终归常州'));
 
@@ -823,6 +845,10 @@
           card.classList.add('universe-node-card', 'ink-card-station');
           item.appendChild(card);
           riverTimeline.appendChild(item);
+
+          if (activeUniverseObserver) {
+            try { activeUniverseObserver.observe(item); } catch (e) {}
+          }
         })(stations[i], i);
       }
 
@@ -839,6 +865,14 @@
       }, 50);
 
       return wrap;
+    },
+    destroy: function () {
+      if (activeUniverseObserver) {
+        try {
+          activeUniverseObserver.disconnect();
+        } catch (e) {}
+        activeUniverseObserver = null;
+      }
     }
   });
 

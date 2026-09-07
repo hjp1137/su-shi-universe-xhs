@@ -74,10 +74,23 @@
     return false;
   }
 
+  function syncDomQualityClass(level) {
+    try {
+      if (typeof document !== 'undefined' && document.documentElement) {
+        if (level === 'low' || level === 'fallback') {
+          document.documentElement.classList.add('quality-low');
+        } else {
+          document.documentElement.classList.remove('quality-low');
+        }
+      }
+    } catch (e) {}
+  }
+
   function QualityManager() {
     if (checkReducedMotion()) {
       currentLevel = 'low';
     }
+    syncDomQualityClass(currentLevel);
   }
 
   QualityManager.prototype.getCurrentLevel = function () {
@@ -106,6 +119,7 @@
       var prev = currentLevel;
       currentLevel = level;
       slowFrameCount = 0;
+      syncDomQualityClass(currentLevel);
       this._notifyChange(currentLevel, prev);
     }
     return true;
