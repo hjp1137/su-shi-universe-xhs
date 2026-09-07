@@ -664,58 +664,174 @@
     }
   });
 
-  // 4. 宇宙生命线视图 Universe
+  // 滚动记忆变量
+  var lastUniverseScrollTop = 0;
+
+  // 4. 宇宙生命线视图 Universe (江河星图纵向生命线、九大站点漫游、高亮定位)
   Router.register('universe', {
-    render: function () {
+    render: function (params) {
+      params = params || {};
       var wrap = document.createElement('div');
-      wrap.className = 'view-wrapper';
+      wrap.className = 'view-wrapper universe-container';
 
-      wrap.appendChild(UI.createSectionHeader('苏轼宇宙生命线', '从眉山出发，行过天涯，终归常州'));
-
-      var timeline = document.createElement('div');
-      timeline.className = 'timeline-container';
+      wrap.appendChild(UI.createSectionHeader('苏轼宇宙生命线', '九大人生站点漫游 · 从眉山出发，行过天涯，终归常州'));
 
       var stations = Data.stations || [];
-      for (var i = 0; i < stations.length; i++) {
-        (function (st) {
-          var item = document.createElement('div');
-          item.className = 'timeline-item';
-
-          var dot = document.createElement('div');
-          dot.className = 'timeline-dot';
-          item.appendChild(dot);
-
-          var cardContent = document.createElement('div');
-          var sTitle = document.createElement('div');
-          sTitle.className = 'nav-card-title';
-          sTitle.textContent = st.name;
-          var sDesc = document.createElement('div');
-          sDesc.className = 'nav-card-desc';
-          sDesc.textContent = (st.time_label || '') + ' · ' + (st.place || '') + ' (' + (st.age_label || '') + ')';
-          cardContent.appendChild(sTitle);
-          cardContent.appendChild(sDesc);
-
-          var card = UI.createInkCard(cardContent, true, function () {
-            Router.navigate('station', { station_id: st.id });
-          });
-          item.appendChild(card);
-          timeline.appendChild(item);
-        })(stations[i]);
+      var highlightId = params.highlight_station_id;
+      if (!highlightId && Store && typeof Store.getLastResult === 'function') {
+        var lastRes = Store.getLastResult();
+        if (lastRes && lastRes.station_id) {
+          highlightId = lastRes.station_id;
+        }
       }
 
-      wrap.appendChild(timeline);
+      // 如果有测试命中的站点，展示顶部直达条
+      var targetStationEl = null;
+      if (highlightId) {
+        var hlStation = Data.getStationById(highlightId);
+        if (hlStation) {
+          var myBar = document.createElement('div');
+          myBar.className = 'universe-my-station-bar';
+          myBar.setAttribute('role', 'button');
+          myBar.setAttribute('tabindex', '0');
+
+          var infoLeft = document.createElement('div');
+          infoLeft.className = 'my-station-info';
+          var tag = document.createElement('span');
+          tag.className = 'my-station-tag';
+          tag.textContent = '你的站点';
+          var txt = document.createElement('span');
+          txt.className = 'my-station-text';
+          txt.textContent = hlStation.name;
+          infoLeft.appendChild(tag);
+          infoLeft.appendChild(txt);
+
+          var btnRight = document.createElement('span');
+          btnRight.className = 'my-station-btn';
+          btnRight.textContent = '点击定位 ↓';
+
+          myBar.appendChild(infoLeft);
+          myBar.appendChild(btnRight);
+
+          myBar.addEventListener('click', function () {
+            if (targetStationEl) {
+              targetStationEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          });
+          wrap.appendChild(myBar);
+        }
+      }
+
+      // 江河生命线
+      var riverTimeline = document.createElement('div');
+      riverTimeline.className = 'universe-river-timeline';
+
+      var rhythmMap = {
+        'station_meishan': 'rhythm-meishan',
+        'station_jingshi': 'rhythm-jingshi',
+        'station_mizhou': 'rhythm-mizhou',
+        'station_wutai': 'rhythm-wutai',
+        'station_huangzhou': 'rhythm-huangzhou',
+        'station_hangzhou': 'rhythm-hangzhou',
+        'station_huizhou': 'rhythm-huizhou',
+        'station_danzhou': 'rhythm-danzhou',
+        'station_changzhou': 'rhythm-changzhou'
+      };
+
+      for (var i = 0; i < stations.length; i++) {
+        (function (st, index) {
+          var item = document.createElement('div');
+          item.className = 'universe-node-item ' + (rhythmMap[st.id] || '');
+          if (highlightId && st.id === highlightId) {
+            item.classList.add('is-highlighted');
+            targetStationEl = item;
+          }
+
+          var badge = document.createElement('div');
+          badge.className = 'universe-node-badge';
+          badge.textContent = String(index + 1);
+          item.appendChild(badge);
+
+          var cardContent = document.createElement('div');
+
+          var headerRow = document.createElement('div');
+          headerRow.className = 'universe-card-header';
+          var title = document.createElement('div');
+          title.className = 'universe-card-title';
+          title.textContent = st.name;
+          headerRow.appendChild(title);
+
+          if (highlightId && st.id === highlightId) {
+            var currPill = document.createElement('span');
+            currPill.className = 'universe-current-pill';
+            currPill.textContent = '你在此站';
+            headerRow.appendChild(currPill);
+          }
+          cardContent.appendChild(headerRow);
+
+          var meta = document.createElement('div');
+          meta.className = 'universe-card-meta';
+          meta.textContent = (st.time_label || '') + ' · ' + (st.place || '') + ' (' + (st.age_label || '') + ')';
+          cardContent.appendChild(meta);
+
+          if (st.theme) {
+            var theme = document.createElement('div');
+            theme.className = 'universe-card-theme';
+            theme.textContent = st.theme;
+            cardContent.appendChild(theme);
+          }
+
+          var quoteId = (st.quote_ids && st.quote_ids[0]) || '';
+          if (quoteId) {
+            var qObj = Data.getQuoteById(quoteId);
+            if (qObj && qObj.text) {
+              var qEl = document.createElement('div');
+              qEl.className = 'universe-card-quote';
+              qEl.textContent = '“' + qObj.text + '”';
+              cardContent.appendChild(qEl);
+            }
+          }
+
+          var arrow = document.createElement('div');
+          arrow.className = 'universe-card-arrow';
+          arrow.textContent = '查看站点详情 →';
+          cardContent.appendChild(arrow);
+
+          var card = UI.createInkCard(cardContent, true, function () {
+            var c = document.getElementById('view-container');
+            if (c) lastUniverseScrollTop = c.scrollTop;
+            Router.navigate('station', { station_id: st.id });
+          });
+          card.classList.add('universe-node-card');
+          item.appendChild(card);
+          riverTimeline.appendChild(item);
+        })(stations[i], i);
+      }
+
+      wrap.appendChild(riverTimeline);
+
+      setTimeout(function () {
+        var container = document.getElementById('view-container');
+        if (!container) return;
+        if (params.highlight_station_id && targetStationEl) {
+          targetStationEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else if (lastUniverseScrollTop > 0) {
+          container.scrollTop = lastUniverseScrollTop;
+        }
+      }, 50);
+
       return wrap;
     }
   });
 
-  // 5. 站点详情视图 Station
+  // 5. 站点详情视图 Station (多维史料、故事、代表作、启发与小行动)
   Router.register('station', {
     render: function (params) {
       params = params || {};
       var station = params.station_id ? Data.getStationById(params.station_id) : (Data.stations ? Data.stations[0] : null);
 
       var wrap = document.createElement('div');
-      wrap.className = 'view-wrapper';
+      wrap.className = 'view-wrapper station-detail-container';
 
       if (!station) {
         wrap.appendChild(UI.createEmptyState('这一页暂时被江雾遮住了', '未找到该站点记录，不妨回到宇宙生命线重新探索。', '返回生命线', function () {
@@ -724,29 +840,149 @@
         return wrap;
       }
 
-      wrap.appendChild(UI.createSectionHeader(station.name, (station.time_label || '') + ' · ' + (station.place || '') + ' (' + (station.age_label || '') + ')'));
+      // 站点头部卡片
+      var headerCard = document.createElement('div');
+      headerCard.className = 'ink-card result-hero-card';
 
-      var factCard = UI.createInkCard([
-        UI.createSectionHeader('史实背景', station.summary_fact),
-        UI.createSectionHeader('人生回望', station.summary_story)
-      ]);
+      var badge = document.createElement('div');
+      badge.className = 'result-moment-badge';
+      badge.textContent = '苏轼人生 · 第 ' + (station.order || 1) + ' 站';
+      headerCard.appendChild(badge);
+
+      var title = document.createElement('h1');
+      title.className = 'result-station-name';
+      title.textContent = station.name;
+      headerCard.appendChild(title);
+
+      var meta = document.createElement('div');
+      meta.className = 'result-station-meta';
+      meta.textContent = (station.time_label || '') + ' · ' + (station.place || '') + ' (' + (station.age_label || '') + ')';
+      headerCard.appendChild(meta);
+
+      if (station.keywords && station.keywords.length > 0) {
+        headerCard.appendChild(UI.createTagGroup(station.keywords));
+      }
+
+      var themeText = document.createElement('div');
+      themeText.className = 'result-hero-guide';
+      themeText.textContent = '“' + (station.theme || '') + '”';
+      headerCard.appendChild(themeText);
+      wrap.appendChild(headerCard);
+
+      // 史实背景卡片
+      var factCard = document.createElement('div');
+      factCard.className = 'ink-card';
+      var fBadge = document.createElement('div');
+      fBadge.className = 'result-card-badge';
+      fBadge.textContent = '真实史实 · 当时发生了什么';
+      var fTitle = document.createElement('h3');
+      fTitle.className = 'result-card-title';
+      fTitle.textContent = '历史现场';
+      var fBody = document.createElement('p');
+      fBody.className = 'result-card-body';
+      fBody.textContent = station.summary_fact;
+      factCard.appendChild(fBadge);
+      factCard.appendChild(fTitle);
+      factCard.appendChild(fBody);
       wrap.appendChild(factCard);
 
-      var quoteId = (station.quote_ids && station.quote_ids[0]) || 'quote_dingfengbo_01';
-      var quoteObj = Data.getQuoteById(quoteId);
-      if (quoteObj) {
-        var workObj = Data.getWorkById(quoteObj.work_id);
-        var sourceText = workObj ? '《' + workObj.title + '》' : '苏轼';
-        wrap.appendChild(UI.createQuoteBlock(quoteObj.text, sourceText));
+      // 生活实录卡片
+      var storyCard = document.createElement('div');
+      storyCard.className = 'ink-card';
+      var sBadge = document.createElement('div');
+      sBadge.className = 'result-card-badge';
+      sBadge.textContent = '生活实录 · 他如何度过';
+      var sTitle = document.createElement('h3');
+      sTitle.className = 'result-card-title';
+      sTitle.textContent = '日常践行';
+      var sBody = document.createElement('p');
+      sBody.className = 'result-card-body';
+      sBody.textContent = station.summary_story;
+      storyCard.appendChild(sBadge);
+      storyCard.appendChild(sTitle);
+      storyCard.appendChild(sBody);
+      wrap.appendChild(storyCard);
+
+      // 代表诗词与名作卡片
+      var quoteId = (station.quote_ids && station.quote_ids[0]) || '';
+      if (quoteId) {
+        var quoteObj = Data.getQuoteById(quoteId);
+        if (quoteObj) {
+          var workObj = quoteObj.work_id ? Data.getWorkById(quoteObj.work_id) : null;
+          var wTitle = workObj ? ('《' + workObj.title + '》') : '《东坡诗选》';
+          var qCard = document.createElement('div');
+          qCard.className = 'ink-card';
+          var qBadge = document.createElement('div');
+          qBadge.className = 'result-card-badge';
+          qBadge.textContent = '代表名作与诗句';
+          qCard.appendChild(qBadge);
+          qCard.appendChild(UI.createQuoteBlock(quoteObj.text, wTitle));
+          if (workObj && workObj.creation_context) {
+            var qContext = document.createElement('div');
+            qContext.className = 'result-quote-context';
+            qContext.textContent = '背景：' + workObj.creation_context;
+            qCard.appendChild(qContext);
+          }
+          wrap.appendChild(qCard);
+        }
       }
 
-      if (station.work_ids && station.work_ids.length > 0) {
-        var firstWorkId = station.work_ids[0];
-        var btnWork = UI.createPrimaryButton('阅读代表作品', function () {
-          Router.navigate('work', { work_id: firstWorkId });
-        });
-        wrap.appendChild(btnWork);
+      // 东坡生活视角
+      if (station.dongpo_view) {
+        var sayingCard = document.createElement('div');
+        sayingCard.className = 'ink-card result-saying-card';
+        var sayBadge = document.createElement('div');
+        sayBadge.className = 'result-card-badge';
+        sayBadge.textContent = '现代启发';
+        var sayTitle = document.createElement('h3');
+        sayTitle.className = 'result-card-title';
+        sayTitle.textContent = '东坡式理解';
+        var sayBody = document.createElement('p');
+        sayBody.className = 'result-card-body';
+        sayBody.textContent = station.dongpo_view;
+        sayingCard.appendChild(sayBadge);
+        sayingCard.appendChild(sayTitle);
+        sayingCard.appendChild(sayBody);
+        wrap.appendChild(sayingCard);
       }
+
+      // 今日小行动
+      if (station.today_action) {
+        var actCard = document.createElement('div');
+        actCard.className = 'ink-card result-action-card';
+        var actBadge = document.createElement('div');
+        actBadge.className = 'result-card-badge';
+        actBadge.textContent = '日常践行';
+        var actTitle = document.createElement('h3');
+        actTitle.className = 'result-card-title';
+        actTitle.textContent = '今天做一件小事';
+        var actBody = document.createElement('p');
+        actBody.className = 'result-card-body';
+        actBody.textContent = station.today_action;
+        actCard.appendChild(actBadge);
+        actCard.appendChild(actTitle);
+        actCard.appendChild(actBody);
+        wrap.appendChild(actCard);
+      }
+
+      // 底部多向操作区
+      var actions = document.createElement('div');
+      actions.className = 'result-actions';
+
+      var btnCard = UI.createPrimaryButton('生成本站东坡人生卡', function () {
+        Router.navigate('share-card', { station_id: station.id, type: 'station' });
+      });
+      var btnUniv = UI.createSecondaryButton('返回人生宇宙漫游', function () {
+        Router.navigate('universe', { highlight_station_id: station.id });
+      });
+      var btnQuiz = UI.createSecondaryButton('测测我的人生正在哪一站', function () {
+        Router.navigate('quiz');
+      });
+
+      actions.appendChild(btnCard);
+      actions.appendChild(btnUniv);
+      actions.appendChild(btnQuiz);
+      wrap.appendChild(actions);
 
       return wrap;
     }

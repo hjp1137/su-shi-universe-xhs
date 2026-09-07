@@ -563,28 +563,192 @@
   margin-top: var(--space-3);
 }
 
-/* 4. 宇宙页 Universe 生命线样式 */
-.timeline-container {
-  position: relative;
-  padding-left: var(--space-6);
-  border-left: 2px solid rgba(111, 175, 194, 0.3);
-  margin-left: var(--space-3);
+/* 4. 宇宙生命线 Universe 样式 */
+.universe-container {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: var(--space-8);
 }
 
-.timeline-item {
+.universe-my-station-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  background: rgba(217, 185, 120, 0.12);
+  border: 1px solid rgba(217, 185, 120, 0.35);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-4);
+  cursor: pointer;
+  transition: background var(--motion-fast);
+}
+
+.universe-my-station-bar:active {
+  background: rgba(217, 185, 120, 0.22);
+}
+
+.my-station-info {
+  display: flex;
+  align-items: center;
+}
+
+.my-station-tag {
+  font-size: var(--font-size-tag);
+  padding: 2px 6px;
+  background: var(--color-warm);
+  color: #141b24;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  margin-right: var(--space-2);
+  flex-shrink: 0;
+}
+
+.my-station-text {
+  font-size: var(--font-size-caption);
+  color: var(--color-warm);
+  font-weight: 500;
+}
+
+.my-station-btn {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}
+
+.universe-river-timeline {
+  position: relative;
+  padding-left: 28px;
+  margin-left: 12px;
+  margin-top: var(--space-3);
+  border-left: 2px solid rgba(111, 175, 194, 0.25);
+}
+
+.universe-node-item {
   position: relative;
   margin-bottom: var(--space-5);
 }
 
-.timeline-dot {
+.universe-node-badge {
   position: absolute;
-  left: calc(-1 * var(--space-6) - 5px);
+  left: -39px;
   top: 14px;
-  width: 8px;
-  height: 8px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  background: var(--color-river);
-  box-shadow: 0 0 8px var(--color-river);
+  background: #0f1a24;
+  border: 2px solid var(--color-river);
+  color: var(--color-river);
+  font-size: 10px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 8px rgba(111, 175, 194, 0.4);
+  transition: all var(--motion-fast);
+}
+
+.universe-node-item.is-highlighted .universe-node-badge {
+  border-color: var(--color-warm);
+  color: var(--color-warm);
+  box-shadow: 0 0 14px rgba(217, 185, 120, 0.8);
+  transform: scale(1.15);
+}
+
+.universe-node-card {
+  border-left: 3px solid transparent;
+  transition: all var(--motion-fast);
+  cursor: pointer;
+}
+
+.universe-node-card:active {
+  transform: translateY(-1px);
+}
+
+.universe-node-item.is-highlighted .universe-node-card {
+  border-left-color: var(--color-warm);
+  background: rgba(217, 185, 120, 0.08);
+  box-shadow: 0 4px 18px rgba(217, 185, 120, 0.2);
+}
+
+.universe-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-1);
+}
+
+.universe-card-title {
+  font-size: var(--font-size-h3);
+  font-weight: 600;
+  color: var(--color-moon);
+  letter-spacing: 0.5px;
+}
+
+.universe-current-pill {
+  font-size: var(--font-size-tag);
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  background: var(--color-warm-dim);
+  color: var(--color-warm);
+  border: 1px solid rgba(217, 185, 120, 0.3);
+}
+
+.universe-card-meta {
+  font-size: var(--font-size-tag);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2);
+}
+
+.universe-card-theme {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-normal);
+  margin-bottom: var(--space-2);
+}
+
+.universe-card-quote {
+  font-size: var(--font-size-tag);
+  color: var(--color-river);
+  font-style: italic;
+  line-height: var(--line-height-normal);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-divider);
+}
+
+.universe-card-arrow {
+  margin-top: var(--space-2);
+  font-size: var(--font-size-tag);
+  color: var(--color-text-muted);
+  text-align: right;
+}
+
+/* 各阶段微调微光节奏 */
+.rhythm-wutai .universe-node-card {
+  border-left-color: #7d6588;
+  background: rgba(30, 20, 40, 0.35);
+}
+
+.rhythm-huangzhou .universe-node-card {
+  border-left-color: var(--color-river);
+}
+
+.rhythm-hangzhou .universe-node-card {
+  border-left-color: var(--color-jade);
+}
+
+.rhythm-huizhou .universe-node-card, .rhythm-danzhou .universe-node-card {
+  border-left-color: var(--color-warm);
+}
+
+/* 站点详情 Station 样式 */
+.station-detail-container {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: var(--space-8);
+}
+
+.station-detail-container > * + * {
+  margin-top: var(--space-4);
 }
 
 /* 5. 分享卡预览 Share-Card 样式 */
