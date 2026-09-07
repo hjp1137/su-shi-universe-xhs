@@ -1,0 +1,13 @@
+# 编译与构建产物
+dist/
+build/
+*.zip
+
+# 依赖与临时文件
+node_modules/
+.DS_Store
+Thumbs.db
+*.log
+
+# 临时下载包
+/minitool-zip-builder-*.skill
