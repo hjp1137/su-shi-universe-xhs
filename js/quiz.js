@@ -244,9 +244,44 @@
     };
   }
 
+  /**
+   * 构建人生节点卡 ViewModel (供漫游九大站点时导出分享卡复用)
+   * @param {string} stationId
+   * @returns {Object} 节点卡可序列化 ViewModel
+   */
+  function buildStationNodeCardViewModel(stationId) {
+    var Data = root.SuShiUniverse ? root.SuShiUniverse.Data : null;
+    if (!Data) return null;
+
+    stationId = stationId || 'station_huangzhou';
+    var station = Data.getStationById(stationId) || Data.getStationById('station_huangzhou') || {};
+    var quoteId = (station.quote_ids && station.quote_ids[0]) || 'quote_dingfengbo_01';
+    var quote = Data.getQuoteById(quoteId) || {};
+    var work = quote.work_id ? Data.getWorkById(quote.work_id) : {};
+
+    return {
+      type: 'node',
+      version: '1.0',
+      station_id: station.id || 'station_huangzhou',
+      station_name: station.name || '黄州｜重新生活',
+      station_short_name: station.short_name || '黄州',
+      station_time_label: station.time_label || '',
+      station_age_label: station.age_label || '',
+      station_place: station.place || '',
+      theme: station.theme || '',
+      keywords: station.keywords || ['重新生活', '徐行', '烟火'],
+      quote_text: quote.text || '莫听穿林打叶声，何妨吟啸且徐行。',
+      work_title: work.title || '定风波·莫听穿林打叶声',
+      summary_fact: station.summary_fact || '',
+      dongpo_view: station.dongpo_view || '',
+      today_action: station.today_action || ''
+    };
+  }
+
   Quiz.calculateQuizResult = calculateQuizResult;
   Quiz.createQuizSession = createQuizSession;
   Quiz.buildShareCardViewModel = buildShareCardViewModel;
+  Quiz.buildStationNodeCardViewModel = buildStationNodeCardViewModel;
 
   root.SuShiUniverse.Quiz = Quiz;
 })();

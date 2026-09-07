@@ -1538,66 +1538,187 @@
     }
   });
 
-  // 8. 分享卡预览视图 Share-Card
+  // 8. 分享卡预览视图 Share-Card (Canvas 2D 动态生成与三类卡片切换)
   Router.register('share-card', {
     render: function (params) {
       params = params || {};
-      var isDaily = params.type === 'daily';
+      var CardCanvas = SuShiUniverse.CardCanvas;
+      var Quiz = SuShiUniverse.Quiz;
+      var Daily = SuShiUniverse.Daily;
+      var Store = SuShiUniverse.Store;
 
-      var wrap = document.createElement('div');
-      wrap.className = 'view-wrapper';
-
-      wrap.appendChild(UI.createSectionHeader('分享卡预览', '长按保存或生成东坡人生卡'));
-
-      var card = document.createElement('div');
-      card.className = 'share-preview-card';
-
-      var brandTitle = document.createElement('div');
-      brandTitle.className = 'section-subtitle';
-      brandTitle.textContent = '中国诗词宇宙 · 苏轼宇宙';
-      card.appendChild(brandTitle);
-
-      var cardTitle = document.createElement('h2');
-      cardTitle.className = 'result-station-name';
-
-      var quoteText = '莫听穿林打叶声，何妨吟啸且徐行。';
-      var sourceText = '苏轼';
-      var tipText = '遇到烦心事，先去东坡那里坐一会儿。';
-
-      if (isDaily && SuShiUniverse.Daily) {
-        var dailyBundle = params.date_str ? SuShiUniverse.Daily.getItemByDate(params.date_str) : SuShiUniverse.Daily.getTodayItem();
-        cardTitle.textContent = '今日东坡签 · ' + dailyBundle.date_display.split('·')[0].trim();
-        quoteText = (dailyBundle.quote && dailyBundle.quote.text) || quoteText;
-        sourceText = dailyBundle.work ? ('《' + dailyBundle.work.title + '》') : sourceText;
-        tipText = dailyBundle.dongpo_view || tipText;
-      } else {
-        cardTitle.textContent = '黄州｜重新生活';
+      // 确定初始卡片类型
+      var currentType = 'station';
+      if (params.type === 'daily' || params.type === 'daily_sign') {
+        currentType = 'daily';
+      } else if (params.type === 'node' || params.type === 'station_node' || params.type === 'station') {
+        currentType = 'node';
+      } else if (params.type === 'result' || params.type === 'station_result') {
+        currentType = 'station';
       }
 
-      card.appendChild(cardTitle);
-      card.appendChild(UI.createQuoteBlock(quoteText, sourceText));
+      // 提取继承参数与安全兜底
+      var lastResult = (Store && typeof Store.getLastResult === 'function') ? Store.getLastResult() : null;
+      var currentStationId = params.station_id || (lastResult && lastResult.station_id) || 'station_huangzhou';
+      var currentMoodId = params.mood_id || (lastResult && lastResult.mood_id) || 'mood_huangzhou_restart';
+      var currentDateStr = params.date_str || (Daily && typeof Daily.getTodayDateString === 'function' ? Daily.getTodayDateString() : '2026-09-07');
+      var currentDataUrl = '';
 
-      var tip = document.createElement('p');
-      tip.className = 'section-subtitle';
-      tip.textContent = tipText;
-      card.appendChild(tip);
+      var wrap = document.createElement('div');
+      wrap.className = 'view-wrapper share-card-container';
 
-      wrap.appendChild(card);
+      wrap.appendChild(UI.createSectionHeader('东坡人生分享卡', '纯本地 Canvas 2D 高清绘制 · 随行诗意安顿日常'));
 
+      // --- Tab 切换条 ---
+      var tabNav = document.createElement('div');
+      tabNav.className = 'share-tabs-nav';
+
+      var tabsConfig = [
+        { type: 'station', label: '人生站点卡' },
+        { type: 'daily', label: '今日东坡签' },
+        { type: 'node', label: '人生节点卡' }
+      ];
+
+      var tabButtons = {};
+
+      tabsConfig.forEach(function (tab) {
+        var btn = document.createElement('button');
+        btn.className = 'share-tab-btn' + (tab.type === currentType ? ' active' : '');
+        btn.textContent = tab.label;
+        btn.setAttribute('type', 'button');
+        btn.setAttribute('role', 'tab');
+        btn.setAttribute('aria-selected', tab.type === currentType ? 'true' : 'false');
+
+        btn.addEventListener('click', function () {
+          if (currentType === tab.type) return;
+          currentType = tab.type;
+
+          // 更新 Tab 样式
+          tabsConfig.forEach(function (t) {
+            if (tabButtons[t.type]) {
+              if (t.type === currentType) {
+                tabButtons[t.type].classList.add('active');
+                tabButtons[t.type].setAttribute('aria-selected', 'true');
+              } else {
+                tabButtons[t.type].classList.remove('active');
+                tabButtons[t.type].setAttribute('aria-selected', 'false');
+              }
+            }
+          });
+
+          renderCardImage();
+        });
+
+        tabButtons[tab.type] = btn;
+        tabNav.appendChild(btn);
+      });
+
+      wrap.appendChild(tabNav);
+
+      // --- 卡片预览展示区 ---
+      var displayBox = document.createElement('div');
+      displayBox.className = 'share-card-display';
+
+      var imgWrap = document.createElement('div');
+      imgWrap.className = 'share-card-img-wrap';
+
+      var loadingEl = document.createElement('div');
+      loadingEl.className = 'share-card-loading';
+      loadingEl.textContent = '正在水墨泼染卡片…';
+      imgWrap.appendChild(loadingEl);
+
+      var imgEl = document.createElement('img');
+      imgEl.className = 'share-card-img';
+      imgEl.alt = '东坡人生分享卡';
+      imgEl.style.display = 'none';
+      imgWrap.appendChild(imgEl);
+
+      displayBox.appendChild(imgWrap);
+
+      var hintEl = document.createElement('p');
+      hintEl.className = 'share-card-hint';
+      hintEl.textContent = '长按图片可直接保存到相册，或使用下方操作按钮';
+      displayBox.appendChild(hintEl);
+
+      wrap.appendChild(displayBox);
+
+      // --- 核心绘制与刷新函数 ---
+      function renderCardImage() {
+        loadingEl.style.display = 'flex';
+        imgEl.style.display = 'none';
+
+        var vm = null;
+        if (currentType === 'daily') {
+          if (Daily && typeof Daily.getItemByDate === 'function' && typeof Daily.buildDailyShareCardViewModel === 'function') {
+            var item = Daily.getItemByDate(currentDateStr);
+            vm = Daily.buildDailyShareCardViewModel(item);
+          }
+        } else if (currentType === 'node') {
+          if (Quiz && typeof Quiz.buildStationNodeCardViewModel === 'function') {
+            vm = Quiz.buildStationNodeCardViewModel(currentStationId);
+          }
+        } else {
+          if (Quiz && typeof Quiz.buildShareCardViewModel === 'function') {
+            vm = Quiz.buildShareCardViewModel(currentStationId, currentMoodId);
+          }
+        }
+
+        if (CardCanvas && typeof CardCanvas.renderCard === 'function') {
+          CardCanvas.renderCard(currentType, vm, function (dataUrl) {
+            currentDataUrl = dataUrl;
+            imgEl.src = dataUrl;
+            imgEl.onload = function () {
+              loadingEl.style.display = 'none';
+              imgEl.style.display = 'block';
+            };
+          });
+        } else {
+          loadingEl.textContent = '生成模块暂未就绪';
+        }
+      }
+
+      // 初次挂载自动渲染
+      renderCardImage();
+
+      // --- 底部操作按钮群 ---
       var actBox = document.createElement('div');
-      actBox.className = 'result-actions';
+      actBox.className = 'share-card-actions';
 
       var btnSave = UI.createPrimaryButton('保存卡片至相册', function () {
-        if (SuShi.Bridge && typeof SuShi.Bridge.saveImage === 'function') {
-          SuShi.Bridge.saveImage('data:image/svg+xml;base64,PHN2Zy8+');
+        if (!currentDataUrl) {
+          if (UI && typeof UI.showToast === 'function') {
+            UI.showToast('卡片正在生成，请稍候…');
+          }
+          return;
+        }
+        if (SuShiUniverse.Bridge && typeof SuShiUniverse.Bridge.saveImage === 'function') {
+          SuShiUniverse.Bridge.saveImage(currentDataUrl, {
+            filename: 'sushi_card_' + currentType + '.png',
+            title: '苏轼宇宙分享卡'
+          });
+        } else {
+          if (UI && typeof UI.showToast === 'function') {
+            UI.showToast('长按图片即可保存至手机相册');
+          }
         }
       });
-      var btnHome = UI.createSecondaryButton('回到首页', function () {
+      actBox.appendChild(btnSave);
+
+      var btnUniv = UI.createSecondaryButton('漫游苏轼人生宇宙', function () {
+        Router.navigate('universe', { highlight_station_id: currentStationId });
+      });
+      actBox.appendChild(btnUniv);
+
+      var btnQuiz = UI.createSecondaryButton('测测我的人生状态', function () {
+        Router.navigate('quiz');
+      });
+      actBox.appendChild(btnQuiz);
+
+      var btnHome = UI.createSecondaryButton('返回首页', function () {
         Router.navigate('home');
       });
-
-      actBox.appendChild(btnSave);
       actBox.appendChild(btnHome);
+
       wrap.appendChild(actBox);
 
       return wrap;
