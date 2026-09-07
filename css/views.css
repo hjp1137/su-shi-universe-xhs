@@ -434,23 +434,129 @@
   letter-spacing: 0.5px;
 }
 
-/* 3. 结果页 Result 样式 */
-.result-header-card {
+/* 3. 结果页 Result 七层叙事体验样式 */
+.result-narrative-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.result-narrative-container > * + * {
+  margin-top: var(--space-4);
+}
+
+.result-hero-card {
   text-align: center;
   padding: var(--space-6) var(--space-4);
+  background: linear-gradient(180deg, rgba(111, 175, 194, 0.08) 0%, rgba(20, 32, 48, 0.6) 100%);
+  border: 1px solid rgba(111, 175, 194, 0.25);
+}
+
+.result-moment-badge {
+  display: inline-block;
+  font-size: var(--font-size-tag);
+  color: var(--color-river);
+  background: var(--color-river-dim);
+  border: 1px solid rgba(111, 175, 194, 0.3);
+  padding: 3px 12px;
+  border-radius: var(--radius-pill);
+  margin-bottom: var(--space-2);
+  letter-spacing: 1px;
 }
 
 .result-station-name {
   font-size: var(--font-size-brand);
   color: var(--color-moon);
   letter-spacing: 2px;
-  margin-bottom: var(--space-2);
+  margin-bottom: var(--space-1);
 }
 
-.result-station-mood {
+.result-station-meta {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-3);
+  letter-spacing: 0.5px;
+}
+
+.result-hero-guide {
   font-size: var(--font-size-body);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-relaxed);
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-divider);
+  font-style: italic;
+}
+
+.result-card-badge {
+  display: inline-block;
+  font-size: var(--font-size-tag);
+  font-weight: 600;
   color: var(--color-river);
-  margin-bottom: var(--space-4);
+  letter-spacing: 0.5px;
+  margin-bottom: var(--space-1);
+}
+
+.result-card-title {
+  font-size: var(--font-size-h3);
+  font-weight: 600;
+  color: var(--color-moon);
+  margin-bottom: var(--space-2);
+  letter-spacing: 0.5px;
+}
+
+.result-card-body {
+  font-size: var(--font-size-body);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+}
+
+.result-quote-context {
+  margin-top: var(--space-2);
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-normal);
+}
+
+.result-saying-card {
+  border-left: 4px solid var(--color-warm);
+  background: rgba(217, 185, 120, 0.06);
+}
+
+.result-saying-card .result-card-badge {
+  color: var(--color-warm);
+}
+
+.result-saying-disclaimer {
+  margin-top: var(--space-3);
+  font-size: var(--font-size-tag);
+  color: var(--color-text-muted);
+  letter-spacing: 0.3px;
+}
+
+.result-action-card {
+  border-left: 4px solid var(--color-jade);
+  background: rgba(130, 182, 162, 0.06);
+}
+
+.result-action-card .result-card-badge {
+  color: var(--color-jade);
+}
+
+.result-action-tag {
+  display: inline-block;
+  margin-top: var(--space-2);
+  font-size: var(--font-size-tag);
+  padding: 2px 8px;
+  background: rgba(130, 182, 162, 0.15);
+  color: var(--color-jade);
+  border-radius: var(--radius-sm);
+}
+
+.result-actions {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--space-3);
+  padding-bottom: var(--space-6);
 }
 
 .result-actions > * + * {

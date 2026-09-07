@@ -199,8 +199,54 @@
     };
   }
 
+  /**
+   * 构建纯数据 ShareCardViewModel (供结果页和任务10分享卡复用，与原生解耦)
+   * @param {string} stationId
+   * @param {string} moodId
+   * @returns {Object} 完整可序列化 ViewModel
+   */
+  function buildShareCardViewModel(stationId, moodId) {
+    var Data = root.SuShiUniverse ? root.SuShiUniverse.Data : null;
+    if (!Data) return null;
+
+    stationId = stationId || 'station_huangzhou';
+    var station = Data.getStationById(stationId) || Data.getStationById('station_huangzhou') || {};
+    var mood = moodId ? Data.getMoodById(moodId) : null;
+
+    var quoteId = (mood && mood.recommended_quote_id) ||
+                  (station.quote_ids && station.quote_ids[0]) ||
+                  'quote_dingfengbo_01';
+    var quote = Data.getQuoteById(quoteId) || {};
+    var work = quote.work_id ? Data.getWorkById(quote.work_id) : {};
+
+    return {
+      version: '1.0',
+      station_id: station.id || 'station_huangzhou',
+      station_name: station.name || '黄州｜重新生活',
+      station_short_name: station.short_name || '黄州',
+      station_place: station.place || '',
+      station_time_label: station.time_label || '',
+      theme: station.theme || '',
+      keywords: station.keywords || ['重启', '徐行', '烟火'],
+      mood_id: mood ? mood.id : '',
+      mood_name: mood ? mood.name : '',
+      mood_dimension: mood ? mood.dimension : '',
+      quote_id: quote.id || '',
+      quote_text: quote.text || '莫听穿林打叶声，何妨吟啸且徐行。',
+      quote_context: quote.context_note || '',
+      work_id: work.id || '',
+      work_title: work.title || '定风波·莫听穿林打叶声',
+      work_why: work.why_related || '',
+      dongpo_view: (mood && mood.dongpo_suggestion) || station.dongpo_view || '',
+      today_action: station.today_action || '',
+      summary_fact: station.summary_fact || '',
+      summary_story: station.summary_story || ''
+    };
+  }
+
   Quiz.calculateQuizResult = calculateQuizResult;
   Quiz.createQuizSession = createQuizSession;
+  Quiz.buildShareCardViewModel = buildShareCardViewModel;
 
   root.SuShiUniverse.Quiz = Quiz;
 })();

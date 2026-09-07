@@ -446,43 +446,40 @@
     }
   });
 
-  // 3. 结果页视图 Result (消费测试结果参数，展示对应站点与文学化建议)
+  // 3. 结果页视图 Result (七层叙事小型体验、多源数据装配、边界降级)
   Router.register('result', {
     render: function (params) {
       params = params || {};
-      var stationId = params.station_id || 'station_huangzhou';
-      var moodId = params.mood_id || '';
-      var moodObj = moodId ? Data.getMoodById(moodId) : null;
-      var station = Data.getStationById(stationId) || {
+
+      // 异常与参数解析：优先入参 -> 其次本地存储 -> 最后安全兜底黄州
+      var stationId = params.station_id;
+      var moodId = params.mood_id;
+
+      if (!stationId && Store && typeof Store.getLastResult === 'function') {
+        var cached = Store.getLastResult();
+        if (cached) {
+          stationId = stationId || cached.station_id;
+          moodId = moodId || cached.mood_id;
+        }
+      }
+
+      stationId = stationId || 'station_huangzhou';
+      var station = Data.getStationById(stationId) || Data.getStationById('station_huangzhou') || {
         name: '黄州｜重新生活',
+        short_name: '黄州',
+        place: '湖北黄冈',
+        time_label: '1080—1084',
         theme: '重新生活',
-        place: '湖北黄冈'
+        keywords: ['重启', '徐行', '烟火'],
+        summary_fact: '元丰三年，苏轼因乌台诗案贬黄州团练副使，本州安置。躬耕东坡自号东坡居士，写下赤壁诸篇。',
+        summary_story: '从九死一生的深渊来到江畔小城。没有俸禄就自己开荒种地，在清贫与孤寂中重新长出力量。',
+        dongpo_view: '跌入低谷并不意味着人生的终结，有时候它只是把我们逼回最真实的生活本身。',
+        today_action: '把一件今天解决不了的烦心事放下，换鞋出去散步十分钟。'
       };
 
-      var wrap = document.createElement('div');
-      wrap.className = 'view-wrapper';
+      var moodObj = moodId ? Data.getMoodById(moodId) : null;
 
-      var headerCard = document.createElement('div');
-      headerCard.className = 'ink-card result-header-card';
-      var subTip = document.createElement('p');
-      subTip.className = 'section-subtitle';
-      subTip.textContent = moodObj ? ('当下心境 · ' + moodObj.name) : '你的人生正在东坡这一站';
-      var sName = document.createElement('h1');
-      sName.className = 'result-station-name';
-      sName.textContent = station.name;
-
-      var tagList = [];
-      if (moodObj && moodObj.dimension) tagList.push(moodObj.dimension);
-      if (station.theme) tagList.push(station.theme);
-      if (tagList.length === 0) tagList = ['慢一点', '重新生活', '继续往前'];
-      var tagGroup = UI.createTagGroup(tagList);
-
-      headerCard.appendChild(subTip);
-      headerCard.appendChild(sName);
-      headerCard.appendChild(tagGroup);
-      wrap.appendChild(headerCard);
-
-      // 匹配诗句与背景卡片 (优先匹配该心境推荐诗句)
+      // 匹配主诗句与主作品
       var targetQuoteId = (moodObj && moodObj.recommended_quote_id) ||
                           (station.quote_ids && station.quote_ids[0]) ||
                           'quote_dingfengbo_01';
@@ -491,17 +488,156 @@
         context_note: '沙湖道中遇雨'
       };
       var workObj = (quoteObj && quoteObj.work_id) ? Data.getWorkById(quoteObj.work_id) : null;
-      var workTitle = workObj ? ('《' + workObj.title + '》') : '《东坡诗选》';
-      wrap.appendChild(UI.createQuoteBlock(quoteObj.text, workTitle));
+      if (!workObj) {
+        workObj = {
+          title: '定风波·莫听穿林打叶声',
+          creation_context: '元丰五年三月，苏轼沙湖道中遇雨，同行狼狈，余独不觉。',
+          why_related: '风雨徐行，是苏轼黄州时期从容应对生活骤雨的精神缩影。'
+        };
+      }
 
-      var storyContent = [
-        UI.createSectionHeader('那时候，苏轼也刚刚经历一段风雨', station.summary_fact || '元丰三年，苏轼因乌台诗案贬黄州团练副使，本州安置。'),
-        UI.createSectionHeader('苏轼对你说', (moodObj && moodObj.dongpo_suggestion) || station.dongpo_view || '你最近可能不是走不动了，只是走到了需要换一种节奏生活的地方。')
-      ];
-      var storyCard = UI.createInkCard(storyContent);
+      var wrap = document.createElement('div');
+      wrap.className = 'view-wrapper result-narrative-container';
+
+      // --- 第 1 层：你到了哪里？ (结果揭晓卡) ---
+      var heroCard = document.createElement('div');
+      heroCard.className = 'ink-card result-hero-card';
+
+      var momentBadge = document.createElement('div');
+      momentBadge.className = 'result-moment-badge';
+      momentBadge.textContent = '你正处在人生的「' + (station.short_name || '东坡') + '时刻」';
+      heroCard.appendChild(momentBadge);
+
+      var sName = document.createElement('h1');
+      sName.className = 'result-station-name';
+      sName.textContent = station.name;
+      heroCard.appendChild(sName);
+
+      var metaText = document.createElement('div');
+      metaText.className = 'result-station-meta';
+      metaText.textContent = (station.time_label || '') + ' · ' + (station.place || '');
+      heroCard.appendChild(metaText);
+
+      var tagList = station.keywords || ['重新生活', '徐行', '烟火'];
+      heroCard.appendChild(UI.createTagGroup(tagList));
+
+      var leadGuide = document.createElement('div');
+      leadGuide.className = 'result-hero-guide';
+      leadGuide.textContent = moodObj ? ('“' + moodObj.summary + '”') : ('“' + station.theme + '”');
+      heroCard.appendChild(leadGuide);
+
+      wrap.appendChild(heroCard);
+
+      // --- 第 2 层：苏轼当时怎么了？ (历史现场真实史实卡) ---
+      var factCard = document.createElement('div');
+      factCard.className = 'ink-card';
+      var factBadge = document.createElement('div');
+      factBadge.className = 'result-card-badge';
+      factBadge.textContent = '第一幕 · 历史现场';
+      var factTitle = document.createElement('h3');
+      factTitle.className = 'result-card-title';
+      factTitle.textContent = '苏轼当时怎么了？';
+      var factBody = document.createElement('p');
+      factBody.className = 'result-card-body';
+      factBody.textContent = station.summary_fact;
+
+      factCard.appendChild(factBadge);
+      factCard.appendChild(factTitle);
+      factCard.appendChild(factBody);
+      wrap.appendChild(factCard);
+
+      // --- 第 3 层：他写下了什么？ (诗句作品卡) ---
+      var quoteCard = document.createElement('div');
+      quoteCard.className = 'ink-card';
+      var quoteBadge = document.createElement('div');
+      quoteBadge.className = 'result-card-badge';
+      quoteBadge.textContent = '第二幕 · 诗词共鸣';
+      var quoteTitle = document.createElement('h3');
+      quoteTitle.className = 'result-card-title';
+      quoteTitle.textContent = '他写下了什么？';
+
+      quoteCard.appendChild(quoteBadge);
+      quoteCard.appendChild(quoteTitle);
+      quoteCard.appendChild(UI.createQuoteBlock(quoteObj.text, '《' + workObj.title + '》'));
+
+      var quoteContext = document.createElement('div');
+      quoteContext.className = 'result-quote-context';
+      quoteContext.textContent = workObj.creation_context ? ('创作背景：' + workObj.creation_context) : '';
+      quoteCard.appendChild(quoteContext);
+
+      if (workObj.why_related) {
+        var quoteWhy = document.createElement('div');
+        quoteWhy.className = 'result-quote-context';
+        quoteWhy.textContent = '为什么相关：' + workObj.why_related;
+        quoteCard.appendChild(quoteWhy);
+      }
+      wrap.appendChild(quoteCard);
+
+      // --- 第 4 层：他后来怎么过？ (生活实践卡) ---
+      var storyCard = document.createElement('div');
+      storyCard.className = 'ink-card';
+      var storyBadge = document.createElement('div');
+      storyBadge.className = 'result-card-badge';
+      storyBadge.textContent = '第三幕 · 生活实践';
+      var storyTitle = document.createElement('h3');
+      storyTitle.className = 'result-card-title';
+      storyTitle.textContent = '他后来怎么过这一关？';
+      var storyBody = document.createElement('p');
+      storyBody.className = 'result-card-body';
+      storyBody.textContent = station.summary_story;
+
+      storyCard.appendChild(storyBadge);
+      storyCard.appendChild(storyTitle);
+      storyCard.appendChild(storyBody);
       wrap.appendChild(storyCard);
 
-      // 结果页操作按钮组
+      // --- 第 5 层：今天给你一句话 (现代生活理解) ---
+      var sayingCard = document.createElement('div');
+      sayingCard.className = 'ink-card result-saying-card';
+      var sayingBadge = document.createElement('div');
+      sayingBadge.className = 'result-card-badge';
+      sayingBadge.textContent = '第四幕 · 现代启发';
+      var sayingTitle = document.createElement('h3');
+      sayingTitle.className = 'result-card-title';
+      sayingTitle.textContent = '今天给你一句话';
+      var sayingBody = document.createElement('p');
+      sayingBody.className = 'result-card-body';
+      sayingBody.textContent = (moodObj && moodObj.dongpo_suggestion) || station.dongpo_view;
+
+      var sayingDisclaimer = document.createElement('div');
+      sayingDisclaimer.className = 'result-saying-disclaimer';
+      sayingDisclaimer.textContent = '* 本句为苏轼宇宙结合史料的现代生活解读，非古籍原文。';
+
+      sayingCard.appendChild(sayingBadge);
+      sayingCard.appendChild(sayingTitle);
+      sayingCard.appendChild(sayingBody);
+      sayingCard.appendChild(sayingDisclaimer);
+      wrap.appendChild(sayingCard);
+
+      // --- 第 6 层：今天做一件小事 (日常践行卡) ---
+      var actionCard = document.createElement('div');
+      actionCard.className = 'ink-card result-action-card';
+      var actionBadge = document.createElement('div');
+      actionBadge.className = 'result-card-badge';
+      actionBadge.textContent = '第五幕 · 日常践行';
+      var actionTitle = document.createElement('h3');
+      actionTitle.className = 'result-card-title';
+      actionTitle.textContent = '今天做一件小事';
+      var actionBody = document.createElement('p');
+      actionBody.className = 'result-card-body';
+      actionBody.textContent = station.today_action || '给自己泡一杯热茶，细细品味两分钟茶香。';
+
+      var actionTag = document.createElement('span');
+      actionTag.className = 'result-action-tag';
+      actionTag.textContent = '即刻行动 · 找回从容';
+
+      actionCard.appendChild(actionBadge);
+      actionCard.appendChild(actionTitle);
+      actionCard.appendChild(actionBody);
+      actionCard.appendChild(actionTag);
+      wrap.appendChild(actionCard);
+
+      // --- 第 7 层：生成我的东坡人生卡与后续入口 ---
       var actBox = document.createElement('div');
       actBox.className = 'result-actions';
 
@@ -514,10 +650,14 @@
       var btnRetest = UI.createSecondaryButton('重新测一次', function () {
         Router.navigate('quiz');
       });
+      var btnHome = UI.createSecondaryButton('返回苏轼宇宙首页', function () {
+        Router.navigate('home');
+      });
 
       actBox.appendChild(btnShare);
       actBox.appendChild(btnStation);
       actBox.appendChild(btnRetest);
+      actBox.appendChild(btnHome);
       wrap.appendChild(actBox);
 
       return wrap;
