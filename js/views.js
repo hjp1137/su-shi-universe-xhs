@@ -34,6 +34,18 @@
       var hero = document.createElement('div');
       hero.className = 'home-first-screen';
 
+      var heroBg = document.createElement('div');
+      heroBg.className = 'home-hero-bg-wrap';
+      var heroImg = document.createElement('img');
+      heroImg.className = 'home-hero-img';
+      heroImg.src = (SuShi.ArtAssets && SuShi.ArtAssets.homeHero) || './assets/images/scenes/hero-home.webp';
+      heroImg.alt = '苏轼宇宙主视觉';
+      var heroMask = document.createElement('div');
+      heroMask.className = 'home-hero-mask';
+      heroBg.appendChild(heroImg);
+      heroBg.appendChild(heroMask);
+      hero.appendChild(heroBg);
+
       var badge = document.createElement('div');
       badge.className = 'home-badge';
       badge.textContent = '中国诗词宇宙 · 人物实验';
@@ -147,8 +159,21 @@
       var navList = document.createElement('div');
       navList.className = 'home-nav-list';
 
-      // 路径 1: 测一测
+      // 路径 1: 测一测 (Primary Planet)
       var quizCardContent = document.createElement('div');
+      quizCardContent.className = 'home-nav-card-inner';
+
+      var qVisual = document.createElement('div');
+      qVisual.className = 'nav-card-visual';
+      var qPlanetImg = document.createElement('img');
+      qPlanetImg.className = 'nav-card-planet-img';
+      qPlanetImg.src = (SuShi.ArtAssets && SuShi.ArtAssets.cosmos.planetPrimary) || './assets/images/cosmos/planet-entry-primary.webp';
+      qPlanetImg.alt = '测一测';
+      qVisual.appendChild(qPlanetImg);
+      quizCardContent.appendChild(qVisual);
+
+      var qTextCol = document.createElement('div');
+      qTextCol.className = 'nav-card-text-col';
       var qHeader = document.createElement('div');
       qHeader.className = 'nav-card-header';
       var qTitle = document.createElement('div');
@@ -162,16 +187,36 @@
       var qDesc = document.createElement('div');
       qDesc.className = 'nav-card-desc';
       qDesc.textContent = '7道生活化小题，照见当下的风雨与从容。';
-      quizCardContent.appendChild(qHeader);
-      quizCardContent.appendChild(qDesc);
+      qTextCol.appendChild(qHeader);
+      qTextCol.appendChild(qDesc);
+      quizCardContent.appendChild(qTextCol);
+
       var quizCard = UI.createInkCard(quizCardContent, true, function () {
         Router.navigate('quiz');
       });
       quizCard.classList.add('home-nav-card', 'nav-quiz', 'ink-card-station');
       navList.appendChild(quizCard);
 
-      // 路径 2: 逛一逛
+      // 路径 2: 逛一逛 (Secondary Planet + Orbit Ring)
       var univCardContent = document.createElement('div');
+      univCardContent.className = 'home-nav-card-inner';
+
+      var uVisual = document.createElement('div');
+      uVisual.className = 'nav-card-visual';
+      var uRing = document.createElement('img');
+      uRing.className = 'nav-card-orbit-ring';
+      uRing.src = (SuShi.ArtAssets && SuShi.ArtAssets.cosmos.orbit) || './assets/images/cosmos/orbit-ring-glow.webp';
+      uRing.alt = '';
+      var uPlanetImg = document.createElement('img');
+      uPlanetImg.className = 'nav-card-planet-img';
+      uPlanetImg.src = (SuShi.ArtAssets && SuShi.ArtAssets.cosmos.planetSecondary) || './assets/images/cosmos/planet-entry-secondary.webp';
+      uPlanetImg.alt = '逛一逛';
+      uVisual.appendChild(uRing);
+      uVisual.appendChild(uPlanetImg);
+      univCardContent.appendChild(uVisual);
+
+      var uTextCol = document.createElement('div');
+      uTextCol.className = 'nav-card-text-col';
       var uHeader = document.createElement('div');
       uHeader.className = 'nav-card-header';
       var uTitle = document.createElement('div');
@@ -185,20 +230,35 @@
       var uDesc = document.createElement('div');
       uDesc.className = 'nav-card-desc';
       uDesc.textContent = '从眉山走到天涯，看东坡九度起伏。';
-      univCardContent.appendChild(uHeader);
-      univCardContent.appendChild(uDesc);
+      uTextCol.appendChild(uHeader);
+      uTextCol.appendChild(uDesc);
+      univCardContent.appendChild(uTextCol);
+
       var univCard = UI.createInkCard(univCardContent, true, function () {
         Router.navigate('universe');
       });
       univCard.classList.add('home-nav-card', 'nav-universe', 'ink-card-narrative');
       navList.appendChild(univCard);
 
-      // 路径 3: 坐一会 (消费统一 Daily 稳定映射结果)
+      // 路径 3: 坐一会 (Soft Nebula)
       var todayDaily = SuShiUniverse.Daily ? SuShiUniverse.Daily.getTodayItem() : null;
       var todayQuoteText = (todayDaily && todayDaily.quote && todayDaily.quote.text) || '莫听穿林打叶声，何妨吟啸且徐行。';
       var todayDongpoView = (todayDaily && todayDaily.dongpo_view) || '每天一言一事，给自己十分钟的从容。';
 
       var dailyCardContent = document.createElement('div');
+      dailyCardContent.className = 'home-nav-card-inner';
+
+      var dVisual = document.createElement('div');
+      dVisual.className = 'nav-card-visual';
+      var dNebulaImg = document.createElement('img');
+      dNebulaImg.className = 'nav-card-planet-img nav-card-nebula-img';
+      dNebulaImg.src = (SuShi.ArtAssets && SuShi.ArtAssets.cosmos.nebula) || './assets/images/cosmos/nebula-entry-soft.webp';
+      dNebulaImg.alt = '坐一会';
+      dVisual.appendChild(dNebulaImg);
+      dailyCardContent.appendChild(dVisual);
+
+      var dTextCol = document.createElement('div');
+      dTextCol.className = 'nav-card-text-col';
       var dHeader = document.createElement('div');
       dHeader.className = 'nav-card-header';
       var dTitle = document.createElement('div');
@@ -222,10 +282,11 @@
       dHint.className = 'home-daily-action-hint';
       dHint.textContent = '坐一会儿 →';
 
-      dailyCardContent.appendChild(dHeader);
-      dailyCardContent.appendChild(dQuote);
-      dailyCardContent.appendChild(dGuide);
-      dailyCardContent.appendChild(dHint);
+      dTextCol.appendChild(dHeader);
+      dTextCol.appendChild(dQuote);
+      dTextCol.appendChild(dGuide);
+      dTextCol.appendChild(dHint);
+      dailyCardContent.appendChild(dTextCol);
 
       var dailyCard = UI.createInkCard(dailyCardContent, true, function () {
         Router.navigate('daily');
@@ -526,29 +587,48 @@
       var heroCard = document.createElement('div');
       heroCard.className = 'ink-card ink-card-station result-hero-card';
 
+      var sceneImg = (SuShi.ArtAssets && SuShi.ArtAssets.getStationScene(station.id)) || '';
+      if (sceneImg) {
+        var coverBox = document.createElement('div');
+        coverBox.className = 'result-scene-cover-box';
+        var imgEl = document.createElement('img');
+        imgEl.className = 'result-scene-cover-img';
+        imgEl.src = sceneImg;
+        imgEl.alt = station.name;
+        var maskEl = document.createElement('div');
+        maskEl.className = 'result-scene-cover-mask';
+        coverBox.appendChild(imgEl);
+        coverBox.appendChild(maskEl);
+        heroCard.appendChild(coverBox);
+      }
+
+      var heroContent = document.createElement('div');
+      heroContent.className = 'result-hero-content';
+
       var momentBadge = document.createElement('div');
       momentBadge.className = 'result-moment-badge';
       momentBadge.textContent = '你正处在人生的「' + (station.short_name || '东坡') + '时刻」';
-      heroCard.appendChild(momentBadge);
+      heroContent.appendChild(momentBadge);
 
       var sName = document.createElement('h1');
       sName.className = 'result-station-name';
       sName.textContent = station.name;
-      heroCard.appendChild(sName);
+      heroContent.appendChild(sName);
 
       var metaText = document.createElement('div');
       metaText.className = 'result-station-meta';
       metaText.textContent = (station.time_label || '') + ' · ' + (station.place || '');
-      heroCard.appendChild(metaText);
+      heroContent.appendChild(metaText);
 
       var tagList = station.keywords || ['重新生活', '徐行', '烟火'];
-      heroCard.appendChild(UI.createTagGroup(tagList));
+      heroContent.appendChild(UI.createTagGroup(tagList));
 
       var leadGuide = document.createElement('div');
       leadGuide.className = 'result-hero-guide';
       leadGuide.textContent = moodObj ? ('“' + moodObj.summary + '”') : ('“' + station.theme + '”');
-      heroCard.appendChild(leadGuide);
+      heroContent.appendChild(leadGuide);
 
+      heroCard.appendChild(heroContent);
       wrap.appendChild(heroCard);
 
       // --- 第 2 层：苏轼当时怎么了？ (历史现场真实史实卡) ---
@@ -793,6 +873,19 @@
           item.appendChild(badge);
 
           var cardContent = document.createElement('div');
+          cardContent.className = 'universe-node-card-body';
+
+          var sceneImg = (SuShi.ArtAssets && SuShi.ArtAssets.getStationScene(st.id)) || '';
+          if (sceneImg) {
+            var thumb = document.createElement('img');
+            thumb.className = 'universe-station-thumb';
+            thumb.src = sceneImg;
+            thumb.alt = st.name;
+            cardContent.appendChild(thumb);
+          }
+
+          var textCol = document.createElement('div');
+          textCol.className = 'universe-node-content-col';
 
           var headerRow = document.createElement('div');
           headerRow.className = 'universe-card-header';
@@ -807,18 +900,18 @@
             currPill.textContent = '你在此站';
             headerRow.appendChild(currPill);
           }
-          cardContent.appendChild(headerRow);
+          textCol.appendChild(headerRow);
 
           var meta = document.createElement('div');
           meta.className = 'universe-card-meta';
           meta.textContent = (st.time_label || '') + ' · ' + (st.place || '') + ' (' + (st.age_label || '') + ')';
-          cardContent.appendChild(meta);
+          textCol.appendChild(meta);
 
           if (st.theme) {
             var theme = document.createElement('div');
             theme.className = 'universe-card-theme';
             theme.textContent = st.theme;
-            cardContent.appendChild(theme);
+            textCol.appendChild(theme);
           }
 
           var quoteId = (st.quote_ids && st.quote_ids[0]) || '';
@@ -828,14 +921,16 @@
               var qEl = document.createElement('div');
               qEl.className = 'universe-card-quote';
               qEl.textContent = '“' + qObj.text + '”';
-              cardContent.appendChild(qEl);
+              textCol.appendChild(qEl);
             }
           }
 
           var arrow = document.createElement('div');
           arrow.className = 'universe-card-arrow';
           arrow.textContent = '查看站点详情 →';
-          cardContent.appendChild(arrow);
+          textCol.appendChild(arrow);
+
+          cardContent.appendChild(textCol);
 
           var card = UI.createInkCard(cardContent, true, function () {
             var c = document.getElementById('view-container');
@@ -896,29 +991,49 @@
       var headerCard = document.createElement('div');
       headerCard.className = 'ink-card result-hero-card';
 
+      var sceneImg = (SuShi.ArtAssets && SuShi.ArtAssets.getStationScene(station.id)) || '';
+      if (sceneImg) {
+        var coverBox = document.createElement('div');
+        coverBox.className = 'station-hero-cover-box';
+        var imgEl = document.createElement('img');
+        imgEl.className = 'station-hero-cover-img';
+        imgEl.src = sceneImg;
+        imgEl.alt = station.name;
+        var maskEl = document.createElement('div');
+        maskEl.className = 'station-hero-cover-mask';
+        coverBox.appendChild(imgEl);
+        coverBox.appendChild(maskEl);
+        headerCard.appendChild(coverBox);
+      }
+
+      var headerContent = document.createElement('div');
+      headerContent.className = 'result-hero-content';
+
       var badge = document.createElement('div');
       badge.className = 'result-moment-badge';
       badge.textContent = '苏轼人生 · 第 ' + (station.order || 1) + ' 站';
-      headerCard.appendChild(badge);
+      headerContent.appendChild(badge);
 
       var title = document.createElement('h1');
       title.className = 'result-station-name';
       title.textContent = station.name;
-      headerCard.appendChild(title);
+      headerContent.appendChild(title);
 
       var meta = document.createElement('div');
       meta.className = 'result-station-meta';
       meta.textContent = (station.time_label || '') + ' · ' + (station.place || '') + ' (' + (station.age_label || '') + ')';
-      headerCard.appendChild(meta);
+      headerContent.appendChild(meta);
 
       if (station.keywords && station.keywords.length > 0) {
-        headerCard.appendChild(UI.createTagGroup(station.keywords));
+        headerContent.appendChild(UI.createTagGroup(station.keywords));
       }
 
       var themeText = document.createElement('div');
       themeText.className = 'result-hero-guide';
       themeText.textContent = '“' + (station.theme || '') + '”';
-      headerCard.appendChild(themeText);
+      headerContent.appendChild(themeText);
+
+      headerCard.appendChild(headerContent);
       wrap.appendChild(headerCard);
 
       // 史实背景卡片
@@ -1129,6 +1244,22 @@
       // --- 4.1 作品头部卡片 ---
       var headerHero = document.createElement('div');
       headerHero.className = 'work-header-hero';
+
+      var poemSceneImg = (SuShi.ArtAssets && SuShi.ArtAssets.getPoemScene(work.id)) ||
+                         (stationObj && SuShi.ArtAssets && SuShi.ArtAssets.getStationScene(stationObj.id)) || '';
+      if (poemSceneImg) {
+        var coverBox = document.createElement('div');
+        coverBox.className = 'work-scene-cover-box';
+        var imgEl = document.createElement('img');
+        imgEl.className = 'work-scene-cover-img';
+        imgEl.src = poemSceneImg;
+        imgEl.alt = work.title;
+        var maskEl = document.createElement('div');
+        maskEl.className = 'work-scene-cover-mask';
+        coverBox.appendChild(imgEl);
+        coverBox.appendChild(maskEl);
+        headerHero.appendChild(coverBox);
+      }
 
       var titleRow = document.createElement('div');
       titleRow.className = 'work-title-row';
@@ -1422,14 +1553,22 @@
       dateHeader.appendChild(stampBadge);
       wrap.appendChild(dateHeader);
 
-      // 书法名句卡片 (四大语义卡片：今日东坡每日签)
+      // 书法名句卡片 (四大语义卡片：今日东坡每日签，融合月晕与星印)
       var quoteCard = document.createElement('div');
-      quoteCard.className = 'daily-quote-card ink-card-daily';
+      quoteCard.className = 'daily-quote-card ink-card-daily has-moon-halo';
 
       var sealStamp = document.createElement('div');
       sealStamp.className = 'daily-seal-stamp';
       sealStamp.textContent = '东坡\n小笺';
       quoteCard.appendChild(sealStamp);
+
+      if (SuShi.ArtAssets && SuShi.ArtAssets.decor && SuShi.ArtAssets.decor.badgeMoon) {
+        var moonDecor = document.createElement('img');
+        moonDecor.className = 'daily-moon-badge';
+        moonDecor.src = SuShi.ArtAssets.decor.badgeMoon;
+        moonDecor.alt = '东坡明月印';
+        quoteCard.appendChild(moonDecor);
+      }
 
       var qMark1 = document.createElement('div');
       qMark1.className = 'work-quote-mark';
