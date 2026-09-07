@@ -977,7 +977,11 @@
             wChip.className = 'work-station-badge';
             wChip.style.marginRight = '8px';
             wChip.style.marginBottom = '8px';
-            wChip.textContent = '《' + otherWork.title + '》';
+            if (otherWork.spatial_note) {
+              wChip.textContent = '《' + otherWork.title + '》 (' + otherWork.spatial_note + ')';
+            } else {
+              wChip.textContent = '《' + otherWork.title + '》';
+            }
             (function (owId, currentStationId) {
               wChip.addEventListener('click', function () {
                 Router.navigate('work', { work_id: owId, from_station_id: currentStationId });
@@ -1127,7 +1131,11 @@
       if (stationObj) {
         var stBadge = document.createElement('span');
         stBadge.className = 'work-station-badge';
-        stBadge.textContent = '所属站点：' + stationObj.name + ' →';
+        var stationLabel = '所属站点：' + stationObj.name;
+        if (work.spatial_note) {
+          stationLabel += ' (' + work.spatial_note + ')';
+        }
+        stBadge.textContent = stationLabel + ' →';
         (function (sid) {
           stBadge.addEventListener('click', function () {
             Router.navigate('station', { station_id: sid });

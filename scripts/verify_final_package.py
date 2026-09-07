@@ -68,18 +68,19 @@ def compute_sha256(filepath):
     return h.hexdigest()
 
 
-def verify_package():
+def verify_package(target_path=None):
     errors = []
     warnings = []
+    zip_path = Path(target_path).resolve() if target_path else ZIP_PATH
 
     log_step("1. 检查 ZIP 产物文件存在性与体积门禁")
-    if not ZIP_PATH.exists():
-        print(f"  [FAIL] ZIP 产物不存在: {ZIP_PATH}")
-        return False, ["ZIP 产物未找到，请先执行构建打包"]
+    if not zip_path.exists():
+        print(f"  [FAIL] ZIP 产物不存在: {zip_path}")
+        return False
 
-    zip_size = ZIP_PATH.stat().st_size
-    sha256_hash = compute_sha256(ZIP_PATH)
-    print(f"  产物路径: {ZIP_PATH}")
+    zip_size = zip_path.stat().st_size
+    sha256_hash = compute_sha256(zip_path)
+    print(f"  产物路径: {zip_path}")
     print(f"  文件大小: {zip_size} 字节 ({zip_size / 1024:.2f} KB / {zip_size / 1024 / 1024:.3f} MB)")
     print(f"  SHA-256 : {sha256_hash}")
 
@@ -91,7 +92,7 @@ def verify_package():
         print(f"  [PASS] ZIP 体积极度优异 ({zip_size / 1024:.2f} KB)，远低于 2 MiB 推荐目标！")
 
     log_step("2. 验证 ZIP 解压顶层入口结构 (绝对严禁外层多嵌套目录)")
-    with zipfile.ZipFile(ZIP_PATH, "r") as zf:
+    with zipfile.ZipFile(zip_path, "r") as zf:
         namelist = zf.namelist()
 
         if "index.html" not in namelist:
@@ -167,12 +168,13 @@ def verify_package():
         return False
     else:
         print(f"SUCCESS: 最终比赛产物包完美达标！")
-        print(f"  产物路径 : {ZIP_PATH.resolve()}")
+        print(f"  产物路径 : {zip_path.resolve()}")
         print(f"  产物大小 : {zip_size / 1024:.2f} KB (≤ 2048 KB 强推荐目标达成)")
         print(f"  SHA-256  : {sha256_hash}")
         return True
 
 
 if __name__ == "__main__":
-    success = verify_package()
+    target = sys.argv[1] if len(sys.argv) > 1 else None
+    success = verify_package(target)
     sys.exit(0 if success else 1)

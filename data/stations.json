@@ -89,7 +89,7 @@
     "place": "湖北黄州（今黄冈）",
     "theme": "低谷重启、躬耕烟火与赤壁超脱",
     "keywords": ["重启", "徐行", "赤壁", "烟火", "清欢"],
-    "summary_fact": "贬黄州团练副使，本州安置。躬耕东坡自号东坡居士，作《定风波》、《前赤壁赋》、《念奴娇·赤壁怀古》等。",
+    "summary_fact": "贬黄州团练副使，本州安置。躬耕东坡自号东坡居士，作《定风波》、《前赤壁赋》、《念奴娇·赤壁怀古》等。离黄州赴汝途中游庐山作《题西林壁》。",
     "summary_story": "从九死一生的深渊来到长江畔的小城。没有俸禄就自己开荒种地，猪肉贱就慢火细煨。在这片荒坡上，那个旷达的东坡居士真正诞生了。",
     "event_ids": ["event_huangzhou_dongpo", "event_huangzhou_chibi"],
     "work_ids": ["work_chudao_huangzhou", "work_dingfengbo_moting", "work_chibi_fu", "work_niannujiao_chibi", "work_linjiangxian_lingao", "work_zhurou_song", "work_chengtian_yeyou", "work_tixilinbi"],
