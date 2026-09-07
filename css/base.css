@@ -105,3 +105,39 @@ html, body {
   margin-top: 0;
   margin-left: var(--space-4);
 }
+
+/* 水墨意境微光晕浮层 (极轻低频呼吸，仅操作 opacity，保障 60fps) */
+.app-shell::before {
+  content: "";
+  position: absolute;
+  top: -10%;
+  left: 10%;
+  width: 80%;
+  height: 60%;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(111, 175, 194, 0.12) 0%, transparent 70%);
+  opacity: 0.6;
+  animation: inkAmbientBreathe var(--motion-breathe);
+  z-index: var(--z-base);
+}
+
+@keyframes inkAmbientBreathe {
+  0% {
+    opacity: 0.45;
+    transform: translate3d(0, 0, 0) scale(0.98);
+  }
+  100% {
+    opacity: 0.75;
+    transform: translate3d(0, 8px, 0) scale(1.02);
+  }
+}
+
+/* 动效无障碍与系统降级保障 (Skill 1.6.0 & 视觉规范基线) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

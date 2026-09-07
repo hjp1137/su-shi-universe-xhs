@@ -3,12 +3,25 @@
  * 遵循基线：Chrome 61 / ES2017 / Skill 1.6.0
  */
 
-/* 视图公共包装容器 */
+/* 视图公共包装容器 (入场平滑淡入浮起，操作 GPU 合成属性保证 60fps) */
 .view-wrapper {
   padding: var(--space-4) var(--space-4) var(--space-8);
   min-height: 100%;
   display: flex;
   flex-direction: column;
+  animation: viewFadeIn var(--motion-enter);
+  will-change: opacity, transform;
+}
+
+@keyframes viewFadeIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
 }
 
 /* 1. 首页 Home 视觉体系 */
@@ -36,6 +49,8 @@
   padding: 4px 14px;
   background-color: rgba(14, 24, 48, 0.65);
   margin-bottom: var(--space-4);
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .home-logo {
@@ -45,6 +60,16 @@
   filter: drop-shadow(0 6px 20px rgba(111, 175, 194, 0.3));
   margin-bottom: var(--space-3);
   transition: transform var(--motion-normal);
+  animation: homeLogoFloat var(--motion-breathe);
+}
+
+@keyframes homeLogoFloat {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, -5px, 0);
+  }
 }
 
 .home-logo:active {
@@ -363,6 +388,18 @@
   padding: var(--space-5) var(--space-4);
   margin-bottom: var(--space-4);
   box-shadow: var(--shadow-card);
+  animation: quizCardIn 260ms ease-out;
+}
+
+@keyframes quizCardIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 6px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
 }
 
 .quiz-q-title {
@@ -391,22 +428,23 @@
   padding: var(--space-4) var(--space-4);
   cursor: pointer;
   outline: none;
-  transition: all var(--motion-fast);
+  transition: transform var(--motion-fast), background var(--motion-fast), border-color var(--motion-fast), box-shadow var(--motion-fast);
   user-select: none;
+  -webkit-user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
 
-.quiz-option-item:hover, .quiz-option-item:active {
-  background: rgba(111, 175, 194, 0.08);
-  border-color: rgba(111, 175, 194, 0.4);
-  transform: translateY(-1px);
+.quiz-option-item:active {
+  transform: scale(0.98);
+  background: rgba(111, 175, 194, 0.10);
+  border-color: rgba(111, 175, 194, 0.45);
 }
 
 .quiz-option-item.is-selected {
-  background: rgba(111, 175, 194, 0.16);
+  background: rgba(111, 175, 194, 0.18);
   border-color: var(--color-river);
   box-shadow: 0 4px 14px rgba(111, 175, 194, 0.25);
-  transform: translateY(-1px);
+  transform: scale(1.01);
 }
 
 .quiz-opt-badge {
@@ -459,7 +497,7 @@
   letter-spacing: 0.5px;
 }
 
-/* 3. 结果页 Result 七层叙事体验样式 */
+/* 3. 结果页 Result 七层叙事体验样式 (阶梯展开微动效) */
 .result-narrative-container {
   display: flex;
   flex-direction: column;
@@ -467,6 +505,36 @@
 
 .result-narrative-container > * + * {
   margin-top: var(--space-4);
+}
+
+.result-narrative-container > *:nth-child(1) {
+  animation: resultCardStagger 320ms cubic-bezier(0.16, 1, 0.3, 1) 0ms both;
+}
+.result-narrative-container > *:nth-child(2) {
+  animation: resultCardStagger 320ms cubic-bezier(0.16, 1, 0.3, 1) 60ms both;
+}
+.result-narrative-container > *:nth-child(3) {
+  animation: resultCardStagger 320ms cubic-bezier(0.16, 1, 0.3, 1) 120ms both;
+}
+.result-narrative-container > *:nth-child(4) {
+  animation: resultCardStagger 320ms cubic-bezier(0.16, 1, 0.3, 1) 180ms both;
+}
+.result-narrative-container > *:nth-child(5) {
+  animation: resultCardStagger 320ms cubic-bezier(0.16, 1, 0.3, 1) 240ms both;
+}
+.result-narrative-container > *:nth-child(n+6) {
+  animation: resultCardStagger 320ms cubic-bezier(0.16, 1, 0.3, 1) 300ms both;
+}
+
+@keyframes resultCardStagger {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
 }
 
 .result-hero-card {
@@ -677,16 +745,31 @@
   color: var(--color-warm);
   box-shadow: 0 0 14px rgba(217, 185, 120, 0.8);
   transform: scale(1.15);
+  animation: stationBadgePulse var(--motion-pulse);
+}
+
+@keyframes stationBadgePulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(217, 185, 120, 0.6);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(217, 185, 120, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(217, 185, 120, 0);
+  }
 }
 
 .universe-node-card {
   border-left: 3px solid transparent;
-  transition: all var(--motion-fast);
+  transition: transform var(--motion-fast), border-color var(--motion-fast), background var(--motion-fast);
   cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .universe-node-card:active {
-  transform: translateY(-1px);
+  transform: scale(0.98);
 }
 
 .universe-node-item.is-highlighted .universe-node-card {
@@ -1217,6 +1300,7 @@
   position: relative;
   width: 100%;
   max-width: 320px;
+  min-height: 400px; /* Chrome 61 基线回退，防未支持 aspect-ratio 时高度塌陷 */
   aspect-ratio: 3 / 4;
   border-radius: var(--radius-lg);
   overflow: hidden;
@@ -1234,6 +1318,18 @@
   display: block;
   user-select: none;
   -webkit-user-select: none;
+  animation: cardRollIn 320ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes cardRollIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97) translate3d(0, 8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translate3d(0, 0, 0);
+  }
 }
 
 .share-card-loading {
@@ -1263,7 +1359,11 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
   margin-top: var(--space-2);
+}
+
+/* Chrome 61 兼容保障：兄弟间距替代裸漏 flex gap */
+.share-card-actions > * + * {
+  margin-top: var(--space-3);
 }
 
