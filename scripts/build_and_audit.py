@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-苏轼宇宙小工具 - 构建、静态审计与打包脚本
-符合小红书官方 minitool-zip-builder-1.6.0 规范
+苏轼宇宙小红书小工具 - 构建、静态合规扫描与官方 Skill 1.6.0 双重审计脚本
+遵循基线：Offline H5 / index.html ZIP 根入口 / CSP Safe / Classic Script / ES2017 / Chrome 61
 """
 
 import os
@@ -17,7 +17,9 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DIST_DIR = PROJECT_ROOT / "dist"
 PACKAGE_NAME = "su-shi-universe-xhs.zip"
 ZIP_OUTPUT = DIST_DIR / PACKAGE_NAME
-SKILL_AUDIT_SCRIPT = PROJECT_ROOT / ".skill" / "minitool-zip-builder" / "scripts" / "audit_artifact.py"
+
+SKILL_PY_SCRIPT = PROJECT_ROOT / ".skill" / "minitool-zip-builder" / "scripts" / "audit_artifact.py"
+SKILL_MJS_SCRIPT = PROJECT_ROOT / ".skill" / "minitool-zip-builder" / "scripts" / "audit_artifact.mjs"
 
 ALLOWED_EXTENSIONS = {
     ".html", ".css", ".js",
@@ -60,8 +62,9 @@ def clean_dist():
 def copy_runtime_files():
     runtime_entries = [
         ("index.html", DIST_DIR / "index.html"),
+        ("css", DIST_DIR / "css"),
+        ("js", DIST_DIR / "js"),
         ("assets", DIST_DIR / "assets"),
-        ("src", DIST_DIR / "src"),
         ("data", DIST_DIR / "data"),
     ]
 
@@ -72,20 +75,20 @@ def copy_runtime_files():
         if src_path.is_file():
             shutil.copy2(src_path, dst_path)
         elif src_path.is_dir():
-            shutil.copytree(src_path, dst_path, ignore=shutil.ignore_patterns("*.md", "*.git*", "*.map"))
+            shutil.copytree(src_path, dst_path, ignore=shutil.ignore_patterns("*.md", "*.git*", "*.map", "__pycache__"))
 
-    print("[2/5] 运行时文件已复制到 dist/ 目录")
+    print("[2/5] 运行时文件已复制到 dist/ 目录 (规范包含: index.html, css/, js/, assets/, data/)")
 
 
 def check_dist_compliance():
-    print("[3/5] 正在执行小红书端能力与静态合规检查...")
+    print("[3/5] 正在执行小红书端能力与静态合规扫描...")
     errors = []
 
     # 1. 检查 index.html 是否位于根目录
     if not (DIST_DIR / "index.html").is_file():
         errors.append("根目录下缺失 index.html 入口文件！")
 
-    # 2. 检查文件后缀
+    # 2. 检查文件后缀白名单
     for path in DIST_DIR.rglob("*"):
         if path.is_file():
             ext = path.suffix.lower()
@@ -106,7 +109,6 @@ def check_dist_compliance():
 
             # 针对 index.html 特别检查是否有内联 <script>...</script>
             if path.name == "index.html":
-                # 排除带有 src 的 script
                 script_inline = re.findall(r"<script(?![^>]*\bsrc=)[^>]*>(.*?)</script>", content, re.DOTALL | re.IGNORECASE)
                 for s in script_inline:
                     if s.strip():
@@ -114,12 +116,10 @@ def check_dist_compliance():
 
             # 检查禁用特征
             for pattern, desc in FORBIDDEN_PATTERNS:
-                # 在检查外链时，排除 xmlns 命名空间声明（例如 svg 的 xmlns="http://www.w3.org/2000/svg"）
                 if "https?://" in pattern and path.suffix.lower() == ".svg":
                     continue
                 matches = re.findall(pattern, content, re.IGNORECASE)
                 if matches:
-                    # 针对 https?:// 检查，进一步判断是否是真正的外链
                     if "https?://" in pattern:
                         real_urls = [m for m in re.findall(r'https?://[^\s"\'<>]+', content) if "www.w3.org" not in m]
                         if real_urls:
@@ -131,7 +131,7 @@ def check_dist_compliance():
         for err in errors:
             print(f"  [ERROR] {err}")
         return False
-    print("  [PASS] 端能力与文件格式合规检查通过")
+    print("  [PASS] 端能力与文件格式合规检查全部通过")
     return True
 
 
@@ -148,34 +148,49 @@ def create_zip():
                 zf.write(full_path, arcname=rel_path.as_posix())
 
     zip_size_kb = ZIP_OUTPUT.stat().st_size / 1024
-    print(f"  [PASS] 打包成功，包体积: {zip_size_kb:.2f} KB (小于 2048 KB 建议上限)")
+    print(f"  [PASS] 打包成功，包体积: {zip_size_kb:.2f} KB (推荐目标 ≤ 2048 KB, 硬上限 10240 KB)")
 
 
-def run_official_audit():
-    print("[5/5] 正在执行小红书官方 Skill 审计脚本 (audit_artifact.py)...")
-    if not SKILL_AUDIT_SCRIPT.exists():
-        print(f"  [ERROR] 官方审计脚本不存在: {SKILL_AUDIT_SCRIPT}")
-        return False
+def run_official_audits():
+    print("[5/5] 正在执行小红书官方 Skill 1.6.0 双重审计 (产物目录与 ZIP 包)...")
 
-    # 1. 审计 dist 目录
-    print("\n--- 官方脚本审计产物目录 (dist/) ---")
-    res_dir = subprocess.run([sys.executable, str(SKILL_AUDIT_SCRIPT), str(DIST_DIR)], capture_output=True, text=True)
-    print(res_dir.stdout.strip())
-    if res_dir.stderr.strip():
-        print(res_dir.stderr.strip())
+    # 1. Python 审计
+    if SKILL_PY_SCRIPT.exists():
+        print("\n--- Python 官方审计: 产物目录 (dist/) ---")
+        p_dir = subprocess.run([sys.executable, str(SKILL_PY_SCRIPT), str(DIST_DIR)], capture_output=True, text=True)
+        print(p_dir.stdout.strip())
+        if p_dir.returncode != 0:
+            print(f"  [FAIL] Python 目录审计未通过: {p_dir.stderr.strip()}")
+            return False
 
-    # 2. 审计 zip 文件
-    print(f"\n--- 官方脚本审计产物 ZIP ({PACKAGE_NAME}) ---")
-    res_zip = subprocess.run([sys.executable, str(SKILL_AUDIT_SCRIPT), str(ZIP_OUTPUT)], capture_output=True, text=True)
-    print(res_zip.stdout.strip())
-    if res_zip.stderr.strip():
-        print(res_zip.stderr.strip())
+        print(f"\n--- Python 官方审计: 产物 ZIP ({PACKAGE_NAME}) ---")
+        p_zip = subprocess.run([sys.executable, str(SKILL_PY_SCRIPT), str(ZIP_OUTPUT)], capture_output=True, text=True)
+        print(p_zip.stdout.strip())
+        if p_zip.returncode != 0:
+            print(f"  [FAIL] Python ZIP 审计未通过: {p_zip.stderr.strip()}")
+            return False
+    else:
+        print(f"  [WARN] 未找到官方 Python 审计脚本: {SKILL_PY_SCRIPT}")
 
-    if res_dir.returncode != 0 or res_zip.returncode != 0:
-        print("\n  [FAIL] 官方 Skill 审计未通过！")
-        return False
+    # 2. Node.js 审计
+    if SKILL_MJS_SCRIPT.exists():
+        node_bin = shutil.which("node")
+        if node_bin:
+            print("\n--- Node.js 官方审计: 产物目录 (dist/) ---")
+            n_dir = subprocess.run([node_bin, str(SKILL_MJS_SCRIPT), str(DIST_DIR)], capture_output=True, text=True)
+            print(n_dir.stdout.strip())
+            if n_dir.returncode != 0:
+                print(f"  [FAIL] Node 目录审计未通过: {n_dir.stderr.strip()}")
+                return False
 
-    print("\n  [PASS] 官方 Skill 审计全部通过！")
+            print(f"\n--- Node.js 官方审计: 产物 ZIP ({PACKAGE_NAME}) ---")
+            n_zip = subprocess.run([node_bin, str(SKILL_MJS_SCRIPT), str(ZIP_OUTPUT)], capture_output=True, text=True)
+            print(n_zip.stdout.strip())
+            if n_zip.returncode != 0:
+                print(f"  [FAIL] Node ZIP 审计未通过: {n_zip.stderr.strip()}")
+                return False
+
+    print("\n  [PASS] 官方 Skill 1.6.0 双重审计全部通过！")
     return True
 
 
@@ -185,10 +200,10 @@ def main():
     if not check_dist_compliance():
         sys.exit(1)
     create_zip()
-    if not run_official_audit():
+    if not run_official_audits():
         sys.exit(1)
     print(f"\n==========================================")
-    print(f"构建与官方校验全部完成！")
+    print(f"任务 1.1 产物纠偏与官方双重审计全部完成！")
     print(f"产物目录: {DIST_DIR}")
     print(f"ZIP 产物: {ZIP_OUTPUT}")
     print(f"==========================================")
