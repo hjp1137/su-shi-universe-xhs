@@ -193,7 +193,11 @@
       univCard.classList.add('home-nav-card', 'nav-universe');
       navList.appendChild(univCard);
 
-      // 路径 3: 坐一会
+      // 路径 3: 坐一会 (消费统一 Daily 稳定映射结果)
+      var todayDaily = SuShiUniverse.Daily ? SuShiUniverse.Daily.getTodayItem() : null;
+      var todayQuoteText = (todayDaily && todayDaily.quote && todayDaily.quote.text) || '莫听穿林打叶声，何妨吟啸且徐行。';
+      var todayDongpoView = (todayDaily && todayDaily.dongpo_view) || '每天一言一事，给自己十分钟的从容。';
+
       var dailyCardContent = document.createElement('div');
       var dHeader = document.createElement('div');
       dHeader.className = 'nav-card-header';
@@ -205,11 +209,24 @@
       dTag.textContent = '每日一诗';
       dHeader.appendChild(dTitle);
       dHeader.appendChild(dTag);
-      var dDesc = document.createElement('div');
-      dDesc.className = 'nav-card-desc';
-      dDesc.textContent = '每天一言一事，给自己十分钟的从容。';
+
+      var dQuote = document.createElement('div');
+      dQuote.className = 'home-daily-quote';
+      dQuote.textContent = '「' + todayQuoteText + '」';
+
+      var dGuide = document.createElement('div');
+      dGuide.className = 'home-daily-guide';
+      dGuide.textContent = todayDongpoView;
+
+      var dHint = document.createElement('div');
+      dHint.className = 'home-daily-action-hint';
+      dHint.textContent = '坐一会儿 →';
+
       dailyCardContent.appendChild(dHeader);
-      dailyCardContent.appendChild(dDesc);
+      dailyCardContent.appendChild(dQuote);
+      dailyCardContent.appendChild(dGuide);
+      dailyCardContent.appendChild(dHint);
+
       var dailyCard = UI.createInkCard(dailyCardContent, true, function () {
         Router.navigate('daily');
       });
@@ -1326,40 +1343,196 @@
     }
   });
 
-  // 7. 今日东坡视图 Daily
+  // 7. 今日东坡视图 Daily (固定四层叙事：诗词 + 真实背景 + 东坡式理解 + 今日小行动)
   Router.register('daily', {
-    render: function () {
-      var wrap = document.createElement('div');
-      wrap.className = 'view-wrapper';
-
-      wrap.appendChild(UI.createSectionHeader('今日东坡', '今天是一个普通日子，东坡给你留了一句话'));
-
-      var dailyList = Data.dailyDongpo || [];
-      var dailyItem = dailyList[0] || {
-        quote_id: 'quote_dingfengbo_01',
-        history_context: '沙湖道中同行皆狼狈，东坡独独从容。',
-        dongpo_view: '风雨不因人的狼狈而停，不如安步徐行。',
-        micro_action: '放下眼前解决不了的焦虑，出门走走十分钟。'
-      };
-
-      var quoteObj = Data.getQuoteById(dailyItem.quote_id);
-      if (quoteObj) {
-        var workObj = Data.getWorkById(quoteObj.work_id);
-        var sourceText = workObj ? '《' + workObj.title + '》' : '苏轼';
-        wrap.appendChild(UI.createQuoteBlock(quoteObj.text, sourceText));
+    render: function (params) {
+      params = params || {};
+      var Daily = SuShiUniverse.Daily;
+      var dailyBundle = null;
+      if (Daily) {
+        dailyBundle = params.date_str ? Daily.getItemByDate(params.date_str) : Daily.getTodayItem();
       }
 
-      var card = UI.createInkCard([
-        UI.createSectionHeader('生活背景', dailyItem.fact_text || dailyItem.history_context),
-        UI.createSectionHeader('放到今天', dailyItem.dongpo_view),
-        UI.createSectionHeader('今天只做一件小事', dailyItem.today_action || dailyItem.micro_action)
-      ]);
-      wrap.appendChild(card);
+      var wrap = document.createElement('div');
+      wrap.className = 'view-wrapper daily-container';
+
+      if (!dailyBundle) {
+        wrap.appendChild(UI.createEmptyState('今日诗笺正在运送途中', '东坡正在江上小舟漫步，请稍后刷新或返回首页。', '返回首页', function () {
+          Router.navigate('home');
+        }));
+        return wrap;
+      }
+
+      // --- 第 1 层：日期印章标头与核心名句书法卡片 ---
+      var dateHeader = document.createElement('div');
+      dateHeader.className = 'daily-date-header';
+
+      var dateText = document.createElement('div');
+      dateText.className = 'daily-date-text';
+      dateText.textContent = dailyBundle.date_display;
+
+      var stampBadge = document.createElement('div');
+      stampBadge.className = 'daily-stamp';
+      stampBadge.textContent = '东坡诗签';
+
+      dateHeader.appendChild(dateText);
+      dateHeader.appendChild(stampBadge);
+      wrap.appendChild(dateHeader);
+
+      // 书法名句卡片
+      var quoteCard = document.createElement('div');
+      quoteCard.className = 'daily-quote-card';
+
+      var qMark1 = document.createElement('div');
+      qMark1.className = 'work-quote-mark';
+      qMark1.textContent = '“';
+
+      var qText = document.createElement('div');
+      qText.className = 'daily-quote-text';
+      qText.textContent = (dailyBundle.quote && dailyBundle.quote.text) || '莫听穿林打叶声，何妨吟啸且徐行。';
+
+      var qMark2 = document.createElement('div');
+      qMark2.className = 'work-quote-mark';
+      qMark2.textContent = '”';
+
+      quoteCard.appendChild(qMark1);
+      quoteCard.appendChild(qText);
+      quoteCard.appendChild(qMark2);
+
+      // 作品出处与站点归属芯片
+      var srcRow = document.createElement('div');
+      srcRow.className = 'daily-source-row';
+
+      if (dailyBundle.work) {
+        var wChip = document.createElement('span');
+        wChip.className = 'daily-work-chip';
+        wChip.textContent = '《' + dailyBundle.work.title + '》 →';
+        (function (wid, sid) {
+          wChip.addEventListener('click', function () {
+            Router.navigate('work', { work_id: wid, from_station_id: sid });
+          });
+        })(dailyBundle.work.id, dailyBundle.station ? dailyBundle.station.id : '');
+        srcRow.appendChild(wChip);
+      }
+
+      if (dailyBundle.station) {
+        var stChip = document.createElement('span');
+        stChip.className = 'daily-station-chip';
+        stChip.textContent = dailyBundle.station.name + ' →';
+        (function (sid) {
+          stChip.addEventListener('click', function () {
+            Router.navigate('station', { station_id: sid });
+          });
+        })(dailyBundle.station.id);
+        srcRow.appendChild(stChip);
+      }
+
+      quoteCard.appendChild(srcRow);
+
+      // 标签流
+      if (dailyBundle.tags && dailyBundle.tags.length > 0) {
+        var tagBox = document.createElement('div');
+        tagBox.className = 'daily-tag-list';
+        for (var t = 0; t < dailyBundle.tags.length; t++) {
+          var tEl = document.createElement('span');
+          tEl.className = 'daily-tag';
+          tEl.textContent = '#' + dailyBundle.tags[t];
+          tagBox.appendChild(tEl);
+        }
+        quoteCard.appendChild(tagBox);
+      }
+
+      wrap.appendChild(quoteCard);
+
+      // --- 第 2 层：一段真实生活背景 ---
+      var factCard = document.createElement('div');
+      factCard.className = 'work-narrative-card';
+      var factBadge = document.createElement('div');
+      factBadge.className = 'work-narrative-badge';
+      factBadge.textContent = '第一幕 · 真实生活现场';
+      var factTitle = document.createElement('h3');
+      factTitle.className = 'work-narrative-title';
+      factTitle.textContent = '苏轼当时面对着什么？';
+      var factBody = document.createElement('p');
+      factBody.className = 'work-narrative-body';
+      factBody.textContent = dailyBundle.fact_text;
+
+      factCard.appendChild(factBadge);
+      factCard.appendChild(factTitle);
+      factCard.appendChild(factBody);
+      wrap.appendChild(factCard);
+
+      // --- 第 3 层：一句东坡式理解 ---
+      var viewCard = document.createElement('div');
+      viewCard.className = 'work-narrative-card work-modern-card';
+      var viewBadge = document.createElement('div');
+      viewBadge.className = 'work-narrative-badge';
+      viewBadge.textContent = '第二幕 · 放到今天';
+      var viewTitle = document.createElement('h3');
+      viewTitle.className = 'work-narrative-title';
+      viewTitle.textContent = '在今天可以怎样理解？';
+      var viewBody = document.createElement('p');
+      viewBody.className = 'work-narrative-body';
+      viewBody.textContent = dailyBundle.dongpo_view;
+
+      var viewDisclaimer = document.createElement('div');
+      viewDisclaimer.className = 'work-modern-disclaimer';
+      viewDisclaimer.textContent = '* 本解读为苏轼宇宙当代生活启发，围绕面对不可控、接受绕路与安顿日常展开，非古人原话。';
+
+      viewCard.appendChild(viewBadge);
+      viewCard.appendChild(viewTitle);
+      viewCard.appendChild(viewBody);
+      viewCard.appendChild(viewDisclaimer);
+      wrap.appendChild(viewCard);
+
+      // --- 第 4 层：一个今日小行动 ---
+      var actionCard = document.createElement('div');
+      actionCard.className = 'ink-card result-action-card';
+      var actBadge = document.createElement('div');
+      actBadge.className = 'result-card-badge';
+      actBadge.textContent = '第三幕 · 今天只做一件小事';
+      var actTitle = document.createElement('h3');
+      actTitle.className = 'result-card-title';
+      actTitle.textContent = '微小而确定的行动';
+      var actBody = document.createElement('p');
+      actBody.className = 'result-card-body';
+      actBody.textContent = dailyBundle.today_action;
+
+      actionCard.appendChild(actBadge);
+      actionCard.appendChild(actTitle);
+      actionCard.appendChild(actBody);
+      wrap.appendChild(actionCard);
+
+      // --- 底部多向操作区 ---
+      var actBox = document.createElement('div');
+      actBox.className = 'result-actions';
 
       var btnSign = UI.createPrimaryButton('生成今日东坡签', function () {
-        Router.navigate('share-card', { type: 'daily' });
+        Router.navigate('share-card', {
+          type: 'daily',
+          daily_id: dailyBundle.id,
+          date_str: dailyBundle.date_str
+        });
       });
-      wrap.appendChild(btnSign);
+      actBox.appendChild(btnSign);
+
+      if (dailyBundle.station) {
+        var btnStation = UI.createSecondaryButton('前往本诗所在站点（' + dailyBundle.station.short_name + '）', function () {
+          Router.navigate('station', { station_id: dailyBundle.station.id });
+        });
+        actBox.appendChild(btnStation);
+      }
+
+      var btnUniv = UI.createSecondaryButton('漫游苏轼人生宇宙', function () {
+        Router.navigate('universe', dailyBundle.station ? { highlight_station_id: dailyBundle.station.id } : {});
+      });
+      var btnHome = UI.createSecondaryButton('返回首页', function () {
+        Router.navigate('home');
+      });
+
+      actBox.appendChild(btnUniv);
+      actBox.appendChild(btnHome);
+      wrap.appendChild(actBox);
 
       return wrap;
     }
@@ -1386,14 +1559,27 @@
 
       var cardTitle = document.createElement('h2');
       cardTitle.className = 'result-station-name';
-      cardTitle.textContent = isDaily ? '今日东坡签' : '黄州｜重新生活';
-      card.appendChild(cardTitle);
 
-      card.appendChild(UI.createQuoteBlock('莫听穿林打叶声，何妨吟啸且徐行。', '苏轼'));
+      var quoteText = '莫听穿林打叶声，何妨吟啸且徐行。';
+      var sourceText = '苏轼';
+      var tipText = '遇到烦心事，先去东坡那里坐一会儿。';
+
+      if (isDaily && SuShiUniverse.Daily) {
+        var dailyBundle = params.date_str ? SuShiUniverse.Daily.getItemByDate(params.date_str) : SuShiUniverse.Daily.getTodayItem();
+        cardTitle.textContent = '今日东坡签 · ' + dailyBundle.date_display.split('·')[0].trim();
+        quoteText = (dailyBundle.quote && dailyBundle.quote.text) || quoteText;
+        sourceText = dailyBundle.work ? ('《' + dailyBundle.work.title + '》') : sourceText;
+        tipText = dailyBundle.dongpo_view || tipText;
+      } else {
+        cardTitle.textContent = '黄州｜重新生活';
+      }
+
+      card.appendChild(cardTitle);
+      card.appendChild(UI.createQuoteBlock(quoteText, sourceText));
 
       var tip = document.createElement('p');
       tip.className = 'section-subtitle';
-      tip.textContent = '遇到烦心事，先去东坡那里坐一会儿。';
+      tip.textContent = tipText;
       card.appendChild(tip);
 
       wrap.appendChild(card);

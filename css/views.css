@@ -248,6 +248,31 @@
   line-height: var(--line-height-normal);
 }
 
+.home-daily-quote {
+  font-family: var(--font-family-title);
+  font-size: var(--font-size-body);
+  color: var(--color-warm);
+  line-height: var(--line-height-normal);
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-1);
+}
+
+.home-daily-guide {
+  font-size: var(--font-size-tag);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-normal);
+}
+
+.home-daily-action-hint {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: var(--space-2);
+  font-size: var(--font-size-tag);
+  color: var(--color-warm);
+  font-weight: 500;
+}
+
 /* 首页底部署名与理念 */
 .home-footer {
   margin-top: var(--space-8);
@@ -1039,7 +1064,109 @@
   line-height: var(--line-height-normal);
 }
 
-/* 6. 分享卡预览 Share-Card 样式 */
+/* 6. 今日东坡 Daily 视图样式 */
+.daily-container {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: var(--space-8);
+}
+
+.daily-container > * + * {
+  margin-top: var(--space-4);
+}
+
+.daily-date-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  background: rgba(30, 42, 60, 0.6);
+  border: 1px solid rgba(217, 185, 120, 0.3);
+  border-radius: var(--radius-md);
+}
+
+.daily-date-text {
+  font-size: var(--font-size-caption);
+  color: var(--color-warm);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.daily-stamp {
+  font-size: var(--font-size-tag);
+  padding: 2px 6px;
+  background: rgba(184, 75, 41, 0.2);
+  color: #d96d4b;
+  border: 1px solid rgba(184, 75, 41, 0.4);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.daily-quote-card {
+  padding: var(--space-6) var(--space-4);
+  background: linear-gradient(180deg, rgba(30, 42, 60, 0.75) 0%, rgba(18, 26, 38, 0.85) 100%);
+  border: 1px solid rgba(217, 185, 120, 0.35);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+
+.daily-quote-text {
+  font-family: var(--font-family-title);
+  font-size: 20px;
+  color: var(--color-paper);
+  line-height: 1.7;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin: var(--space-2) 0 var(--space-3);
+}
+
+.daily-source-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.daily-work-chip {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--font-size-tag);
+  color: var(--color-river);
+  background: rgba(120, 160, 195, 0.15);
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  margin: 0 4px;
+  cursor: pointer;
+}
+
+.daily-station-chip {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--font-size-tag);
+  color: var(--color-warm);
+  background: rgba(217, 185, 120, 0.15);
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  margin: 0 4px;
+  cursor: pointer;
+}
+
+.daily-tag-list {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--space-3);
+}
+
+.daily-tag {
+  font-size: var(--font-size-tag);
+  color: var(--color-text-muted);
+  margin: 0 4px;
+}
+
+/* 7. 分享卡预览 Share-Card 样式 */
 .share-preview-card {
   border: 1px solid rgba(244, 240, 230, 0.25);
   background: linear-gradient(180deg, rgba(22, 36, 65, 0.9) 0%, rgba(14, 24, 48, 0.95) 100%);
