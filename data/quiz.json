@@ -1,0 +1,288 @@
+{
+  "version": "1.0",
+  "tie_break_priority": [
+    "mood_anxious",
+    "mood_work_stuck",
+    "mood_misunderstood",
+    "mood_overthinking",
+    "mood_tired",
+    "mood_lost",
+    "mood_lonely",
+    "mood_ordinary"
+  ],
+  "questions": [
+    {
+      "id": "quiz_q01",
+      "order": 1,
+      "title": "最近最容易让你心里一紧的是什么？",
+      "options": [
+        {
+          "id": "opt_1a",
+          "text": "工作或生活里突如其来的临时变动",
+          "scores": {
+            "mood_anxious": 3,
+            "mood_overthinking": 2
+          }
+        },
+        {
+          "id": "opt_1b",
+          "text": "付出了很多心力，事情却没能按预期推进",
+          "scores": {
+            "mood_work_stuck": 3,
+            "mood_lost": 1
+          }
+        },
+        {
+          "id": "opt_1c",
+          "text": "别人无意间的一句挑剔或冷淡反馈",
+          "scores": {
+            "mood_misunderstood": 3,
+            "mood_overthinking": 1
+          }
+        },
+        {
+          "id": "opt_1d",
+          "text": "其实没发生什么，但就是觉得身上没劲",
+          "scores": {
+            "mood_tired": 3,
+            "mood_ordinary": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "quiz_q02",
+      "order": 2,
+      "title": "当你感到压力很大时，第一反应通常是？",
+      "options": [
+        {
+          "id": "opt_2a",
+          "text": "在心里反复推演各种最坏的结果",
+          "scores": {
+            "mood_overthinking": 3,
+            "mood_anxious": 2
+          }
+        },
+        {
+          "id": "opt_2b",
+          "text": "想找个没人的地方彻底安静呆着",
+          "scores": {
+            "mood_lonely": 2,
+            "mood_tired": 2
+          }
+        },
+        {
+          "id": "opt_2c",
+          "text": "逼着自己硬撑着继续做，直到做完为止",
+          "scores": {
+            "mood_work_stuck": 2,
+            "mood_tired": 3
+          }
+        },
+        {
+          "id": "opt_2d",
+          "text": "先不管了，吃一顿好吃的或者出去转转",
+          "scores": {
+            "mood_ordinary": 3,
+            "mood_lost": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "quiz_q03",
+      "order": 3,
+      "title": "如果今天突然多出三个小时完全属于你的时间，你最想？",
+      "options": [
+        {
+          "id": "opt_3a",
+          "text": "拉上窗帘，不受打扰地昏天黑地睡一觉",
+          "scores": {
+            "mood_tired": 3,
+            "mood_anxious": 1
+          }
+        },
+        {
+          "id": "opt_3b",
+          "text": "给自己做一顿热气腾腾的饭菜，慢慢吃完",
+          "scores": {
+            "mood_ordinary": 3,
+            "mood_work_stuck": 1
+          }
+        },
+        {
+          "id": "opt_3c",
+          "text": "去江边、公园或林荫道走走，听风看树",
+          "scores": {
+            "mood_overthinking": 2,
+            "mood_lonely": 2
+          }
+        },
+        {
+          "id": "opt_3d",
+          "text": "一个人呆着，理一理乱糟糟的思绪和待办",
+          "scores": {
+            "mood_lost": 3,
+            "mood_work_stuck": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "quiz_q04",
+      "order": 4,
+      "title": "在社交或职场中，你最反感或疲惫的时刻是？",
+      "options": [
+        {
+          "id": "opt_4a",
+          "text": "别人根本没弄懂事实，就在背后议论评价",
+          "scores": {
+            "mood_misunderstood": 3,
+            "mood_anxious": 1
+          }
+        },
+        {
+          "id": "opt_4b",
+          "text": "大家表面上很热闹，内心却谁也触碰不到谁",
+          "scores": {
+            "mood_lonely": 3,
+            "mood_tired": 1
+          }
+        },
+        {
+          "id": "opt_4c",
+          "text": "很多繁文缛节，消耗了大部分做实事的时间",
+          "scores": {
+            "mood_work_stuck": 3,
+            "mood_ordinary": 1
+          }
+        },
+        {
+          "id": "opt_4d",
+          "text": "每个人都在卷预期、抢节奏，把气氛搞得很紧绷",
+          "scores": {
+            "mood_anxious": 3,
+            "mood_overthinking": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "quiz_q05",
+      "order": 5,
+      "title": "回看过去半年，你觉得最困扰自己的感觉是？",
+      "options": [
+        {
+          "id": "opt_5a",
+          "text": "总感觉被推着往前赶，无法掌控自己的生活节奏",
+          "scores": {
+            "mood_anxious": 2,
+            "mood_tired": 2
+          }
+        },
+        {
+          "id": "opt_5b",
+          "text": "不知道正在努力的事情到底有没有意义和未来",
+          "scores": {
+            "mood_lost": 3,
+            "mood_work_stuck": 1
+          }
+        },
+        {
+          "id": "opt_5c",
+          "text": "心里装了太多事，却找不到一个合适的人倾诉",
+          "scores": {
+            "mood_lonely": 3,
+            "mood_misunderstood": 1
+          }
+        },
+        {
+          "id": "opt_5d",
+          "text": "虽然过得很平稳，但有时候会觉得缺点生命的热气",
+          "scores": {
+            "mood_ordinary": 3,
+            "mood_lost": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "quiz_q06",
+      "order": 6,
+      "title": "如果出门突然遇到一场没带伞的大雨，你更可能？",
+      "options": [
+        {
+          "id": "opt_6a",
+          "text": "有点烦躁，赶紧找个屋檐避雨并抱怨运气差",
+          "scores": {
+            "mood_anxious": 2,
+            "mood_overthinking": 2
+          }
+        },
+        {
+          "id": "opt_6b",
+          "text": "既然淋湿了就算了，放慢脚步在雨里慢慢走回去",
+          "scores": {
+            "mood_work_stuck": 2,
+            "mood_ordinary": 2
+          }
+        },
+        {
+          "id": "opt_6c",
+          "text": "看着别人行色匆匆，反而觉得此刻世界很安静",
+          "scores": {
+            "mood_lonely": 2,
+            "mood_tired": 2
+          }
+        },
+        {
+          "id": "opt_6d",
+          "text": "顺势拐进旁边的一家小茶馆或便利店坐一会儿",
+          "scores": {
+            "mood_ordinary": 3,
+            "mood_lost": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "quiz_q07",
+      "order": 7,
+      "title": "今天如果送你一句来自东坡的话，你最渴望听到什么？",
+      "options": [
+        {
+          "id": "opt_7a",
+          "text": "“别怕，外界的风雨决定不了你的步调。”",
+          "scores": {
+            "mood_anxious": 3,
+            "mood_work_stuck": 1
+          }
+        },
+        {
+          "id": "opt_7b",
+          "text": "“累了就慢一点，今天先好好吃一顿饭。”",
+          "scores": {
+            "mood_tired": 3,
+            "mood_ordinary": 2
+          }
+        },
+        {
+          "id": "opt_7c",
+          "text": "“懂你的人自会懂，守住内心的清白就好。”",
+          "scores": {
+            "mood_misunderstood": 3,
+            "mood_lonely": 1
+          }
+        },
+        {
+          "id": "opt_7d",
+          "text": "“人生的路不止这一条，天涯海角皆可有书声与新程。”",
+          "scores": {
+            "mood_lost": 3,
+            "mood_overthinking": 1
+          }
+        }
+      ]
+    }
+  ]
+}

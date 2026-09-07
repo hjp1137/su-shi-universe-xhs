@@ -1,0 +1,302 @@
+[
+  {
+    "id": "daily_001",
+    "quote_id": "quote_dingfengbo_01",
+    "station_id": "station_huangzhou",
+    "fact_text": "元丰五年春，苏轼在黄州沙湖道中突遇急雨，同行者皆狼狈避雨，唯独苏轼泰然前行。",
+    "dongpo_view": "风雨扑面而来时，越慌乱越容易失足。试着不让突发的外界动荡打乱你自己的呼吸节奏。",
+    "today_action": "在工作或学习中遇到催促时，先停下敲击键盘的手，深呼吸三次再开始处理。",
+    "tags": ["风雨", "徐行", "节奏"],
+    "review_status": "approved"
+  },
+  {
+    "id": "daily_002",
+    "quote_id": "quote_dingfengbo_02",
+    "station_id": "station_huangzhou",
+    "fact_text": "苏轼在黄州清贫简朴，手拄竹杖，脚蹬草鞋，却觉得比骑着高头大马还要轻快自在。",
+    "dongpo_view": "身上背负的期待与装备越重，行路时越害怕跌倒。有时候卸下包袱，反而步履轻盈。",
+    "today_action": "清理掉随身背包或手机桌面上三样长期不用、却一直占据空间的小物件。",
+    "tags": ["轻装", "简朴", "坦然"],
+    "review_status": "approved"
+  },
+  {
+    "id": "daily_003",
+    "quote_id": "quote_dingfengbo_03",
+    "station_id": "station_huangzhou",
+    "fact_text": "雨后初晴，斜阳照彻湿润的山径。苏轼回望刚才风雨交加的地方，心中一片澄澈明净。",
+    "dongpo_view": "世间的所有难关都会成为过去。当你跨过眼前的泥泞再回头看时，不过是一抹浮云。",
+    "today_action": "想一件三年前让你彻夜难眠、但现在早已释怀的事，告诉自己今天的事也一样会过去。",
+    "tags": ["释怀", "平静", "回望"],
+    "review_status": "approved"
+  },
+  {
+    "id": "daily_004",
+    "quote_id": "quote_shuidiao_01",
+    "station_id": "station_mizhou",
+    "fact_text": "熙宁九年中秋，苏轼在密州望月思念弟弟苏辙，感怀人世离合并非人力所能尽全。",
+    "dongpo_view": "月亮尚且有阴晴圆缺，何况纷繁复杂的人间。接纳遗憾与残缺，内心才会真正安定。",
+    "today_action": "接受今天一件没能做到完美的事，允许它停留在眼下的状态，不苛责自己。",
+    "tags": ["圆缺", "接纳", "无常"],
+    "review_status": "approved"
+  },
+  {
+    "id": "daily_005",
+    "quote_id": "quote_shuidiao_02",
+    "station_id": "station_mizhou",
+    "fact_text": "兄弟天各一方，苏轼将最深沉的挂念化作望向同一轮明月的旷远祝福。",
+    "dongpo_view": "距离阻隔不了真挚的情感。知道彼此都在认真生活着，就是世间极好的陪伴。",
+    "today_action": "给一位远方的老友发一张风景照片，不必聊很深，只道一声安好。",
+    "tags": ["明月", "思念", "温情"],
+    "review_status": "approved"
+  },
+  {
+    "id": "daily_006",
+    "quote_id": "quote_chibi_01",
+    "station_id": "station_huangzhou",
+    "fact_text": "黄州赤壁之下，苏轼与客泛舟江心，仰望茫茫江天，感念人生如蜉蝣般短暂渺小。",
+    "dongpo_view": "在广袤天地面前，我们遇到的纠结其实很小很轻。换个辽阔的眼界，烦恼自会消减大半。",
+    "today_action": "站在窗前或者空旷处，远眺地平线或天空两分钟，放空纷扰的大脑。",
+    "tags": ["宇宙", "渺小", "释怀"],
+    "review_status": "approved"
+  },
+  {
+    "id": "daily_007",
+    "quote_id": "quote_chibi_02",
+    "station_id": "station_huangzhou",
+    "fact_text": "逝者如斯而未尝往也，盈虚者如彼而卒莫消长。苏轼在流动与永恒中参悟生命自足。",
+    "dongpo_view": "不要只盯着失去的东西不放。万物各有节律，守住生命本质的充盈，便无所羡慕。",
+    "today_action": "写下一件你现在真实拥有、且能带给你纯粹快乐的小确幸。",
+    "tags": ["自足", "常态", "超然"],
+    "review_status": "approved"
+  },
+  {
+    "id": "daily_008",
+    "quote_id": "quote_chibi_03",
+    "station_id": "station_huangzhou",
+    "fact_text": "江上习习清风，山间朗朗明月，大自然将最珍贵的造化慷慨赐予懂得驻足的人。",
+    "dongpo_view": "世界上最抚慰人心的美好往往是不花钱的。微风、树影、鸟鸣与夕阳，随时为你开放。",
+    "today_action": "下班路上摘掉耳机，认真听三分钟风吹树叶和傍晚城市的真实声响。",
+    "tags": ["清风", "明月", "日常"],
+    "review_status": "approved"
+  },
+  {
+    "id": "daily_009",
+    "quote_id": "quote_niannujiao_01",
+    "station_id": "station_huangzhou",
+    "fact_text": "大江东去浪涛翻滚，三国多少叱咤风云的英雄人物，终归消融在滚滚浪花之中。",
+    "dongpo_view": "把眼前的执念放进历史长河里洗一洗，你会发现谁都有巅峰与落幕，不必为一时得失困惑。",
+    "today_action": "看一段历史纪录片片段，感受岁月流转与个人的开阔天地。",
+    "tags": ["历史", "豪迈", "江流"],
+    "review_status": "approved"
+  },
+  {
+    "id": "daily_010",
+    "quote_id": "quote_niannujiao_02",
+    "station_id": "station_huangzhou",
+    "fact_text": "赤壁夜色中举杯对月，将世间繁华与辛酸都化入杯中水月。",
+    "dongpo_view": "与其在失意中反复消耗自己，不如敬今晚的江月一杯酒，原谅过去的遗憾，拥抱当下的生活。",
+    "today_action": "今晚临睡前向自己敬一杯温开水，感谢今天依然努力生活的自己。",
+    "tags": ["和解", "敬月", "从容"],
+    "review_status": "approved"
+  },
+  {
+    "id": "daily_011",
+    "quote_id": "quote_linjiangxian_01",
+    "station_id": "station_huangzhou",
+    "fact_text": "夜归临皋家门紧闭，童仆鼾声如雷。苏轼倚杖听长江流水之声，萌生泛舟远寄之意。",
+    "dongpo_view": "当全世界都在沉睡的时候，找到一个能与自己真实心灵对话的角落，是一种难得的奢侈。",
+    "today_action": "留出十五分钟独处时间，不看屏幕，只听一首纯音乐或静坐。",
+    "tags": ["独处", "自由", "宁静"],
+    "review_status": "approved"
+  },
+  {
+    "id": "daily_012",
+    "quote_id": "quote_linjiangxian_02",
+    "station_id": "station_huangzhou",
+    "fact_text": "苏轼深感身为外物所役的劳顿，反问自己何时才能放下营营役役的浮华追求。",
+    "dongpo_view": "我们常常为了别人的眼光忙得身心俱疲。停下来问问自己：什么才是真正属于你的幸福？",
+    "today_action": "拒绝一件并非必要、且会让自己感到耗能的人情邀约或琐碎事务。",
+    "tags": ["反思", "减负", "本真"],
+    "review_status": "approved"
+  },
+  {
+    "id": "daily_013",
+    "quote_id": "quote_yinhushang_01",
+    "station_id": "station_hangzhou",
+    "fact_text": "在杭州西湖上，苏轼观察到晴日有水光潋滟之美，雨时有山色空蒙之奇，各具其妙。",
+    "dongpo_view": "顺境有顺境的舒展，逆境有逆境的淬炼。心态对了，生活在何种天气里都能生机盎然。",
+    "today_action": "不管今天天气如何，找一处窗口看看外面的景色，发现一处微小的美好细节。",
+    "tags": ["晴雨", "兼收", "山水"],
+    "review_status": "approved"
+  },
+  {
+    "id": "daily_014",
+    "quote_id": "quote_yinhushang_02",
+    "station_id": "station_hangzhou",
+    "fact_text": "苏轼将西湖比作西施，淡妆清雅，浓抹娇艳，皆具动人神韵。",
+    "dongpo_view": "不必非要模仿别人光鲜亮丽的模样。接纳自己素朴真实的样子，你本就有独特的生命光彩。",
+    "today_action": "出门前照镜子，对镜子里的自己真诚地笑一下。",
+    "tags": ["自信", "本色", "适宜"],
+    "review_status": "approved"
+  },
+  {
+    "id": "daily_015",
+    "quote_id": "quote_wanghulong_01",
+    "station_id": "station_hangzhou",
+    "fact_text": "在望湖楼避雨饮酒，骤雨如珠溅入游船，转瞬间狂风卷过，漫天浓云消散无踪。",
+    "dongpo_view": "很多突如其来的危机看起来声势浩大，实际上可能是一场来去匆匆的阵雨，沉住气别被吓倒。",
+    "today_action": "遇到突发小状况时，先在心里默数到十，不要立刻做出情绪化反应。",
+    "tags": ["骤雨", "淡定", "转晴"],
+    "review_status": "approved"
+  },
+  {
+    "id": "daily_016",
+    "quote_id": "quote_wangjiangnan_01",
+    "station_id": "station_mizhou",
+    "fact_text": "寒食过后新火初起，苏轼在超然台上煮新茶、饮薄酒，感叹好春光正当其时。",
+    "dongpo_view": "过去已成定局，未来尚未到来。把全部的生命力投入到今天这顿饭、这盏茶中，就是最好的年华。",
+    "today_action": "为自己精心泡一杯好茶或手冲一杯咖啡，细细品味第一口的温度与香气。",
+    "tags": ["当下", "茶酒", "年华"],
+    "review_status": "approved"
+  },
+  {
+    "id": "daily_017",
+    "quote_id": "quote_chengtian_01",
+    "station_id": "station_huangzhou",
+    "fact_text": "见月光照入窗台，苏轼欣然漫步承天寺寻张怀民同赏竹柏疏影，感叹世间唯少闲适之人。",
+    "dongpo_view": "生活中不是缺少诗意，而是缺少一颗愿意在忙碌间隙抬起头看一眼明月的心。",
+    "today_action": "今晚晚饭后放下手机，在小区楼下散步圈巡视十五分钟，观察今晚的树影与夜色。",
+    "tags": ["月色", "闲适", "知己"],
+    "review_status": "approved"
+  },
+  {
+    "id": "daily_018",
+    "quote_id": "quote_tixilinbi_01",
+    "station_id": "station_huangzhou",
+    "fact_text": "离开黄州途经庐山，苏轼从横、侧、远、近各个角度看山，写下蕴含千古哲理的名句。",
+    "dongpo_view": "当你觉得事情走进死胡同的时候，往往只是因为你站在原本狭窄的角度。退后两步，全貌立现。",
+    "today_action": "换一个不同寻常的视角看一件令你头疼的事，想一想如果三年后的你看它会觉得重要吗？",
+    "tags": ["视角", "格局", "庐山"],
+    "review_status": "approved"
+  },
+  {
+    "id": "daily_019",
+    "quote_id": "quote_huizhou_01",
+    "station_id": "station_huizhou",
+    "fact_text": "五十八岁被远贬偏僻湿热的岭南惠州，苏轼尝到当地鲜甜荔枝，顿觉异乡亦可安居。",
+    "dongpo_view": "环境的艰苦无法抹杀生活里微小而真实的甜。只要心存好奇，任何土地都能长出快乐。",
+    "today_action": "去水果店买一份平常很少吃、但一直想尝尝的水果，好好享用它。",
+    "tags": ["尝新", "荔枝", "乐观"],
+    "review_status": "approved"
+  },
+  {
+    "id": "daily_020",
+    "quote_id": "quote_dingfengbo_nhg_01",
+    "station_id": "station_huizhou",
+    "fact_text": "好友王巩因苏轼牵连受累远贬岭南，其侍妾柔奴历经万里风霜归来，面容却愈发年轻温润。",
+    "dongpo_view": "生活的风浪可以在额头上留下印记，但只要心底始终保持温柔与澄澈，岁月便无可奈何。",
+    "today_action": "温和地对今天遇到的服务人员（快递员、保洁、店员）说一声谢谢。",
+    "tags": ["温柔", "澄澈", "韧性"],
+    "review_status": "approved"
+  },
+  {
+    "id": "daily_021",
+    "quote_id": "quote_dingfengbo_nhg_02",
+    "station_id": "station_huizhou",
+    "fact_text": "苏轼问柔奴岭南风土如何，柔奴轻声答道：'此心安处，便是吾乡。'苏轼大受震动。",
+    "dongpo_view": "真正的避难所不在远方，而在你自己的内心。心安顿下来了，走到哪里都不再是流浪。",
+    "today_action": "整理一个能让你感到安全和舒服的私人小角落，哪怕只是一把椅子或一个靠垫。",
+    "tags": ["心安", "归宿", "安顿"],
+    "review_status": "approved"
+  },
+  {
+    "id": "daily_022",
+    "quote_id": "quote_liuyue_01",
+    "station_id": "station_danzhou",
+    "fact_text": "六十四岁北归遇赦渡海，苏轼回顾自己九死一生的南荒岁月，不仅毫无怨恨，反而称其为平生奇游。",
+    "dongpo_view": "真正的坚强不是从不受伤，而是在穿越了所有苦难之后，依然能够坦荡地热爱这段生命旅程。",
+    "today_action": "回顾一件过去让你痛苦但最终让你变得坚韧的往事，在心里由衷感谢自己的坚持。",
+    "tags": ["达观", "奇绝", "不恨"],
+    "review_status": "approved"
+  },
+  {
+    "id": "daily_023",
+    "quote_id": "quote_liuyue_02",
+    "station_id": "station_danzhou",
+    "fact_text": "夜渡大海风平浪静，天光与海色浑然一体，苏轼感悟宇宙本色就是如此澄清无染。",
+    "dongpo_view": "外界的误解与流言就像遮蔽天空的乌云，风吹云散之后，你的纯粹本心自然会明澈如初。",
+    "today_action": "今天不去搜索或打听任何关于自己的评价和议论，让心灵彻底休息一天。",
+    "tags": ["澄清", "本质", "澄澈"],
+    "review_status": "approved"
+  },
+  {
+    "id": "daily_024",
+    "quote_id": "quote_jinshan_01",
+    "station_id": "station_changzhou",
+    "fact_text": "苏轼暮年在镇江金山寺见自己画像，自题一生功业不在京堂高位，而在黄州、惠州、儋州三次贬谪中。",
+    "dongpo_view": "不要用别人世俗的标准来度量你的成功。你在逆境中展现出的仁厚、坚韧与创造，才是你最硬核的徽章。",
+    "today_action": "列出三件在困境中你依然坚持做完并帮助到他人的事情，认可自己的价值。",
+    "tags": ["功业", "真谛", "逆境"],
+    "review_status": "approved"
+  },
+  {
+    "id": "daily_025",
+    "quote_id": "quote_zhurou_01",
+    "station_id": "station_huangzhou",
+    "fact_text": "苏轼在黄州发明东坡肉，心得是微火慢煨不急躁，火候到了肉自然酥烂香美。",
+    "dongpo_view": "很多急不来的事情，就交给时间和耐力。只要底子扎实、温度持续，水到自然渠成。",
+    "today_action": "为自己煮一碗热汤或者细火炖一道简单的食材，体味慢慢等待的耐心。",
+    "tags": ["耐心", "火候", "烟火"],
+    "review_status": "approved"
+  },
+  {
+    "id": "daily_026",
+    "quote_id": "quote_jiangchengzi_01",
+    "station_id": "station_mizhou",
+    "fact_text": "人到中年的苏轼在密州率千骑出猎，左手牵黄犬，右臂擎苍鹰，意气风发犹胜少年郎。",
+    "dongpo_view": "年龄从来不该成为束缚热忱的枷锁。只要心怀豪迈与向往，何时都可以重燃少年狂意。",
+    "today_action": "去做一件你一直想做、却总觉得自己这个年纪不合适的小任性事情。",
+    "tags": ["意气", "少年", "活力"],
+    "review_status": "approved"
+  },
+  {
+    "id": "daily_027",
+    "quote_id": "quote_jiangchengzi_02",
+    "station_id": "station_mizhou",
+    "fact_text": "苏轼在密州望月挽弓，胸中翻涌着报国御侮、射破天狼星宿的豪情斗志。",
+    "dongpo_view": "生活哪怕有一万个借口让我们认输，只要还有一口不甘平庸的气魄，就能挽弓射破阴霾。",
+    "today_action": "对一件一直拖延或者不敢直面的困难任务发起正面攻坚，先做三十分钟。",
+    "tags": ["破局", "魄力", "担当"],
+    "review_status": "approved"
+  },
+  {
+    "id": "daily_028",
+    "quote_id": "quote_yimao_01",
+    "station_id": "station_mizhou",
+    "fact_text": "十年生死相隔，梦中忽见梳妆楼阁，相顾无言唯有泪水千行，苏轼倾诉千古深情。",
+    "dongpo_view": "深藏在心底的情感不需要天天挂在嘴边。珍惜眼前陪伴你的人，因为相遇本就是奇迹。",
+    "today_action": "主动拥抱或者诚恳地问候一下身边最亲近的伴侣或家人。",
+    "tags": ["深情", "珍惜", "至爱"],
+    "review_status": "approved"
+  },
+  {
+    "id": "daily_029",
+    "quote_id": "quote_chudao_01",
+    "station_id": "station_huangzhou",
+    "fact_text": "刚到荒僻黄州安顿下来的苏轼，惊喜地发现江里鱼鲜肥美、漫山竹笋清香扑鼻。",
+    "dongpo_view": "生活的乐趣往往就藏在换一个视角后的微小发现中。哪怕身处异地，也能找到食物与风物的温存。",
+    "today_action": "今天吃饭时尝试一道平时没点过的家常菜，用心感受食材的新鲜滋味。",
+    "tags": ["鲜美", "发现", "安顿"],
+    "review_status": "approved"
+  },
+  {
+    "id": "daily_030",
+    "quote_id": "quote_xingshang_01",
+    "station_id": "station_jingshi",
+    "fact_text": "二十一岁苏轼在应试答卷中论及法制赏罚，力主以宽厚仁爱为先，体现博大胸怀。",
+    "dongpo_view": "待人接物多一份宽厚与仁善，不仅放过了别人，更是在丰盈与安宁自己的内心天地。",
+    "today_action": "宽容一件今天同事或路人无心造成的小失误，给对方一个理解的眼神。",
+    "tags": ["宽厚", "仁爱", "胸怀"],
+    "review_status": "approved"
+  }
+]

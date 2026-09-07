@@ -1,0 +1,281 @@
+[
+  {
+    "id": "quote_dingfengbo_01",
+    "text": "莫听穿林打叶声，何妨吟啸且徐行。",
+    "quote_type": "original_poem",
+    "work_id": "work_dingfengbo_moting",
+    "source_ids": ["source_dply_cb"],
+    "context_note": "沙湖道中遇雨，不让外界风雨打乱自己的心境与步伐。",
+    "review_status": "approved"
+  },
+  {
+    "id": "quote_dingfengbo_02",
+    "text": "竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。",
+    "quote_type": "original_poem",
+    "work_id": "work_dingfengbo_moting",
+    "source_ids": ["source_dply_cb"],
+    "context_note": "简朴装备也能行过风雨，平生坦荡无所畏惧。",
+    "review_status": "approved"
+  },
+  {
+    "id": "quote_dingfengbo_03",
+    "text": "回首向来萧瑟处，归去，也无风雨也无晴。",
+    "quote_type": "original_poem",
+    "work_id": "work_dingfengbo_moting",
+    "source_ids": ["source_dply_cb"],
+    "context_note": "雨停天晴之后回望来路，超越得失顺逆的平静澄澈。",
+    "review_status": "approved"
+  },
+  {
+    "id": "quote_shuidiao_01",
+    "text": "人有悲欢离合，月有阴晴圆缺，此事古难全。",
+    "quote_type": "original_poem",
+    "work_id": "work_shuidiaogetou_mingyue",
+    "source_ids": ["source_dply_cb"],
+    "context_note": "接纳人生的不完美与无常，是通达的开始。",
+    "review_status": "approved"
+  },
+  {
+    "id": "quote_shuidiao_02",
+    "text": "但愿人长久，千里共婵娟。",
+    "quote_type": "original_poem",
+    "work_id": "work_shuidiaogetou_mingyue",
+    "source_ids": ["source_dply_cb"],
+    "context_note": "打破时空阻隔的美好祝愿与深厚温情。",
+    "review_status": "approved"
+  },
+  {
+    "id": "quote_chibi_01",
+    "text": "寄蜉蝣于天地，渺沧海之一粟。",
+    "quote_type": "original_prose",
+    "work_id": "work_chibi_fu",
+    "source_ids": ["source_sswj_cb"],
+    "context_note": "洞察个体生命在宇宙间的渺小，从而放下虚妄的执念。",
+    "review_status": "approved"
+  },
+  {
+    "id": "quote_chibi_02",
+    "text": "自其不变者而观之，则物与我皆无尽也，而又何羡乎！",
+    "quote_type": "original_prose",
+    "work_id": "work_chibi_fu",
+    "source_ids": ["source_sswj_cb"],
+    "context_note": "以超然恒常的宇宙视角看待变化，找到内心的安定与自足。",
+    "review_status": "approved"
+  },
+  {
+    "id": "quote_chibi_03",
+    "text": "惟江上之清风，与山间之明月，耳得之而为声，目遇之而成色，取之无禁，用之不竭。",
+    "quote_type": "original_prose",
+    "work_id": "work_chibi_fu",
+    "source_ids": ["source_sswj_cb"],
+    "context_note": "世间最珍贵的清风与明月属于懂得欣赏的人，免费而充盈。",
+    "review_status": "approved"
+  },
+  {
+    "id": "quote_niannujiao_01",
+    "text": "大江东去，浪淘尽，千古风流人物。",
+    "quote_type": "original_poem",
+    "work_id": "work_niannujiao_chibi",
+    "source_ids": ["source_dply_cb"],
+    "context_note": "历史长河奔流不息，暂时的得失荣辱皆可释怀。",
+    "review_status": "approved"
+  },
+  {
+    "id": "quote_niannujiao_02",
+    "text": "人生如梦，一尊还酹江月。",
+    "quote_type": "original_poem",
+    "work_id": "work_niannujiao_chibi",
+    "source_ids": ["source_dply_cb"],
+    "context_note": "以一杯清酒敬这浩瀚江月，与天地同醉同醒。",
+    "review_status": "approved"
+  },
+  {
+    "id": "quote_linjiangxian_01",
+    "text": "小舟从此逝，江海寄余生。",
+    "quote_type": "original_poem",
+    "work_id": "work_linjiangxian_lingao",
+    "source_ids": ["source_dply_cb"],
+    "context_note": "夜归临皋听江声，对心灵自由与宁静生活的无限向往。",
+    "review_status": "approved"
+  },
+  {
+    "id": "quote_linjiangxian_02",
+    "text": "长恨此身非我有，何时忘却营营。",
+    "quote_type": "original_poem",
+    "work_id": "work_linjiangxian_lingao",
+    "source_ids": ["source_dply_cb"],
+    "context_note": "反思世俗名利的无休止奔忙，渴望内心的喘息与回归。",
+    "review_status": "approved"
+  },
+  {
+    "id": "quote_yinhushang_01",
+    "text": "水光潋滟晴方好，山色空蒙雨亦奇。",
+    "quote_type": "original_poem",
+    "work_id": "work_yinhushang_chuning",
+    "source_ids": ["source_sssc_cb"],
+    "context_note": "晴天有晴天的明媚，雨天有雨天的空灵，处处皆风景。",
+    "review_status": "approved"
+  },
+  {
+    "id": "quote_yinhushang_02",
+    "text": "欲把西湖比西子，淡妆浓抹总相宜。",
+    "quote_type": "original_poem",
+    "work_id": "work_yinhushang_chuning",
+    "source_ids": ["source_sssc_cb"],
+    "context_note": "无论以何种姿态面对世间，皆有独特的韵味与从容。",
+    "review_status": "approved"
+  },
+  {
+    "id": "quote_wanghulong_01",
+    "text": "白雨跳珠乱入船，卷地风来忽吹散。",
+    "quote_type": "original_poem",
+    "work_id": "work_wanghulong_zuishu",
+    "source_ids": ["source_sssc_cb"],
+    "context_note": "骤雨虽急，来得猛去得也快，天地终归水天一色。",
+    "review_status": "approved"
+  },
+  {
+    "id": "quote_wangjiangnan_01",
+    "text": "且将新火试新茶，诗酒趁年华。",
+    "quote_type": "original_poem",
+    "work_id": "work_wangjiangnan_chaoran",
+    "source_ids": ["source_dply_cb"],
+    "context_note": "不沉溺于过往遗憾，认真过好眼下的春光与今天。",
+    "review_status": "approved"
+  },
+  {
+    "id": "quote_chengtian_01",
+    "text": "何夜无月？何处无竹柏？但少闲人如吾两人者耳。",
+    "quote_type": "original_prose",
+    "work_id": "work_chengtian_yeyou",
+    "source_ids": ["source_sswj_cb"],
+    "context_note": "月光夜夜都在，缺少的只是停下脚步、安然欣赏的心境。",
+    "review_status": "approved"
+  },
+  {
+    "id": "quote_tixilinbi_01",
+    "text": "不识庐山真面目，只缘身在此山中。",
+    "quote_type": "original_poem",
+    "work_id": "work_tixilinbi",
+    "source_ids": ["source_sssc_cb"],
+    "context_note": "困扰常常源于身在局中，跳出来远观，自能看清全貌。",
+    "review_status": "approved"
+  },
+  {
+    "id": "quote_huizhou_01",
+    "text": "日啖荔枝三百颗，不辞长作岭南人。",
+    "quote_type": "original_poem",
+    "work_id": "work_huizhou_shilichi",
+    "source_ids": ["source_sssc_cb"],
+    "context_note": "把远谪异乡过成生活田园，在寻常果实中品出欢喜。",
+    "review_status": "approved"
+  },
+  {
+    "id": "quote_dingfengbo_nhg_01",
+    "text": "万里归来颜愈少，微笑，笑时犹带岭梅香。",
+    "quote_type": "original_poem",
+    "work_id": "work_dingfengbo_nanhaigui",
+    "source_ids": ["source_dply_cb"],
+    "context_note": "经历世间风尘洗礼，依然保持清澈的容颜与内心的芬芳。",
+    "review_status": "approved"
+  },
+  {
+    "id": "quote_dingfengbo_nhg_02",
+    "text": "试问岭南应不好，却道：此心安处是吾乡。",
+    "quote_type": "original_poem",
+    "work_id": "work_dingfengbo_nanhaigui",
+    "source_ids": ["source_dply_cb"],
+    "context_note": "身处何方不重要，心若能安顿下来，哪里都是故乡。",
+    "review_status": "approved"
+  },
+  {
+    "id": "quote_liuyue_01",
+    "text": "九死南荒吾不恨，兹游奇绝冠平生。",
+    "quote_type": "original_poem",
+    "work_id": "work_liuyue_duhai",
+    "source_ids": ["source_sssc_cb"],
+    "context_note": "将天涯贬谪的磨难视作平生最奇绝的游历，格局开阔无双。",
+    "review_status": "approved"
+  },
+  {
+    "id": "quote_liuyue_02",
+    "text": "云散月明谁点缀？天容海色本澄清。",
+    "quote_type": "original_poem",
+    "work_id": "work_liuyue_duhai",
+    "source_ids": ["source_sssc_cb"],
+    "context_note": "风波散去天宇澄清，内心本自澄澈明澈，不为外物所染。",
+    "review_status": "approved"
+  },
+  {
+    "id": "quote_jinshan_01",
+    "text": "问汝平生功业，黄州惠州儋州。",
+    "quote_type": "original_poem",
+    "work_id": "work_ziti_jinshan",
+    "source_ids": ["source_sssc_cb"],
+    "context_note": "暮年自题画像，将一生三段最艰难的贬谪之地当作真正平生勋业。",
+    "review_status": "approved"
+  },
+  {
+    "id": "quote_zhurou_01",
+    "text": "净洗铛，少著水，柴头罨烟焰不起。待他自熟莫催他，火候足时他自美。",
+    "quote_type": "original_prose",
+    "work_id": "work_zhurou_song",
+    "source_ids": ["source_sswj_cb"],
+    "context_note": "慢火煨炖的厨房智慧：不急不躁，耐心等候时间成就至味。",
+    "review_status": "approved"
+  },
+  {
+    "id": "quote_jiangchengzi_01",
+    "text": "老夫聊发少年狂，左牵黄，右擎苍，锦帽貂裘，千骑卷平冈。",
+    "quote_type": "original_poem",
+    "work_id": "work_jiangchengzi_mizhou",
+    "source_ids": ["source_dply_cb"],
+    "context_note": "中年困顿之时的少年意气与豪迈担当。",
+    "review_status": "approved"
+  },
+  {
+    "id": "quote_jiangchengzi_02",
+    "text": "会挽雕弓如满月，西北望，射天狼。",
+    "quote_type": "original_poem",
+    "work_id": "work_jiangchengzi_mizhou",
+    "source_ids": ["source_dply_cb"],
+    "context_note": "纵处逆境，仍怀抱报效家国与破局的坚决志气。",
+    "review_status": "approved"
+  },
+  {
+    "id": "quote_yimao_01",
+    "text": "十年生死两茫茫，不思量，自难忘。",
+    "quote_type": "original_poem",
+    "work_id": "work_jiangchengzi_yimao",
+    "source_ids": ["source_dply_cb"],
+    "context_note": "深藏心底的不朽深情，不刻意想起，却从未遗忘。",
+    "review_status": "approved"
+  },
+  {
+    "id": "quote_yuzhong_01",
+    "text": "与君世世为兄弟，更结来生未了因。",
+    "quote_type": "original_poem",
+    "work_id": "work_yuzhong_ziyou",
+    "source_ids": ["source_sssc_cb"],
+    "context_note": "狱中绝境之时对至亲的生死托付与无悔深情。",
+    "review_status": "approved"
+  },
+  {
+    "id": "quote_chudao_01",
+    "text": "长江绕郭知鱼美，好竹连山觉笋香。",
+    "quote_type": "original_poem",
+    "work_id": "work_chudao_huangzhou",
+    "source_ids": ["source_sssc_cb"],
+    "context_note": "初抵黄州荒僻小镇，第一件事是看见鱼肥笋香的日常生活乐趣。",
+    "review_status": "approved"
+  },
+  {
+    "id": "quote_xingshang_01",
+    "text": "可以赏，可以无赏，赏之过乎仁；可以罚，可以无罚，罚之滥乎不仁。",
+    "quote_type": "original_prose",
+    "work_id": "work_xingshang_lun",
+    "source_ids": ["source_sswj_cb"],
+    "context_note": "青年苏轼以宽厚仁爱之道立身治世之初志。",
+    "review_status": "approved"
+  }
+]

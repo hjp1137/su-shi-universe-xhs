@@ -1,0 +1,62 @@
+[
+  {
+    "id": "source_songshi_sushi",
+    "source_type": "primary",
+    "title": "宋史·列传第九十七·苏轼传",
+    "author_editor": "脱脱 等",
+    "publisher": "中华书局",
+    "edition": "二十四史点校本",
+    "note": "苏轼生平政绩、任职与贬谪路线之权威正史依据",
+    "review_status": "approved"
+  },
+  {
+    "id": "source_sswj_cb",
+    "source_type": "primary",
+    "title": "苏轼文集",
+    "author_editor": "苏轼 著，孔凡礼 点校",
+    "publisher": "中华书局",
+    "edition": "点校本",
+    "note": "赋文、书信、题跋、杂记原文权威校本",
+    "review_status": "approved"
+  },
+  {
+    "id": "source_sssc_cb",
+    "source_type": "primary",
+    "title": "苏轼诗集",
+    "author_editor": "苏轼 著，王文诰 辑注，孔凡礼 点校",
+    "publisher": "中华书局",
+    "edition": "点校本",
+    "note": "苏轼诗作编年校勘权威整理本",
+    "review_status": "approved"
+  },
+  {
+    "id": "source_dply_cb",
+    "source_type": "primary",
+    "title": "东坡乐府笺",
+    "author_editor": "苏轼 著，朱祖谋 笺，龙榆生 校订",
+    "publisher": "上海古籍出版社",
+    "edition": "整理本",
+    "note": "苏轼词作版本校订与编年权威底本",
+    "review_status": "approved"
+  },
+  {
+    "id": "source_ssnp_kfl",
+    "source_type": "scholar",
+    "title": "苏轼年谱",
+    "author_editor": "孔凡礼",
+    "publisher": "中华书局",
+    "edition": "初版",
+    "note": "苏轼生平行踪、交游、作品系年权威考据著作",
+    "review_status": "approved"
+  },
+  {
+    "id": "source_dpzl_cb",
+    "source_type": "primary",
+    "title": "东坡志林",
+    "author_editor": "苏轼 著，王松龄 点校",
+    "publisher": "中华书局",
+    "edition": "唐宋史料笔记丛刊",
+    "note": "苏轼晚年杂记、生活感悟、随笔原始文献",
+    "review_status": "approved"
+  }
+]

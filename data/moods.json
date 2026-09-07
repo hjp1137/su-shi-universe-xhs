@@ -1,0 +1,98 @@
+[
+  {
+    "id": "mood_anxious",
+    "name": "最近总有点慌",
+    "dimension": "节奏失控",
+    "core_theme": "风雨与徐行",
+    "candidate_station_ids": ["station_huangzhou", "station_hangzhou"],
+    "primary_station_id": "station_huangzhou",
+    "summary": "事情一件接着一件，总担心意外发生，心里七上八下定不下来。",
+    "dongpo_suggestion": "别让风雨决定你的步伐。撑不住伞的时候，何妨慢下脚步慢慢走。",
+    "recommended_quote_id": "quote_dingfengbo_01",
+    "review_status": "approved"
+  },
+  {
+    "id": "mood_work_stuck",
+    "name": "工作不太顺心",
+    "dimension": "受挫与重建",
+    "core_theme": "低谷重启与新可能",
+    "candidate_station_ids": ["station_huangzhou", "station_mizhou"],
+    "primary_station_id": "station_huangzhou",
+    "summary": "付出了很多努力，却得不到预期的反馈，或者项目受阻感到挫败。",
+    "dongpo_suggestion": "低谷也可以成为重新生活的入口。哪怕暂时被困，也可以先做一顿好饭、开垦属于自己的小天地。",
+    "recommended_quote_id": "quote_dingfengbo_02",
+    "review_status": "approved"
+  },
+  {
+    "id": "mood_misunderstood",
+    "name": "太在意外界看法",
+    "dimension": "外部评价与自我认同",
+    "core_theme": "风波与内在澄澈",
+    "candidate_station_ids": ["station_wutai", "station_huangzhou"],
+    "primary_station_id": "station_wutai",
+    "summary": "别人的一句评价、一个冷淡的眼神，都会在脑海里反复琢磨大半天。",
+    "dongpo_suggestion": "外界的声音永远嘈杂，别人的误读不等于真实的你。守住内心的清白与厚道即可。",
+    "recommended_quote_id": "quote_liuyue_02",
+    "review_status": "approved"
+  },
+  {
+    "id": "mood_overthinking",
+    "name": "脑子停不下来",
+    "dimension": "内耗与过度预演",
+    "core_theme": "活在当下与超然",
+    "candidate_station_ids": ["station_huangzhou", "station_mizhou"],
+    "primary_station_id": "station_huangzhou",
+    "summary": "一件还没发生的事，已经在心里演练了十几种最坏的可能，把自己搞得精疲力竭。",
+    "dongpo_suggestion": "不要提前经历还没发生的风雨。当下的每一步走稳了，将来的路自会清晰。",
+    "recommended_quote_id": "quote_dingfengbo_03",
+    "review_status": "approved"
+  },
+  {
+    "id": "mood_tired",
+    "name": "最近真的好累",
+    "dimension": "精力透支与恢复",
+    "core_theme": "停顿与歇息",
+    "candidate_station_ids": ["station_huangzhou", "station_huizhou"],
+    "primary_station_id": "station_huangzhou",
+    "summary": "明明没干什么体力活，却从早到晚觉得精力空虚，只想瘫坐着什么都不想。",
+    "dongpo_suggestion": "累了就先歇着，走慢一点并不代表停滞不前。先睡个好觉，天不会塌下来。",
+    "recommended_quote_id": "quote_linjiangxian_01",
+    "review_status": "approved"
+  },
+  {
+    "id": "mood_lost",
+    "name": "对未来感到迷茫",
+    "dimension": "路径不确定与探索",
+    "core_theme": "远游与心安",
+    "candidate_station_ids": ["station_huizhou", "station_danzhou"],
+    "primary_station_id": "station_huizhou",
+    "summary": "不知道下一步该往哪走，过去的规划似乎走不通，前面的路又看不真切。",
+    "dongpo_suggestion": "人生不会只有一条既定路线。哪怕被命运带到了意料之外的荒原，也能走出别样的风景。",
+    "recommended_quote_id": "quote_dingfengbo_nhg_02",
+    "review_status": "approved"
+  },
+  {
+    "id": "mood_lonely",
+    "name": "偶尔觉得有点孤单",
+    "dimension": "独处与情感连接",
+    "core_theme": "明月与清风共处",
+    "candidate_station_ids": ["station_mizhou", "station_huangzhou"],
+    "primary_station_id": "station_mizhou",
+    "summary": "身处人群依然觉得没人真正懂自己，渴望被理解，却又不知道向谁倾诉。",
+    "dongpo_suggestion": "学会与自己相处，也是一种深沉的能力。江上清风与山间明月，随时都在等待与你相逢。",
+    "recommended_quote_id": "quote_shuidiao_02",
+    "review_status": "approved"
+  },
+  {
+    "id": "mood_ordinary",
+    "name": "日子平淡但想过好",
+    "dimension": "日常琐碎与生活审美",
+    "core_theme": "人间烟火与清欢",
+    "candidate_station_ids": ["station_hangzhou", "station_huizhou"],
+    "primary_station_id": "station_hangzhou",
+    "summary": "没有波澜壮阔的起伏，每天都是重复的琐碎，但内心希望能把普通的日子过得有滋有味。",
+    "dongpo_suggestion": "把普通的日子过好，本身就是一种极高的人生修养。认真吃好一顿饭，细心品味一杯茶。",
+    "recommended_quote_id": "quote_wangjiangnan_01",
+    "review_status": "approved"
+  }
+]

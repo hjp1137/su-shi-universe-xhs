@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-苏轼宇宙小红书小工具 - 构建、静态合规扫描与官方 Skill 1.6.0 双重审计脚本
+苏轼宇宙小红书小工具 - 构建、数据校验、静态合规扫描与官方 Skill 1.6.0 双重审计脚本
 遵循基线：Offline H5 / index.html ZIP 根入口 / CSP Safe / Classic Script / ES2017 / Chrome 61
 """
 
@@ -17,6 +17,9 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DIST_DIR = PROJECT_ROOT / "dist"
 PACKAGE_NAME = "su-shi-universe-xhs.zip"
 ZIP_OUTPUT = DIST_DIR / PACKAGE_NAME
+
+VALIDATE_CONTENT_SCRIPT = PROJECT_ROOT / "scripts" / "validate_content.py"
+BUILD_CONTENT_SCRIPT = PROJECT_ROOT / "scripts" / "build_content.py"
 
 SKILL_PY_SCRIPT = PROJECT_ROOT / ".skill" / "minitool-zip-builder" / "scripts" / "audit_artifact.py"
 SKILL_MJS_SCRIPT = PROJECT_ROOT / ".skill" / "minitool-zip-builder" / "scripts" / "audit_artifact.mjs"
@@ -52,11 +55,30 @@ FORBIDDEN_PATTERNS = [
 ]
 
 
+def run_data_pipeline():
+    print("[1/6] 执行内容数据底座自动校验与离线编译...")
+    # 1. 运行校验脚本
+    res_val = subprocess.run([sys.executable, str(VALIDATE_CONTENT_SCRIPT)], capture_output=True, text=True)
+    print(res_val.stdout.strip())
+    if res_val.returncode != 0:
+        print(f"[ERROR] 内容数据校验未通过！\n{res_val.stderr.strip()}")
+        return False
+
+    # 2. 运行编译脚本
+    res_build = subprocess.run([sys.executable, str(BUILD_CONTENT_SCRIPT)], capture_output=True, text=True)
+    print(res_build.stdout.strip())
+    if res_build.returncode != 0:
+        print(f"[ERROR] 离线数据脚本编译失败！\n{res_build.stderr.strip()}")
+        return False
+
+    return True
+
+
 def clean_dist():
     if DIST_DIR.exists():
         shutil.rmtree(DIST_DIR)
     DIST_DIR.mkdir(parents=True, exist_ok=True)
-    print(f"[1/5] 已清理并初始化输出目录: {DIST_DIR}")
+    print(f"[2/6] 已清理并初始化输出目录: {DIST_DIR}")
 
 
 def copy_runtime_files():
@@ -77,11 +99,11 @@ def copy_runtime_files():
         elif src_path.is_dir():
             shutil.copytree(src_path, dst_path, ignore=shutil.ignore_patterns("*.md", "*.git*", "*.map", "__pycache__"))
 
-    print("[2/5] 运行时文件已复制到 dist/ 目录 (规范包含: index.html, css/, js/, assets/, data/)")
+    print("[3/6] 运行时文件已复制到 dist/ 目录 (规范包含: index.html, css/, js/, assets/, data/)")
 
 
 def check_dist_compliance():
-    print("[3/5] 正在执行小红书端能力与静态合规扫描...")
+    print("[4/6] 正在执行小红书端能力与静态合规扫描...")
     errors = []
 
     # 1. 检查 index.html 是否位于根目录
@@ -136,8 +158,7 @@ def check_dist_compliance():
 
 
 def create_zip():
-    print(f"[4/5] 正在打包为离线 zip: {PACKAGE_NAME} ...")
-    # 严格遵照规范：压缩目录内的所有文件，使解压后第一级直接呈现 index.html
+    print(f"[5/6] 正在打包为离线 zip: {PACKAGE_NAME} ...")
     with zipfile.ZipFile(ZIP_OUTPUT, "w", compression=zipfile.ZIP_DEFLATED) as zf:
         for root, dirs, files in os.walk(DIST_DIR):
             for file in sorted(files):
@@ -152,7 +173,7 @@ def create_zip():
 
 
 def run_official_audits():
-    print("[5/5] 正在执行小红书官方 Skill 1.6.0 双重审计 (产物目录与 ZIP 包)...")
+    print("[6/6] 正在执行小红书官方 Skill 1.6.0 双重审计 (产物目录与 ZIP 包)...")
 
     # 1. Python 审计
     if SKILL_PY_SCRIPT.exists():
@@ -195,6 +216,8 @@ def run_official_audits():
 
 
 def main():
+    if not run_data_pipeline():
+        sys.exit(1)
     clean_dist()
     copy_runtime_files()
     if not check_dist_compliance():
@@ -203,7 +226,7 @@ def main():
     if not run_official_audits():
         sys.exit(1)
     print(f"\n==========================================")
-    print(f"任务 1.1 产物纠偏与官方双重审计全部完成！")
+    print(f"任务 2 数据底座与官方双重审计全部完成！")
     print(f"产物目录: {DIST_DIR}")
     print(f"ZIP 产物: {ZIP_OUTPUT}")
     print(f"==========================================")

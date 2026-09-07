@@ -1,0 +1,109 @@
+[
+  {
+    "id": "event_jinshi_kaoshi",
+    "title": "嘉祐登第与名动京师",
+    "station_ids": ["station_jingshi"],
+    "date_precision": "year",
+    "date_start": "1057",
+    "fact_summary": "宋仁宗嘉祐二年，二十一岁的苏轼与弟苏辙同登进士第。主考官欧阳修读其《刑赏忠厚之至论》，极度赞赏，叹曰：'吾当避此人出一头地。'苏轼一举名震京师。",
+    "related_work_ids": ["work_xingshang_lun"],
+    "source_ids": ["source_songshi_sushi", "source_ssnp_kfl"],
+    "review_status": "approved"
+  },
+  {
+    "id": "event_mizhou_chaoran",
+    "title": "密州抗灾与超然四望",
+    "station_ids": ["station_mizhou"],
+    "date_precision": "year",
+    "date_start": "1074",
+    "date_end": "1076",
+    "fact_summary": "苏轼出知密州，时值严重旱灾与蝗灾。苏轼带领百姓灭蝗救灾、收养弃儿。其间修葺城北废台，苏辙命名为'超然台'。苏轼在此作《水调歌头·明月几时有》与《望江南·超然台作》。",
+    "related_work_ids": ["work_jiangchengzi_mizhou", "work_shuidiaogetou_mingyue", "work_wangjiangnan_chaoran"],
+    "source_ids": ["source_songshi_sushi", "source_ssnp_kfl"],
+    "review_status": "approved"
+  },
+  {
+    "id": "event_wutai_case",
+    "title": "乌台诗案与生死淬炼",
+    "station_ids": ["station_wutai"],
+    "date_precision": "month",
+    "date_start": "1079-07",
+    "date_end": "1079-12",
+    "fact_summary": "元丰二年，因新党官员摘引其诗文中讽谏之词，苏轼在湖州被御史台差官逮捕，押解京师御史台狱（乌台）。关押审讯达一百三十天，几遭极刑。在王安石、苏辙及各方营救下，终获从轻发落，贬为黄州团练副使。",
+    "related_work_ids": ["work_yuzhong_ziyou"],
+    "source_ids": ["source_songshi_sushi", "source_ssnp_kfl"],
+    "review_status": "approved"
+  },
+  {
+    "id": "event_huangzhou_dongpo",
+    "title": "黄州躬耕与东坡居士",
+    "station_ids": ["station_huangzhou"],
+    "date_precision": "year",
+    "date_start": "1080",
+    "date_end": "1084",
+    "fact_summary": "苏轼初至黄州，俸禄断绝，生计维艰。在旧友马正卿相助下，在城东营地废弃荒坡开垦荒地数十亩，自筑雪堂，种植蔬麦。自此自号'东坡居士'，真正把日子重新过起来。",
+    "related_work_ids": ["work_chudao_huangzhou", "work_dingfengbo_moting", "work_zhurou_song"],
+    "source_ids": ["source_songshi_sushi", "source_ssnp_kfl"],
+    "review_status": "approved"
+  },
+  {
+    "id": "event_huangzhou_chibi",
+    "title": "赤壁泛舟与旷达心境",
+    "station_ids": ["station_huangzhou"],
+    "date_precision": "month",
+    "date_start": "1082-07",
+    "date_end": "1082-10",
+    "fact_summary": "元丰五年秋、冬，苏轼先后两次泛舟黄州城外赤壁矶，写下千古名作《前赤壁赋》、《后赤壁赋》及《念奴娇·赤壁怀古》，完成了个人生命哲学的重大升华。",
+    "related_work_ids": ["work_chibi_fu", "work_niannujiao_chibi", "work_linjiangxian_lingao", "work_chengtian_yeyou"],
+    "source_ids": ["source_sswj_cb", "source_ssnp_kfl"],
+    "review_status": "approved"
+  },
+  {
+    "id": "event_hangzhou_sudi",
+    "title": "再知杭州与疏浚西湖",
+    "station_ids": ["station_hangzhou"],
+    "date_precision": "year",
+    "date_start": "1089",
+    "date_end": "1091",
+    "fact_summary": "元祐四年，苏轼以龙图阁学士知杭州。见西湖大半葑草湮塞，苏轼动用工役二十万，疏浚西湖，用葑草淤泥筑起纵贯南北的长堤，后世称之'苏堤'，成为惠泽千年的民生工程。",
+    "related_work_ids": ["work_yinhushang_chuning", "work_wanghulong_zuishu"],
+    "source_ids": ["source_songshi_sushi", "source_ssnp_kfl"],
+    "review_status": "approved"
+  },
+  {
+    "id": "event_huizhou_zagen",
+    "title": "岭南烟火与心安扎根",
+    "station_ids": ["station_huizhou"],
+    "date_precision": "year",
+    "date_start": "1094",
+    "date_end": "1097",
+    "fact_summary": "绍圣元年，新党重新得势，五十九岁的苏轼被远贬岭南惠州。苏轼不仅迅速适应当地风土人情，还助修东新桥、西新桥，筑白鹤峰新居，表现出随遇而安的超强生命力。",
+    "related_work_ids": ["work_huizhou_shilichi", "work_dingfengbo_nanhaigui"],
+    "source_ids": ["source_songshi_sushi", "source_ssnp_kfl"],
+    "review_status": "approved"
+  },
+  {
+    "id": "event_danzhou_shusheng",
+    "title": "天涯儋州与播种书声",
+    "station_ids": ["station_danzhou"],
+    "date_precision": "year",
+    "date_start": "1097",
+    "date_end": "1100",
+    "fact_summary": "绍圣四年，六十二岁的苏轼再贬琼州昌化军（今海南儋州）。苏轼居桄榔庵，食无肉、病无药、居无室，却在当地开办学堂载酒堂，传播中原儒学文化，培养出海南历史上第一位举人姜唐佐。",
+    "related_work_ids": ["work_liuyue_duhai", "work_bie_hainan"],
+    "source_ids": ["source_songshi_sushi", "source_ssnp_kfl"],
+    "review_status": "approved"
+  },
+  {
+    "id": "event_changzhou_guishi",
+    "title": "北归常州与平和谢幕",
+    "station_ids": ["station_changzhou"],
+    "date_precision": "month",
+    "date_start": "1101-06",
+    "date_end": "1101-07",
+    "fact_summary": "建中靖国元年，苏轼获赦北归，行至常州病重。同年七月二十八日，苏轼在常州孙氏馆从容辞世，终年六十六岁。临终前维琳方丈劝其念西方极乐，苏轼答曰：'着力即差。'门人问后事，答曰：'平生未尝为恶，死必不坠。'从容归去。",
+    "related_work_ids": ["work_ziti_jinshan"],
+    "source_ids": ["source_songshi_sushi", "source_ssnp_kfl"],
+    "review_status": "approved"
+  }
+]

@@ -1,0 +1,212 @@
+[
+  {
+    "id": "work_xingshang_lun",
+    "title": "刑赏忠厚之至论",
+    "genre": "文",
+    "station_ids": ["station_jingshi"],
+    "creation_context": "嘉祐二年（1057）苏轼在京师参加进士考试时所作试策，深受欧阳修赏识，一举成名。",
+    "why_related": "苏轼青年时代才华被天下看见的重要转折节点代表作。",
+    "source_ids": ["source_sswj_cb", "source_songshi_sushi"],
+    "review_status": "approved"
+  },
+  {
+    "id": "work_jiangchengzi_mizhou",
+    "title": "江城子·密州出猎",
+    "genre": "词",
+    "station_ids": ["station_mizhou"],
+    "creation_context": "熙宁八年（1075）冬苏轼任密州知州时出猎所作，开豪放词派先河。",
+    "why_related": "体现中年苏轼面对边患国事与自身际遇时的豪迈担当之气。",
+    "source_ids": ["source_dply_cb", "source_ssnp_kfl"],
+    "review_status": "approved"
+  },
+  {
+    "id": "work_shuidiaogetou_mingyue",
+    "title": "水调歌头·明月几时有",
+    "genre": "词",
+    "station_ids": ["station_mizhou"],
+    "creation_context": "丙辰中秋（1076），苏轼在密州欢饮达旦，兼怀子由所作。",
+    "why_related": "中秋怀亲与人生哲思之巅，体现从人事离合到天地通达的心境跃迁。",
+    "source_ids": ["source_dply_cb", "source_ssnp_kfl"],
+    "review_status": "approved"
+  },
+  {
+    "id": "work_jiangchengzi_yimao",
+    "title": "江城子·乙卯正月二十日夜记梦",
+    "genre": "词",
+    "station_ids": ["station_mizhou"],
+    "creation_context": "熙宁八年（1075）正月，苏轼在密州梦见亡妻王弗，醒后悲痛写下此词。",
+    "why_related": "苏轼深沉深情人生面向的代表作，千古悼亡绝唱。",
+    "source_ids": ["source_dply_cb"],
+    "review_status": "approved"
+  },
+  {
+    "id": "work_yuzhong_ziyou",
+    "title": "狱中寄子由二首",
+    "genre": "诗",
+    "station_ids": ["station_wutai"],
+    "creation_context": "元丰二年（1079）苏轼深陷乌台诗案御史台狱中，自料必死时给弟弟苏辙的绝笔诗。",
+    "why_related": "苏轼一生最深沉的生死考验与患难兄弟情谊之真实记录。",
+    "source_ids": ["source_sssc_cb", "source_songshi_sushi"],
+    "review_status": "approved"
+  },
+  {
+    "id": "work_chudao_huangzhou",
+    "title": "初到黄州",
+    "genre": "诗",
+    "station_ids": ["station_huangzhou"],
+    "creation_context": "元丰三年（1080）苏轼贬谪初抵黄州所作，写下初到荒僻小城的清贫与从容安顿。",
+    "why_related": "记录低谷起点，展现不怨尤、先安顿日常的生活姿态。",
+    "source_ids": ["source_sssc_cb", "source_ssnp_kfl"],
+    "review_status": "approved"
+  },
+  {
+    "id": "work_dingfengbo_moting",
+    "title": "定风波·莫听穿林打叶声",
+    "genre": "词",
+    "station_ids": ["station_huangzhou"],
+    "creation_context": "元丰五年（1082）春三月，苏轼在黄州沙湖道中遇雨，同行皆狼狈，独苏轼缓行吟啸。",
+    "why_related": "苏轼人生哲学最核心的凝练，直面风雨、徐行旷达的标志性名篇。",
+    "source_ids": ["source_dply_cb", "source_ssnp_kfl"],
+    "review_status": "approved"
+  },
+  {
+    "id": "work_chibi_fu",
+    "title": "赤壁赋",
+    "genre": "赋",
+    "station_ids": ["station_huangzhou"],
+    "creation_context": "元丰五年（1082）秋，苏轼与客泛舟游黄州赤壁之下，感叹江月造化与人生短促。",
+    "why_related": "在江上清风与山间明月中安顿生命，将挫折升华为主客双清的豁达生命观。",
+    "source_ids": ["source_sswj_cb", "source_ssnp_kfl"],
+    "review_status": "approved"
+  },
+  {
+    "id": "work_niannujiao_chibi",
+    "title": "念奴娇·赤壁怀古",
+    "genre": "词",
+    "station_ids": ["station_huangzhou"],
+    "creation_context": "元丰五年（1082）苏轼泛舟赤壁矶所作，抒发对三国英雄风流的追慕与自省。",
+    "why_related": "大江东去淘尽风波，将个人际遇置于浩荡历史长河中释怀。",
+    "source_ids": ["source_dply_cb"],
+    "review_status": "approved"
+  },
+  {
+    "id": "work_linjiangxian_lingao",
+    "title": "临江仙·夜归临皋",
+    "genre": "词",
+    "station_ids": ["station_huangzhou"],
+    "creation_context": "元丰五年（1082）九月，苏轼夜饮东坡醒复醉，归家门闭倚杖听江声所作。",
+    "why_related": "静夜面对长江流水，寻找心灵真正归宿与自由的安然姿态。",
+    "source_ids": ["source_dply_cb"],
+    "review_status": "approved"
+  },
+  {
+    "id": "work_zhurou_song",
+    "title": "猪肉颂",
+    "genre": "文",
+    "station_ids": ["station_huangzhou"],
+    "creation_context": "元丰年间苏轼在黄州自创慢火煨炖红烧肉，并作此趣味文赋记之。",
+    "why_related": "在微贱食材与朴素厨房中找寻至味，以美食化解困顿的烟火实践。",
+    "source_ids": ["source_sswj_cb"],
+    "review_status": "approved"
+  },
+  {
+    "id": "work_yinhushang_chuning",
+    "title": "饮湖上初晴后雨二首·其二",
+    "genre": "诗",
+    "station_ids": ["station_hangzhou"],
+    "creation_context": "熙宁六年（1073）苏轼任杭州通判时泛舟西湖所作，将西湖比作西子。",
+    "why_related": "无论晴天或雨天皆能领略天地之美，从容做事与享受生活的完美融合。",
+    "source_ids": ["source_sssc_cb", "source_ssnp_kfl"],
+    "review_status": "approved"
+  },
+  {
+    "id": "work_wanghulong_zuishu",
+    "title": "望湖楼醉书五绝·其一",
+    "genre": "诗",
+    "station_ids": ["station_hangzhou"],
+    "creation_context": "熙宁五年（1072）苏轼在杭州望湖楼饮酒时遇骤雨骤晴所作。",
+    "why_related": "白雨跳珠忽又风卷云开，象征世间风云来去匆匆，水天自有一色从容。",
+    "source_ids": ["source_sssc_cb"],
+    "review_status": "approved"
+  },
+  {
+    "id": "work_wangjiangnan_chaoran",
+    "title": "望江南·超然台作",
+    "genre": "词",
+    "station_ids": ["station_mizhou"],
+    "creation_context": "熙宁九年（1076）春，苏轼登密州超然台，兼怀故园所作。",
+    "why_related": "且将新火试新茶，诗酒趁年华，表达立足当下珍惜当下的生命热情。",
+    "source_ids": ["source_dply_cb"],
+    "review_status": "approved"
+  },
+  {
+    "id": "work_huizhou_shilichi",
+    "title": "惠州一绝 / 食荔枝",
+    "genre": "诗",
+    "station_ids": ["station_huizhou"],
+    "creation_context": "绍圣三年（1096）苏轼贬谪惠州时尝岭南荔枝所作。",
+    "why_related": "日啖荔枝三百颗，不辞长作岭南人，体现惊人的环境适应力与生活乐观度。",
+    "source_ids": ["source_sssc_cb", "source_ssnp_kfl"],
+    "review_status": "approved"
+  },
+  {
+    "id": "work_dingfengbo_nanhaigui",
+    "title": "定风波·南海归赠王定国侍人寓娘",
+    "genre": "词",
+    "station_ids": ["station_huizhou"],
+    "creation_context": "元丰六年（1083）苏轼感念王巩之妾柔奴随行岭南历尽艰辛却面容愈少而作。",
+    "why_related": "此心安处是吾乡，从他人的坚韧中映照出心安即归所的博大情怀。",
+    "source_ids": ["source_dply_cb"],
+    "review_status": "approved"
+  },
+  {
+    "id": "work_liuyue_duhai",
+    "title": "六月二十日夜渡海",
+    "genre": "诗",
+    "station_ids": ["station_danzhou"],
+    "creation_context": "元符三年（1100）苏轼遇赦北归，夜渡琼州海峡时所作。",
+    "why_related": "九死南荒吾不恨，兹游奇绝冠平生。晚年跨越生死磨砺后的终极释怀与达观。",
+    "source_ids": ["source_sssc_cb", "source_ssnp_kfl"],
+    "review_status": "approved"
+  },
+  {
+    "id": "work_bie_hainan",
+    "title": "别海南黎民表",
+    "genre": "诗",
+    "station_ids": ["station_danzhou"],
+    "creation_context": "元符三年（1100）苏轼离开儋州时与当地百姓深情惜别所作。",
+    "why_related": "在天涯绝域传播中原文教，与底层黎民结下真挚友谊的博大仁爱体现。",
+    "source_ids": ["source_sssc_cb"],
+    "review_status": "approved"
+  },
+  {
+    "id": "work_ziti_jinshan",
+    "title": "自题金山画像",
+    "genre": "诗",
+    "station_ids": ["station_changzhou"],
+    "creation_context": "建中靖国元年（1101）苏轼北归途经镇江金山寺，见李公麟所画自己肖像，病中题诗总结一生。",
+    "why_related": "问汝平生功业，黄州惠州儋州。苏轼对自己坎坷却丰盛一生的终极概括与自嘲。",
+    "source_ids": ["source_sssc_cb", "source_ssnp_kfl"],
+    "review_status": "approved"
+  },
+  {
+    "id": "work_chengtian_yeyou",
+    "title": "记承天寺夜游",
+    "genre": "文",
+    "station_ids": ["station_huangzhou"],
+    "creation_context": "元丰六年（1083）苏轼在黄州夜见月色入户，欣然起行寻张怀民同游所作小品文。",
+    "why_related": "何夜无月？何处无竹柏？但少闲人如吾两人者耳。日常细微之美的最高发现力。",
+    "source_ids": ["source_sswj_cb"],
+    "review_status": "approved"
+  },
+  {
+    "id": "work_tixilinbi",
+    "title": "题西林壁",
+    "genre": "诗",
+    "station_ids": ["station_huangzhou"],
+    "creation_context": "元丰七年（1084）五月苏轼离开黄州赴汝州途中，游庐山西林寺所题壁诗。",
+    "why_related": "不识庐山真面目，只缘身在此山中。换个视角看待人生与困局的经典哲理。",
+    "source_ids": ["source_sssc_cb", "source_ssnp_kfl"],
+    "review_status": "approved"
+  }
+]
