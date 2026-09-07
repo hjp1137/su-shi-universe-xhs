@@ -1663,6 +1663,8 @@
           }
         }
 
+        currentVm = vm;
+
         if (CardCanvas && typeof CardCanvas.renderCard === 'function') {
           CardCanvas.renderCard(currentType, vm, function (dataUrl) {
             currentDataUrl = dataUrl;
@@ -1677,33 +1679,151 @@
         }
       }
 
+      var currentVm = null;
+
       // 初次挂载自动渲染
       renderCardImage();
 
-      // --- 底部操作按钮群 ---
+      // --- 底部操作按钮群 (传播闭环双主链) ---
       var actBox = document.createElement('div');
       actBox.className = 'share-card-actions';
 
-      var btnSave = UI.createPrimaryButton('保存卡片至相册', function () {
+      // 1. 一键发布到小红书 (核心主按钮)
+      var btnPublish = UI.createPrimaryButton('一键发布到小红书', function () {
+        if (!currentDataUrl) {
+          if (UI && typeof UI.showToast === 'function') {
+            UI.showToast('卡片正在水墨泼染，请稍候…');
+          }
+          return;
+        }
+
+        var Bridge = SuShiUniverse.Bridge;
+        if (!Bridge || typeof Bridge.postNote !== 'function') {
+          if (UI && typeof UI.showToast === 'function') {
+            UI.showToast('发布能力暂未就绪');
+          }
+          return;
+        }
+
+        // 构造克制优雅、充满文化气息的推荐正文
+        var postTitle = '苏轼宇宙 · ' + (currentVm ? (currentVm.station_name || '东坡人生') : '人生站点');
+        var postContent = '';
+        if (currentType === 'daily') {
+          postTitle = '今日东坡签 · ' + (currentVm ? (currentVm.date_display ? currentVm.date_display.split('·')[0].trim() : '小札') : '随行');
+          postContent = '今天在苏轼宇宙抽到了东坡诗笺：\n' +
+                        '“' + ((currentVm && currentVm.quote_text) || '') + '”\n\n' +
+                        '【放到今天】' + ((currentVm && currentVm.dongpo_view) || '') + '\n' +
+                        '【今日一事】' + ((currentVm && currentVm.today_action) || '') + '\n\n' +
+                        '#今日东坡 #诗词日历 #日常哲学 #苏轼宇宙';
+        } else if (currentType === 'node') {
+          postTitle = '东坡行迹 · ' + ((currentVm && currentVm.station_name) || '人生节点');
+          postContent = '行至「' + ((currentVm && currentVm.station_name) || '苏轼人生站') + '」。\n' +
+                        ((currentVm && currentVm.summary_fact) ? ('历史现场：' + currentVm.summary_fact + '\n') : '') +
+                        ((currentVm && currentVm.dongpo_view) ? ('生活启示：' + currentVm.dongpo_view + '\n') : '') +
+                        '\n九万里风鹏正举，人生随处是东坡。\n#苏轼生平 #人生站点 #东坡行迹 #苏轼宇宙';
+        } else {
+          postTitle = '我的苏轼人生站点 · ' + ((currentVm && currentVm.station_name) || '黄州');
+          postContent = '原来我最近处在苏轼的「' + ((currentVm && currentVm.station_name) || '黄州') + '」时刻。\n' +
+                        '“' + ((currentVm && currentVm.quote_text) || '') + '”\n\n' +
+                        ((currentVm && currentVm.dongpo_view) ? (currentVm.dongpo_view + '\n') : '') +
+                        '\n遇到风雨，不如徐行自洽。\n#苏轼宇宙 #中国诗词宇宙 #东坡人生';
+        }
+
+        btnPublish.disabled = true;
+        btnPublish.textContent = '正在调起小红书发布器…';
+
+        Bridge.postNote({
+          title: postTitle,
+          content: postContent,
+          pageType: 'photo_publish',
+          dataUri: currentDataUrl,
+          tags: '苏轼宇宙,中国诗词宇宙'
+        }).then(function (res) {
+          if (res && res.canceled) {
+            if (UI && typeof UI.showToast === 'function') {
+              UI.showToast('已取消发布');
+            }
+          } else {
+            if (UI && typeof UI.showToast === 'function') {
+              UI.showToast('已成功调起小红书发布！');
+            }
+          }
+        }).catch(function (err) {
+          console.warn('[ShareCard] postNote error:', err);
+          if (Bridge.isUserCancel(err)) {
+            if (UI && typeof UI.showToast === 'function') {
+              UI.showToast('已取消发布');
+            }
+          } else {
+            if (UI && typeof UI.showToast === 'function') {
+              UI.showToast('调起发布异常，请长按图片手动发布');
+            }
+          }
+        }).then(function () {
+          // 无论成功或失败，必定恢复按钮状态
+          btnPublish.disabled = false;
+          btnPublish.textContent = '一键发布到小红书';
+        });
+      });
+      actBox.appendChild(btnPublish);
+
+      // 2. 保存卡片至相册 (次主按钮)
+      var btnSave = UI.createSecondaryButton('保存卡片至相册', function () {
         if (!currentDataUrl) {
           if (UI && typeof UI.showToast === 'function') {
             UI.showToast('卡片正在生成，请稍候…');
           }
           return;
         }
-        if (SuShiUniverse.Bridge && typeof SuShiUniverse.Bridge.saveImage === 'function') {
-          SuShiUniverse.Bridge.saveImage(currentDataUrl, {
-            filename: 'sushi_card_' + currentType + '.png',
-            title: '苏轼宇宙分享卡'
-          });
-        } else {
+
+        var Bridge = SuShiUniverse.Bridge;
+        if (!Bridge || typeof Bridge.saveImage !== 'function') {
           if (UI && typeof UI.showToast === 'function') {
-            UI.showToast('长按图片即可保存至手机相册');
+            UI.showToast('长按图片即可直接保存至手机相册');
           }
+          return;
         }
+
+        btnSave.disabled = true;
+        btnSave.textContent = '正在保存至相册…';
+
+        Bridge.saveImage(currentDataUrl, {
+          filename: 'sushi_card_' + currentType + '.png',
+          title: '苏轼宇宙分享卡'
+        }).then(function (res) {
+          if (res && res.canceled) {
+            if (UI && typeof UI.showToast === 'function') {
+              UI.showToast('已取消保存');
+            }
+          } else {
+            if (UI && typeof UI.showToast === 'function') {
+              UI.showToast('已成功保存至手机相册！');
+            }
+          }
+        }).catch(function (err) {
+          console.warn('[ShareCard] saveImage error:', err);
+          var errMsg = String((err && err.errMsg) || err || '');
+          if (Bridge.isUserCancel(err)) {
+            if (UI && typeof UI.showToast === 'function') {
+              UI.showToast('已取消保存');
+            }
+          } else if (errMsg.indexOf('auth deny') !== -1 || errMsg.indexOf('permission') !== -1) {
+            if (UI && typeof UI.showToast === 'function') {
+              UI.showToast('保存失败：请在系统设置中允许访问相册');
+            }
+          } else {
+            if (UI && typeof UI.showToast === 'function') {
+              UI.showToast('保存失败，您可长按图片直接存储');
+            }
+          }
+        }).then(function () {
+          btnSave.disabled = false;
+          btnSave.textContent = '保存卡片至相册';
+        });
       });
       actBox.appendChild(btnSave);
 
+      // 3. 辅助跳转按钮组
       var btnUniv = UI.createSecondaryButton('漫游苏轼人生宇宙', function () {
         Router.navigate('universe', { highlight_station_id: currentStationId });
       });

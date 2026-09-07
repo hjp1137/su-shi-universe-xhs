@@ -218,6 +218,32 @@
     return box;
   }
 
+  // 12. Toast 提示浮层
+  var toastTimer = null;
+  function showToast(msg, duration) {
+    if (!msg || typeof document === 'undefined') return;
+    duration = duration || 2200;
+
+    var existing = document.querySelector('.toast-message');
+    if (existing && existing.parentNode) {
+      existing.parentNode.removeChild(existing);
+    }
+    if (toastTimer) {
+      clearTimeout(toastTimer);
+    }
+
+    var el = document.createElement('div');
+    el.className = 'toast-message';
+    el.textContent = msg;
+    document.body.appendChild(el);
+
+    toastTimer = setTimeout(function () {
+      if (el && el.parentNode) {
+        el.parentNode.removeChild(el);
+      }
+    }, duration);
+  }
+
   // 挂载到 SuShiUniverse.UI
   UI.createBackButton = createBackButton;
   UI.createSectionHeader = createSectionHeader;
@@ -230,6 +256,7 @@
   UI.createLoadingState = createLoadingState;
   UI.createEmptyState = createEmptyState;
   UI.createErrorState = createErrorState;
+  UI.showToast = showToast;
 
   SuShi.UI = UI;
 })();

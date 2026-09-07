@@ -1,8 +1,14 @@
 /**
- * 苏轼宇宙小红书小工具 - Native Bridge 适配层骨架
+ * 苏轼宇宙小红书小工具 - XHSBridge 统一原生适配层
  * 遵循基线：ES2017 / Chrome 61 / Classic Script
- * 依赖关系：须在 namespace.js 之后加载
- * 官方标准：window.xhs.miniTool.* (Skill 1.6.0 规范)
+ * 依赖关系：必须在 js/namespace.js 之后加载
+ * 官方标准：window.xhs.miniTool.* (Skill 1.6.0 规范，以 jsbridge-api.md 为准)
+ * 核心职责：
+ *  1. Bridge 存在性与运行环境检测 (isAvailable)；
+ *  2. 原生 API Promise 封装与参数校验 (writeTempFile, saveImageToPhotosAlbum, postNote, openRedPage)；
+ *  3. 错误码归一化与用户取消分支识别 (isUserCancel)；
+ *  4. PC/开发环境模拟降级与防并发保护；
+ *  5. 严禁 <a download>、严禁网络上传/fetch/外链、绝不自动发布。
  */
 
 (function () {
@@ -12,6 +18,11 @@
   if (!root.SuShiUniverse) {
     root.SuShiUniverse = {};
   }
+
+  // 模拟运行模式 ('default' | 'success' | 'cancel' | 'fail_auth')
+  var mockMode = 'default';
+  // 全局防并发锁
+  var isBusy = false;
 
   var XHSBridge = {
     /**
@@ -27,9 +38,37 @@
     },
 
     /**
-     * base64 转临时文件
-     * @param {string} dataUri 完整的 data:<mime>;base64,... 字符串
-     * @returns {Promise<{filePath: string}>}
+     * 识别 Native 抛出的错误是否属于用户正常取消分支
+     * @param {any} err
+     * @returns {boolean}
+     */
+    isUserCancel: function (err) {
+      if (!err) return false;
+      var msg = String(err.errMsg || err.message || err).toLowerCase();
+      return msg.indexOf('cancel') !== -1;
+    },
+
+    /**
+     * 设置调试模拟模式 (仅供测试或离线调试使用)
+     * @param {'default'|'success'|'cancel'|'fail_auth'} mode
+     */
+    setMockMode: function (mode) {
+      mockMode = mode || 'default';
+    },
+
+    /**
+     * 获取当前模拟模式
+     * @returns {string}
+     */
+    getMockMode: function () {
+      return mockMode;
+    },
+
+    /**
+     * base64 转临时文件 (writeTempFile)
+     * 官方规则：data 必须是完整 data:uri 格式，不接受裸 base64
+     * @param {string} dataUri 完整的 data:<mime>;base64,<payload> 字符串
+     * @returns {Promise<{filePath: string, errMsg: string}>}
      */
     writeTempFile: function (dataUri) {
       var self = this;
@@ -38,101 +77,229 @@
           return reject(new Error('writeTempFile:fail data 必须是完整 data:uri 格式'));
         }
 
+        // 1. 真机环境调用
         if (self.isAvailable() && typeof root.xhs.miniTool.writeTempFile === 'function') {
           root.xhs.miniTool.writeTempFile({
             data: dataUri,
             success: function (res) {
-              resolve(res);
+              resolve(res || { filePath: 'tmp://local_generated.png', errMsg: 'writeTempFile:ok' });
             },
             fail: function (err) {
-              reject(err);
+              reject(err || new Error('writeTempFile:fail unknown'));
             }
           });
-        } else {
-          // 本地/模拟环境降级：返回虚拟临时文件路径
-          console.warn('[XHSBridge] 当前非小红书容器，writeTempFile 采用本地模拟降级');
-          resolve({ filePath: 'mock://temp/' + Date.now() + '.png' });
+          return;
         }
+
+        // 2. PC / 开发模拟环境降级
+        if (mockMode === 'cancel') {
+          var cancelErr = new Error('writeTempFile:fail cancel');
+          cancelErr.errMsg = 'writeTempFile:fail cancel';
+          return reject(cancelErr);
+        }
+        if (mockMode === 'fail_auth') {
+          var authErr = new Error('writeTempFile:fail permission denied');
+          authErr.errMsg = 'writeTempFile:fail permission denied';
+          return reject(authErr);
+        }
+
+        // 默认模拟成功
+        var mockPath = 'mock://temp/sushi_card_' + Date.now() + '.png';
+        resolve({ filePath: mockPath, errMsg: 'writeTempFile:ok (mock)' });
       });
     },
 
     /**
-     * 保存图片到系统相册
-     * @param {string} filePath 本地临时文件路径或完整 data:uri
-     * @returns {Promise<any>}
+     * 保存图片到系统相册 (saveImage / saveImageToPhotosAlbum)
+     * 官方规则：filePath 只接受 base64 data:uri 或本地路径，传网络地址会失败；用户取消属于正常分支
+     * @param {string} filePathOrDataUri 本地路径或 data:uri
+     * @param {object} [options] 额外选项
+     * @returns {Promise<{success: boolean, canceled: boolean, errMsg: string}>}
      */
-    saveImage: function (filePath) {
+    saveImage: function (filePathOrDataUri, options) {
       var self = this;
+      options = options || {};
+
+      if (isBusy) {
+        return Promise.reject(new Error('saveImage:fail 正在处理上一操作，请勿频繁点击'));
+      }
+      isBusy = true;
+
+      function releaseLock() {
+        isBusy = false;
+      }
+
       return new Promise(function (resolve, reject) {
-        if (!filePath) {
-          return reject(new Error('saveImage:fail filePath 不能为空'));
+        if (!filePathOrDataUri) {
+          releaseLock();
+          return reject(new Error('saveImage:fail 缺少目标图片路径或数据'));
         }
 
-        if (self.isAvailable() && typeof root.xhs.miniTool.saveImageToPhotosAlbum === 'function') {
-          root.xhs.miniTool.saveImageToPhotosAlbum({
-            filePath: filePath,
-            success: function (res) {
-              resolve(res);
-            },
-            fail: function (err) {
-              reject(err);
+        // 辅助执行真正的 saveImageToPhotosAlbum
+        function doSave(targetPath) {
+          if (self.isAvailable() && typeof root.xhs.miniTool.saveImageToPhotosAlbum === 'function') {
+            root.xhs.miniTool.saveImageToPhotosAlbum({
+              filePath: targetPath,
+              success: function (res) {
+                releaseLock();
+                resolve({ success: true, canceled: false, errMsg: (res && res.errMsg) || 'saveImageToPhotosAlbum:ok' });
+              },
+              fail: function (err) {
+                releaseLock();
+                if (self.isUserCancel(err)) {
+                  resolve({ success: false, canceled: true, errMsg: (err && err.errMsg) || 'saveImageToPhotosAlbum:fail cancel' });
+                } else {
+                  reject(err || new Error('saveImageToPhotosAlbum:fail unknown'));
+                }
+              }
+            });
+          } else {
+            // PC 模拟环境降级
+            releaseLock();
+            if (mockMode === 'cancel') {
+              resolve({ success: false, canceled: true, errMsg: 'saveImageToPhotosAlbum:fail cancel' });
+            } else if (mockMode === 'fail_auth') {
+              var failErr = new Error('saveImageToPhotosAlbum:fail auth deny');
+              failErr.errMsg = 'saveImageToPhotosAlbum:fail auth deny';
+              reject(failErr);
+            } else {
+              // 模拟环境成功：温和反馈
+              resolve({ success: true, canceled: false, errMsg: 'saveImageToPhotosAlbum:ok (mock)' });
+            }
+          }
+        }
+
+        // 若传入的是 data:uri，优先走 writeTempFile 换取本地临时文件
+        if (typeof filePathOrDataUri === 'string' && filePathOrDataUri.indexOf('data:') === 0) {
+          self.writeTempFile(filePathOrDataUri).then(function (fileRes) {
+            doSave(fileRes.filePath);
+          }).catch(function (writeErr) {
+            // 若写文件失败且当前是真机，尝试直接传 dataUri 容错降级，否则抛错
+            if (self.isAvailable()) {
+              doSave(filePathOrDataUri);
+            } else {
+              releaseLock();
+              reject(writeErr);
             }
           });
         } else {
-          // 本地/模拟环境降级
-          console.warn('[XHSBridge] 当前非小红书容器，saveImageToPhotosAlbum 采用本地模拟提示');
-          alert('【本地预览】已触发保存图片到相册（实机需运行在小红书客户端内）');
-          resolve({ errMsg: 'saveImageToPhotosAlbum:ok (mock)' });
+          doSave(filePathOrDataUri);
         }
       });
     },
 
     /**
-     * 发布图文/视频笔记
-     * @param {object} options 包含 mediaInfo, title, content 等
-     * @returns {Promise<any>}
+     * 发布图文笔记 (postNote)
+     * 官方规则：必须由用户显式触发，mediaInfo 必填，支持 title(≤20), content(≤1000), pageType, tags
+     * @param {object} options
+     * @returns {Promise<{success: boolean, canceled: boolean, errMsg: string}>}
      */
     postNote: function (options) {
       var self = this;
+      options = options || {};
+
+      if (isBusy) {
+        return Promise.reject(new Error('postNote:fail 正在处理上一操作，请勿频繁点击'));
+      }
+      isBusy = true;
+
+      function releaseLock() {
+        isBusy = false;
+      }
+
       return new Promise(function (resolve, reject) {
-        var opt = options || {};
-        if (!opt.mediaInfo) {
-          return reject(new Error('postNote:fail mediaInfo 为必填项'));
+        // 提取并校验关键媒体资源
+        var mediaInfo = options.mediaInfo;
+        var directUrl = options.filePath || options.url || options.dataUri;
+
+        function executePost(finalMediaInfo) {
+          if (!finalMediaInfo) {
+            releaseLock();
+            return reject(new Error('postNote:fail mediaInfo 为必填项'));
+          }
+
+          var payload = {
+            title: String(options.title || '').substring(0, 20),
+            content: String(options.content || '').substring(0, 1000),
+            pageType: options.pageType || 'photo_publish',
+            mediaInfo: finalMediaInfo,
+            tags: options.tags || ''
+          };
+
+          if (self.isAvailable() && typeof root.xhs.miniTool.postNote === 'function') {
+            root.xhs.miniTool.postNote({
+              title: payload.title,
+              content: payload.content,
+              pageType: payload.pageType,
+              mediaInfo: payload.mediaInfo,
+              tags: payload.tags,
+              success: function (res) {
+                releaseLock();
+                resolve({ success: true, canceled: false, errMsg: (res && res.errMsg) || 'postNote:ok' });
+              },
+              fail: function (err) {
+                releaseLock();
+                if (self.isUserCancel(err)) {
+                  resolve({ success: false, canceled: true, errMsg: (err && err.errMsg) || 'postNote:fail cancel' });
+                } else {
+                  reject(err || new Error('postNote:fail unknown'));
+                }
+              }
+            });
+          } else {
+            // PC 模拟环境降级
+            releaseLock();
+            if (mockMode === 'cancel') {
+              resolve({ success: false, canceled: true, errMsg: 'postNote:fail cancel' });
+            } else if (mockMode === 'fail_auth') {
+              var failErr = new Error('postNote:fail client exception');
+              failErr.errMsg = 'postNote:fail client exception';
+              reject(failErr);
+            } else {
+              resolve({ success: true, canceled: false, errMsg: 'postNote:ok (mock)' });
+            }
+          }
         }
 
-        if (self.isAvailable() && typeof root.xhs.miniTool.postNote === 'function') {
-          root.xhs.miniTool.postNote({
-            title: opt.title || '',
-            content: opt.content || '',
-            pageType: opt.pageType || 'photo_publish',
-            mediaInfo: opt.mediaInfo,
-            tags: opt.tags || '',
-            success: function (res) {
-              resolve(res);
-            },
-            fail: function (err) {
-              reject(err);
-            }
-          });
+        // 若已有合规 mediaInfo 则直接执行
+        if (mediaInfo && (mediaInfo.image_resources || mediaInfo.video_resources || mediaInfo.live_photo_resources)) {
+          executePost(mediaInfo);
+        } else if (directUrl) {
+          // 若传入的是 dataUri，先写临时文件换取本地路径
+          if (typeof directUrl === 'string' && directUrl.indexOf('data:') === 0) {
+            self.writeTempFile(directUrl).then(function (fileRes) {
+              executePost({
+                image_resources: [{ url: fileRes.filePath }]
+              });
+            }).catch(function () {
+              // 降级使用原始 URI
+              executePost({
+                image_resources: [{ url: directUrl }]
+              });
+            });
+          } else {
+            executePost({
+              image_resources: [{ url: directUrl }]
+            });
+          }
         } else {
-          // 本地/模拟环境降级
-          console.warn('[XHSBridge] 当前非小红书容器，postNote 采用本地模拟提示');
-          alert('【本地预览】已触发发布笔记（实机需运行在小红书客户端内）');
-          resolve({ errMsg: 'postNote:ok (mock)' });
+          releaseLock();
+          reject(new Error('postNote:fail 未提供可用的卡片图片素材'));
         }
       });
     },
 
     /**
-     * 跳转通用原生页面
-     * @param {string} type 原生规则白名单 key
-     * @param {object} params 语义参数
-     * @returns {Promise<any>}
+     * 原生页面跳转 (openRedPage)
+     * 官方规则：type 命中白名单才放行，由 Native 规则表映射
+     * @param {string} type
+     * @param {object} [params]
+     * @returns {Promise<{success: boolean, errMsg: string}>}
      */
     openRedPage: function (type, params) {
       var self = this;
       return new Promise(function (resolve, reject) {
-        if (!type) {
+        if (!type || typeof type !== 'string') {
           return reject(new Error('openRedPage:fail type 为必填项'));
         }
 
@@ -141,21 +308,21 @@
             type: type,
             params: params || {},
             success: function (res) {
-              resolve(res);
+              resolve({ success: true, errMsg: (res && res.errMsg) || 'openRedPage:ok' });
             },
             fail: function (err) {
-              reject(err);
+              reject(err || new Error('openRedPage:fail unknown'));
             }
           });
         } else {
-          // 本地/模拟环境降级
-          console.warn('[XHSBridge] 当前非小红书容器，openRedPage: ' + type);
-          resolve({ errMsg: 'openRedPage:ok (mock)' });
+          // 模拟环境
+          resolve({ success: true, errMsg: 'openRedPage:ok (mock: ' + type + ')' });
         }
       });
     }
   };
 
-  // 挂载至统一命名空间
+  // 挂载至统一命名空间及别名
   root.SuShiUniverse.Bridge = XHSBridge;
+  root.SuShiUniverse.XHSBridge = XHSBridge;
 })();
