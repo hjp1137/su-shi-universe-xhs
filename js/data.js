@@ -2118,4 +2118,12 @@
     }
     return null;
   };
+
+  root.SuShiUniverse.Data.getQuizQuestions = function () {
+    return (root.SuShiUniverse.Data.quiz && root.SuShiUniverse.Data.quiz.questions) || [];
+  };
+
+  root.SuShiUniverse.Data.getQuizTieBreak = function () {
+    return (root.SuShiUniverse.Data.quiz && root.SuShiUniverse.Data.quiz.tie_break_priority) || [];
+  };
 })();

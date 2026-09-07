@@ -235,58 +235,224 @@
     }
   });
 
-  // 2. 测试页视图 Quiz
+  // 2. 测试页视图 Quiz (单题单屏、轻反馈推进、确定性评分)
   Router.register('quiz', {
     render: function () {
       var wrap = document.createElement('div');
-      wrap.className = 'view-wrapper';
+      wrap.className = 'view-wrapper quiz-container';
 
-      wrap.appendChild(UI.createSectionHeader('人生问答', '选出最符合你当下心境的一项'));
-      wrap.appendChild(UI.createProgressBar(43)); // 示例进度 3/7
-
-      var qBox = document.createElement('div');
-      qBox.className = 'quiz-question-box';
-
-      var qCard = UI.createInkCard([
-        UI.createSectionHeader('第 3 题 / 共 7 题', '最近最让你费心的是什么？')
-      ]);
-      qBox.appendChild(qCard);
-
-      var optList = document.createElement('div');
-      optList.className = 'quiz-option-list';
-
-      var sampleOptions = [
-        '事情很多，脑子停不下来',
-        '努力了，但结果总不如预期',
-        '太在意别人怎么看我',
-        '没什么大事，就是有点累'
-      ];
-
-      for (var i = 0; i < sampleOptions.length; i++) {
-        (function (optText) {
-          var optCard = UI.createInkCard(optText, true, function () {
-            // 模拟记录最近测试结果
-            if (Store && typeof Store.saveLastResult === 'function') {
-              Store.saveLastResult({ station_id: 'station_huangzhou', mood_id: 'resilient_restart' });
-            }
-            Router.navigate('result', { station_id: 'station_huangzhou', mood_id: 'resilient_restart' });
-          });
-          optCard.classList.add('quiz-option-card');
-          optList.appendChild(optCard);
-        })(sampleOptions[i]);
+      var questions = (Data.quiz && Data.quiz.questions) || [];
+      var total = questions.length;
+      if (total === 0) {
+        wrap.appendChild(UI.createEmptyState('测试题库正在准备中...'));
+        return wrap;
       }
 
-      qBox.appendChild(optList);
-      wrap.appendChild(qBox);
+      var QuizModule = SuShi.Quiz;
+      var session = QuizModule ? QuizModule.createQuizSession() : null;
+      var isTransitioning = false;
+
+      // 顶部导航与步进信息
+      var topBar = document.createElement('div');
+      topBar.className = 'quiz-top-bar';
+
+      var stepInfo = document.createElement('div');
+      stepInfo.className = 'quiz-step-info';
+
+      var actionsBox = document.createElement('div');
+      actionsBox.className = 'quiz-top-actions';
+
+      var prevBtn = document.createElement('button');
+      prevBtn.className = 'quiz-nav-btn quiz-prev-btn';
+      prevBtn.type = 'button';
+      prevBtn.textContent = '上一题';
+
+      var resetBtn = document.createElement('button');
+      resetBtn.className = 'quiz-nav-btn quiz-reset-btn';
+      resetBtn.type = 'button';
+      resetBtn.textContent = '重新测';
+
+      actionsBox.appendChild(prevBtn);
+      actionsBox.appendChild(resetBtn);
+      topBar.appendChild(stepInfo);
+      topBar.appendChild(actionsBox);
+      wrap.appendChild(topBar);
+
+      // 细线平滑进度条
+      var progressTrack = document.createElement('div');
+      progressTrack.className = 'quiz-progress-track';
+      var progressFill = document.createElement('div');
+      progressFill.className = 'quiz-progress-fill';
+      progressTrack.appendChild(progressFill);
+      wrap.appendChild(progressTrack);
+
+      // 短引导文案
+      var introTip = document.createElement('div');
+      introTip.className = 'quiz-intro-tip';
+      introTip.textContent = '最近的你，像东坡人生里的哪一段路？';
+      wrap.appendChild(introTip);
+
+      // 动态问答主舞台
+      var stage = document.createElement('div');
+      stage.className = 'quiz-stage';
+      wrap.appendChild(stage);
+
+      function renderQuestion() {
+        var idx = session ? session.getCurrentIndex() : 0;
+        var currentQ = questions[idx];
+        isTransitioning = false;
+
+        var orderNum = idx + 1;
+        stepInfo.textContent = '第 ' + orderNum + ' 题 · 共 ' + total + ' 题';
+        progressFill.style.width = ((orderNum / total) * 100) + '%';
+
+        if (idx > 0) {
+          prevBtn.style.visibility = 'visible';
+          prevBtn.style.opacity = '1';
+        } else {
+          prevBtn.style.visibility = 'hidden';
+          prevBtn.style.opacity = '0';
+        }
+
+        while (stage.firstChild) {
+          stage.removeChild(stage.firstChild);
+        }
+
+        // 题目卡片
+        var qCard = document.createElement('div');
+        qCard.className = 'quiz-question-card';
+        var qTitle = document.createElement('h2');
+        qTitle.className = 'quiz-q-title';
+        qTitle.textContent = currentQ.title;
+        qCard.appendChild(qTitle);
+        stage.appendChild(qCard);
+
+        // 选项列表
+        var optList = document.createElement('div');
+        optList.className = 'quiz-option-list';
+
+        var selectedOptId = session ? session.getSelectedOption(currentQ.id) : null;
+        var letters = ['A', 'B', 'C', 'D', 'E'];
+        var options = currentQ.options || [];
+
+        for (var i = 0; i < options.length; i++) {
+          (function (opt, optIndex) {
+            var item = document.createElement('div');
+            item.className = 'quiz-option-item';
+            item.setAttribute('role', 'button');
+            item.setAttribute('tabindex', '0');
+
+            if (selectedOptId === opt.id) {
+              item.classList.add('is-selected');
+            }
+
+            var badge = document.createElement('div');
+            badge.className = 'quiz-opt-badge';
+            badge.textContent = letters[optIndex] || String(optIndex + 1);
+            item.appendChild(badge);
+
+            var txt = document.createElement('div');
+            txt.className = 'quiz-opt-text';
+            txt.textContent = opt.text;
+            item.appendChild(txt);
+
+            item.addEventListener('click', function () {
+              if (isTransitioning) return;
+              isTransitioning = true;
+
+              var allItems = optList.querySelectorAll('.quiz-option-item');
+              for (var a = 0; a < allItems.length; a++) {
+                allItems[a].classList.remove('is-selected');
+              }
+              item.classList.add('is-selected');
+
+              if (session) {
+                session.selectOption(currentQ.id, opt.id);
+              }
+
+              setTimeout(function () {
+                if (idx < total - 1) {
+                  if (session) session.goNext(total);
+                  renderQuestion();
+                } else {
+                  showCalculatingState();
+                }
+              }, 200);
+            });
+
+            optList.appendChild(item);
+          })(options[i], i);
+        }
+
+        stage.appendChild(optList);
+      }
+
+      function showCalculatingState() {
+        while (stage.firstChild) {
+          stage.removeChild(stage.firstChild);
+        }
+        var calcBox = document.createElement('div');
+        calcBox.className = 'quiz-calc-box';
+        var calcTitle = document.createElement('div');
+        calcTitle.className = 'quiz-calc-title';
+        calcTitle.textContent = '正在为你寻觅东坡那一站...';
+        var calcSub = document.createElement('div');
+        calcSub.className = 'quiz-calc-sub';
+        calcSub.textContent = '莫听穿林打叶声，何妨吟啸且徐行';
+        calcBox.appendChild(calcTitle);
+        calcBox.appendChild(calcSub);
+        stage.appendChild(calcBox);
+
+        var result = QuizModule ? session.calculateResult(Data.quiz, Data.moods) : null;
+        if (!result) {
+          result = {
+            station_id: 'station_huangzhou',
+            mood_id: 'mood_anxious',
+            result_id: 'res_mood_anxious_station_huangzhou'
+          };
+        }
+
+        if (Store && typeof Store.saveLastResult === 'function') {
+          Store.saveLastResult(result);
+        }
+
+        setTimeout(function () {
+          Router.navigate('result', {
+            station_id: result.station_id,
+            mood_id: result.mood_id,
+            result_id: result.result_id
+          });
+        }, 250);
+      }
+
+      prevBtn.addEventListener('click', function () {
+        if (isTransitioning) return;
+        if (session && session.canGoPrevious()) {
+          session.goPrevious();
+          renderQuestion();
+        }
+      });
+
+      resetBtn.addEventListener('click', function () {
+        if (isTransitioning) return;
+        if (session) {
+          session.reset();
+          renderQuestion();
+        }
+      });
+
+      renderQuestion();
       return wrap;
     }
   });
 
-  // 3. 结果页视图 Result
+  // 3. 结果页视图 Result (消费测试结果参数，展示对应站点与文学化建议)
   Router.register('result', {
     render: function (params) {
       params = params || {};
       var stationId = params.station_id || 'station_huangzhou';
+      var moodId = params.mood_id || '';
+      var moodObj = moodId ? Data.getMoodById(moodId) : null;
       var station = Data.getStationById(stationId) || {
         name: '黄州｜重新生活',
         theme: '重新生活',
@@ -300,29 +466,39 @@
       headerCard.className = 'ink-card result-header-card';
       var subTip = document.createElement('p');
       subTip.className = 'section-subtitle';
-      subTip.textContent = '你的人生正在东坡这一站';
+      subTip.textContent = moodObj ? ('当下心境 · ' + moodObj.name) : '你的人生正在东坡这一站';
       var sName = document.createElement('h1');
       sName.className = 'result-station-name';
       sName.textContent = station.name;
-      var tagGroup = UI.createTagGroup(['慢一点', '重新生活', '继续往前']);
+
+      var tagList = [];
+      if (moodObj && moodObj.dimension) tagList.push(moodObj.dimension);
+      if (station.theme) tagList.push(station.theme);
+      if (tagList.length === 0) tagList = ['慢一点', '重新生活', '继续往前'];
+      var tagGroup = UI.createTagGroup(tagList);
 
       headerCard.appendChild(subTip);
       headerCard.appendChild(sName);
       headerCard.appendChild(tagGroup);
       wrap.appendChild(headerCard);
 
-      // 诗句与背景卡片
-      var quoteObj = Data.getQuoteById('quote_dingfengbo_01') || {
+      // 匹配诗句与背景卡片 (优先匹配该心境推荐诗句)
+      var targetQuoteId = (moodObj && moodObj.recommended_quote_id) ||
+                          (station.quote_ids && station.quote_ids[0]) ||
+                          'quote_dingfengbo_01';
+      var quoteObj = Data.getQuoteById(targetQuoteId) || {
         text: '莫听穿林打叶声，何妨吟啸且徐行。',
         context_note: '沙湖道中遇雨'
       };
-      var workObj = Data.getWorkById(quoteObj.work_id) || { title: '定风波·莫听穿林打叶声' };
-      wrap.appendChild(UI.createQuoteBlock(quoteObj.text, '《' + workObj.title + '》'));
+      var workObj = (quoteObj && quoteObj.work_id) ? Data.getWorkById(quoteObj.work_id) : null;
+      var workTitle = workObj ? ('《' + workObj.title + '》') : '《东坡诗选》';
+      wrap.appendChild(UI.createQuoteBlock(quoteObj.text, workTitle));
 
-      var storyCard = UI.createInkCard([
-        UI.createSectionHeader('那时候，苏轼也刚刚经历一场风雨', station.summary_fact || '元丰三年，苏轼因乌台诗案贬黄州团练副使，本州安置。'),
-        UI.createSectionHeader('如果把这句话放回今天', station.dongpo_view || '你最近可能不是走不动了，只是走到了需要换一种节奏生活的地方。')
-      ]);
+      var storyContent = [
+        UI.createSectionHeader('那时候，苏轼也刚刚经历一段风雨', station.summary_fact || '元丰三年，苏轼因乌台诗案贬黄州团练副使，本州安置。'),
+        UI.createSectionHeader('苏轼对你说', (moodObj && moodObj.dongpo_suggestion) || station.dongpo_view || '你最近可能不是走不动了，只是走到了需要换一种节奏生活的地方。')
+      ];
+      var storyCard = UI.createInkCard(storyContent);
       wrap.appendChild(storyCard);
 
       // 结果页操作按钮组
@@ -330,7 +506,7 @@
       actBox.className = 'result-actions';
 
       var btnShare = UI.createPrimaryButton('生成我的东坡人生卡', function () {
-        Router.navigate('share-card', { station_id: stationId, type: 'result' });
+        Router.navigate('share-card', { station_id: stationId, mood_id: moodId, type: 'result' });
       });
       var btnStation = UI.createSecondaryButton('看看苏轼的这一站', function () {
         Router.navigate('station', { station_id: stationId });

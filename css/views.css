@@ -269,22 +269,169 @@
   letter-spacing: 1px;
 }
 
-/* 2. 测试页 Quiz 样式 */
-.quiz-question-box {
-  margin-bottom: var(--space-6);
+/* 2. 测试页 Quiz 完整单题单屏视觉与动效 */
+.quiz-container {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 120px);
+  padding-bottom: var(--space-6);
+}
+
+.quiz-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+  padding: 0 var(--space-1);
+}
+
+.quiz-step-info {
+  font-size: var(--font-size-caption);
+  color: var(--color-river);
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+.quiz-nav-btn {
+  background: transparent;
+  border: none;
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: color var(--motion-fast);
+}
+
+.quiz-nav-btn:hover, .quiz-nav-btn:active {
+  color: var(--color-moon);
+}
+
+.quiz-progress-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  margin-bottom: var(--space-4);
+}
+
+.quiz-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-river), var(--color-moon));
+  border-radius: var(--radius-pill);
+  transition: width 0.3s ease-out;
+}
+
+.quiz-intro-tip {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+  text-align: center;
+  margin-bottom: var(--space-4);
+  letter-spacing: 0.8px;
+}
+
+.quiz-question-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5) var(--space-4);
+  margin-bottom: var(--space-4);
+  box-shadow: var(--shadow-card);
+}
+
+.quiz-q-title {
+  font-size: var(--font-size-h2);
+  font-weight: 600;
+  color: var(--color-moon);
+  line-height: 1.45;
+  letter-spacing: 0.5px;
+}
+
+.quiz-option-list {
+  display: flex;
+  flex-direction: column;
 }
 
 .quiz-option-list > * + * {
   margin-top: var(--space-3);
 }
 
-.quiz-option-card {
-  padding: var(--space-4) var(--space-5);
-  border-left: 3px solid transparent;
+.quiz-option-item {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-4);
+  cursor: pointer;
+  outline: none;
+  transition: all var(--motion-fast);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.quiz-option-card:hover, .quiz-option-card:active {
-  border-left-color: var(--color-river);
+.quiz-option-item:hover, .quiz-option-item:active {
+  background: rgba(111, 175, 194, 0.08);
+  border-color: rgba(111, 175, 194, 0.4);
+  transform: translateY(-1px);
+}
+
+.quiz-option-item.is-selected {
+  background: rgba(111, 175, 194, 0.16);
+  border-color: var(--color-river);
+  box-shadow: 0 4px 14px rgba(111, 175, 194, 0.25);
+  transform: translateY(-1px);
+}
+
+.quiz-opt-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-tag);
+  font-weight: 600;
+  margin-right: var(--space-3);
+  flex-shrink: 0;
+  transition: all var(--motion-fast);
+}
+
+.quiz-option-item.is-selected .quiz-opt-badge {
+  background: var(--color-river);
+  color: #0d1b1e;
+}
+
+.quiz-opt-text {
+  font-size: var(--font-size-body);
+  color: var(--color-moon);
+  line-height: 1.45;
+  flex: 1;
+}
+
+.quiz-calc-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8) var(--space-4);
+  text-align: center;
+}
+
+.quiz-calc-title {
+  font-size: var(--font-size-h2);
+  color: var(--color-moon);
+  margin-bottom: var(--space-2);
+  letter-spacing: 1px;
+}
+
+.quiz-calc-sub {
+  font-size: var(--font-size-caption);
+  color: var(--color-river);
+  letter-spacing: 0.5px;
 }
 
 /* 3. 结果页 Result 样式 */

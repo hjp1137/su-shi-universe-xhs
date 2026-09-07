@@ -29,6 +29,7 @@
     if (!isStorageAvailable() || !data) return false;
     try {
       var payload = {
+        result_id: data.result_id || '',
         station_id: data.station_id || '',
         mood_id: data.mood_id || '',
         timestamp: Date.now()
