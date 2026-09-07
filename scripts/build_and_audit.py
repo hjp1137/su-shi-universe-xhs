@@ -140,7 +140,10 @@ def check_dist_compliance():
             for pattern, desc in FORBIDDEN_PATTERNS:
                 if "https?://" in pattern and path.suffix.lower() == ".svg":
                     continue
-                matches = re.findall(pattern, content, re.IGNORECASE)
+                flags = re.IGNORECASE
+                if "Function" in pattern:
+                    flags = 0  # new Function 是大小写敏感的构造函数，避免误报普通 new function() 匿名实例化
+                matches = re.findall(pattern, content, flags)
                 if matches:
                     if "https?://" in pattern:
                         real_urls = [m for m in re.findall(r'https?://[^\s"\'<>]+', content) if "www.w3.org" not in m]

@@ -50,6 +50,17 @@ html, body {
   overflow: hidden;
 }
 
+/* WebGL 画布层 (自适应覆盖，事件穿透，位于底层云雾与内容层之间) */
+.universe-bg-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
 /* Layer 1: 远山与云雾层 */
 .cosmos-mist-layer {
   position: absolute;

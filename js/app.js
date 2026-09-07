@@ -51,11 +51,42 @@
         navLeftEl.appendChild(backBtn);
       }
     }
+
+    // 3. WebGL 东方水墨宇宙特效协同 (完全解耦，不阻断主流程)
+    if (SuShi.Effects && typeof SuShi.Effects.mount === 'function') {
+      try {
+        if (info.name === 'home') {
+          SuShi.Effects.mount('hero', info.params);
+        } else if (info.name === 'universe') {
+          SuShi.Effects.mount('universe', info.params);
+        } else if (info.name === 'result') {
+          SuShi.Effects.mount('result', info.params);
+        } else if (info.name === 'station') {
+          SuShi.Effects.mount('universe', info.params);
+        } else {
+          // 其他视图（quiz, work, daily, share-card）进入低功耗休眠
+          if (typeof SuShi.Effects.pause === 'function') {
+            SuShi.Effects.pause();
+          }
+        }
+      } catch (effErr) {
+        console.warn('[SuShiUniverse] 特效调度异常，不影响业务:', effErr);
+      }
+    }
   }
 
   function init() {
     navTitleEl = document.getElementById('nav-title');
     navLeftEl = document.getElementById('nav-left');
+
+    // 初始化东方水墨宇宙 WebGL 特效系统 (优雅降级，异常捕获)
+    if (SuShi.Effects && typeof SuShi.Effects.init === 'function') {
+      try {
+        SuShi.Effects.init();
+      } catch (effInitErr) {
+        console.warn('[SuShiUniverse] WebGL 特效系统启动捕获:', effInitErr);
+      }
+    }
 
     // 监听逻辑路由变化
     if (Router && typeof Router.onViewChange === 'function') {
