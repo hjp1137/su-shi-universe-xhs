@@ -11,32 +11,44 @@
   flex-direction: column;
 }
 
-/* 1. 首页 Home 样式 */
-.home-hero {
+/* 1. 首页 Home 视觉体系 */
+.home-view {
+  padding: var(--space-4) var(--space-4) var(--space-12);
+  display: flex;
+  flex-direction: column;
+}
+
+/* 首屏视觉锚点容器 (高对比、有呼吸感) */
+.home-first-screen {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: var(--space-6) 0 var(--space-4);
+  padding: var(--space-4) 0 var(--space-6);
 }
 
 .home-badge {
   font-size: var(--font-size-tag);
   letter-spacing: 2px;
   color: var(--color-river);
-  border: 1px solid rgba(111, 175, 194, 0.35);
+  border: 1px solid rgba(111, 175, 194, 0.4);
   border-radius: var(--radius-pill);
-  padding: 3px 12px;
-  background-color: rgba(14, 24, 48, 0.6);
+  padding: 4px 14px;
+  background-color: rgba(14, 24, 48, 0.65);
   margin-bottom: var(--space-4);
 }
 
 .home-logo {
-  width: 72px;
-  height: 72px;
+  width: 80px;
+  height: 80px;
   display: block;
-  filter: drop-shadow(0 4px 16px rgba(111, 175, 194, 0.25));
+  filter: drop-shadow(0 6px 20px rgba(111, 175, 194, 0.3));
   margin-bottom: var(--space-3);
+  transition: transform var(--motion-normal);
+}
+
+.home-logo:active {
+  transform: scale(0.95);
 }
 
 .home-title {
@@ -48,11 +60,123 @@
 }
 
 .home-slogan {
+  font-size: var(--font-size-body);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-normal);
+  letter-spacing: 1.5px;
+  margin-bottom: var(--space-2);
+}
+
+.home-subdesc {
   font-size: var(--font-size-caption);
   color: var(--color-text-secondary);
   line-height: var(--line-height-normal);
-  letter-spacing: 1px;
   margin-bottom: var(--space-6);
+}
+
+/* 第一屏主 CTA 区域 (一屏清晰可见) */
+.home-cta-box {
+  width: 100%;
+  max-width: 340px;
+  margin-bottom: var(--space-6);
+}
+
+.home-main-cta {
+  min-height: 52px;
+  font-size: var(--font-size-h3);
+  letter-spacing: 2px;
+  box-shadow: 0 4px 20px rgba(111, 175, 194, 0.35);
+}
+
+/* 今日东坡一句诗轻预览卡片 */
+.home-today-snip {
+  width: 100%;
+  max-width: 340px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px dashed rgba(217, 185, 120, 0.35);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: background var(--motion-fast), border-color var(--motion-fast);
+}
+
+.home-today-snip:active {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--color-warm);
+}
+
+.home-snip-tag {
+  font-size: var(--font-size-tag);
+  color: var(--color-warm);
+  letter-spacing: 1px;
+  margin-bottom: var(--space-1);
+}
+
+.home-snip-poem {
+  font-size: var(--font-size-caption);
+  color: var(--color-moon);
+  line-height: var(--line-height-normal);
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+/* 最近结果卡片 (本地存储可用时优雅展示) */
+.home-history-card {
+  background: rgba(217, 185, 120, 0.08);
+  border: 1px solid rgba(217, 185, 120, 0.3);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-5);
+  margin-bottom: var(--space-6);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.home-history-info {
+  flex: 1;
+}
+
+.home-history-label {
+  font-size: var(--font-size-tag);
+  color: var(--color-warm);
+  letter-spacing: 1px;
+  margin-bottom: 2px;
+}
+
+.home-history-station {
+  font-size: var(--font-size-h3);
+  font-weight: 600;
+  color: var(--color-moon);
+}
+
+.home-history-btn {
+  flex-shrink: 0;
+  padding: 6px 14px;
+  background: rgba(217, 185, 120, 0.2);
+  color: var(--color-warm);
+  font-size: var(--font-size-caption);
+  border: 1px solid rgba(217, 185, 120, 0.4);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  outline: none;
+  transition: background var(--motion-fast);
+}
+
+.home-history-btn:active {
+  background: rgba(217, 185, 120, 0.4);
+}
+
+/* 三大入口区域 */
+.home-section-title {
+  font-size: var(--font-size-h3);
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  color: var(--color-moon);
+  margin-bottom: var(--space-3);
+  padding-left: var(--space-1);
 }
 
 .home-nav-list {
@@ -64,16 +188,85 @@
   margin-top: var(--space-3);
 }
 
+.home-nav-card {
+  position: relative;
+  overflow: hidden;
+  border-left-width: 4px;
+}
+
+.home-nav-card.nav-quiz {
+  border-left-color: var(--color-river);
+}
+
+.home-nav-card.nav-universe {
+  border-left-color: var(--color-jade);
+}
+
+.home-nav-card.nav-daily {
+  border-left-color: var(--color-warm);
+}
+
+.nav-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-1);
+}
+
 .nav-card-title {
   font-size: var(--font-size-h3);
   font-weight: 600;
   color: var(--color-moon);
-  margin-bottom: var(--space-1);
+  letter-spacing: 0.5px;
+}
+
+.nav-card-tag {
+  font-size: var(--font-size-tag);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.nav-quiz .nav-card-tag {
+  color: var(--color-river);
+  background: var(--color-river-dim);
+}
+
+.nav-universe .nav-card-tag {
+  color: var(--color-jade);
+  background: rgba(130, 182, 162, 0.18);
+}
+
+.nav-daily .nav-card-tag {
+  color: var(--color-warm);
+  background: var(--color-warm-dim);
 }
 
 .nav-card-desc {
   font-size: var(--font-size-caption);
   color: var(--color-text-secondary);
+  line-height: var(--line-height-normal);
+}
+
+/* 首页底部署名与理念 */
+.home-footer {
+  margin-top: var(--space-8);
+  padding: var(--space-6) 0 var(--space-4);
+  text-align: center;
+  border-top: 1px solid var(--color-divider);
+}
+
+.home-footer-slogan {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
+  letter-spacing: 1.5px;
+  margin-bottom: var(--space-2);
+}
+
+.home-footer-brand {
+  font-size: var(--font-size-tag);
+  color: var(--color-text-muted);
+  letter-spacing: 1px;
 }
 
 /* 2. 测试页 Quiz 样式 */

@@ -12,14 +12,27 @@
   var UI = SuShi.UI;
   var Data = SuShi.Data;
 
-  // 1. 首页视图 Home
+  var Store = SuShi.Store;
+
+  // 计算当天稳定东坡小签条目 (确定性日历映射，零网络)
+  function getTodayDailyItem() {
+    var list = Data.dailyDongpo;
+    if (!list || list.length === 0) return null;
+    var d = new Date();
+    var key = d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
+    var index = Math.abs(key) % list.length;
+    return list[index];
+  }
+
+  // 1. 正式首页视图 Home
   Router.register('home', {
     render: function () {
       var wrap = document.createElement('div');
-      wrap.className = 'view-wrapper';
+      wrap.className = 'home-view';
 
+      // --- 首屏视觉中心 (Hero + 第一主 CTA + 今日诗句轻预览) ---
       var hero = document.createElement('div');
-      hero.className = 'home-hero';
+      hero.className = 'home-first-screen';
 
       var badge = document.createElement('div');
       badge.className = 'home-badge';
@@ -42,58 +55,182 @@
       slogan.textContent = '遇到烦心事，先去东坡那里坐一会儿。';
       hero.appendChild(slogan);
 
+      var subdesc = document.createElement('p');
+      subdesc.className = 'home-subdesc';
+      subdesc.textContent = '7道生活化小题 · 看看你更像走在东坡哪一站';
+      hero.appendChild(subdesc);
+
+      // 第一主操作 CTA 按钮 (首屏内一览无遗)
+      var ctaBox = document.createElement('div');
+      ctaBox.className = 'home-cta-box';
+      var mainBtn = UI.createPrimaryButton('看看我的人生正在东坡哪一站', function () {
+        Router.navigate('quiz');
+      }, 'home-main-cta');
+      ctaBox.appendChild(mainBtn);
+      hero.appendChild(ctaBox);
+
+      // 今日东坡一句诗轻预览微卡片
+      var todayItem = getTodayDailyItem();
+      if (todayItem) {
+        var quoteObj = Data.getQuoteById(todayItem.quote_id);
+        var poemText = quoteObj ? quoteObj.text : '莫听穿林打叶声，何妨吟啸且徐行。';
+        var snipCard = document.createElement('div');
+        snipCard.className = 'home-today-snip';
+        snipCard.setAttribute('role', 'button');
+        snipCard.setAttribute('tabindex', '0');
+
+        var snipTag = document.createElement('div');
+        snipTag.className = 'home-snip-tag';
+        snipTag.textContent = '今日东坡 · 一言一事';
+        snipCard.appendChild(snipTag);
+
+        var snipPoem = document.createElement('div');
+        snipPoem.className = 'home-snip-poem';
+        snipPoem.textContent = '“' + poemText + '”';
+        snipCard.appendChild(snipPoem);
+
+        snipCard.addEventListener('click', function () {
+          Router.navigate('daily');
+        });
+        hero.appendChild(snipCard);
+      }
+
       wrap.appendChild(hero);
 
-      // 三大核心入口卡片
+      // --- 最近测试结果卡片 (若本地存储可用且有历史记录) ---
+      if (Store && typeof Store.getLastResult === 'function') {
+        var lastRes = Store.getLastResult();
+        if (lastRes && lastRes.station_id) {
+          var lastStation = Data.getStationById(lastRes.station_id);
+          if (lastStation) {
+            var histCard = document.createElement('div');
+            histCard.className = 'home-history-card';
+
+            var histInfo = document.createElement('div');
+            histInfo.className = 'home-history-info';
+
+            var histLabel = document.createElement('div');
+            histLabel.className = 'home-history-label';
+            histLabel.textContent = '上次测试站点';
+            histInfo.appendChild(histLabel);
+
+            var histStation = document.createElement('div');
+            histStation.className = 'home-history-station';
+            histStation.textContent = lastStation.name;
+            histInfo.appendChild(histStation);
+
+            histCard.appendChild(histInfo);
+
+            var histBtn = document.createElement('button');
+            histBtn.className = 'home-history-btn';
+            histBtn.type = 'button';
+            histBtn.textContent = '继续查看';
+            histBtn.addEventListener('click', function () {
+              Router.navigate('result', {
+                station_id: lastRes.station_id,
+                mood_id: lastRes.mood_id
+              });
+            });
+            histCard.appendChild(histBtn);
+
+            wrap.appendChild(histCard);
+          }
+        }
+      }
+
+      // --- 三大核心体验路径卡片 ---
+      var secTitle = document.createElement('h2');
+      secTitle.className = 'home-section-title';
+      secTitle.textContent = '三大体验路径';
+      wrap.appendChild(secTitle);
+
       var navList = document.createElement('div');
       navList.className = 'home-nav-list';
 
-      // 测一测主入口
+      // 路径 1: 测一测
       var quizCardContent = document.createElement('div');
+      var qHeader = document.createElement('div');
+      qHeader.className = 'nav-card-header';
       var qTitle = document.createElement('div');
       qTitle.className = 'nav-card-title';
       qTitle.textContent = '测一测｜你的人生正在东坡哪一站？';
+      var qTag = document.createElement('span');
+      qTag.className = 'nav-card-tag';
+      qTag.textContent = '主推荐';
+      qHeader.appendChild(qTitle);
+      qHeader.appendChild(qTag);
       var qDesc = document.createElement('div');
       qDesc.className = 'nav-card-desc';
       qDesc.textContent = '7道生活化小题，照见当下的风雨与从容。';
-      quizCardContent.appendChild(qTitle);
+      quizCardContent.appendChild(qHeader);
       quizCardContent.appendChild(qDesc);
       var quizCard = UI.createInkCard(quizCardContent, true, function () {
         Router.navigate('quiz');
       });
+      quizCard.classList.add('home-nav-card', 'nav-quiz');
       navList.appendChild(quizCard);
 
-      // 逛一逛宇宙生命线入口
+      // 路径 2: 逛一逛
       var univCardContent = document.createElement('div');
+      var uHeader = document.createElement('div');
+      uHeader.className = 'nav-card-header';
       var uTitle = document.createElement('div');
       uTitle.className = 'nav-card-title';
       uTitle.textContent = '逛一逛｜苏轼九大人生生命线';
+      var uTag = document.createElement('span');
+      uTag.className = 'nav-card-tag';
+      uTag.textContent = '人生全景';
+      uHeader.appendChild(uTitle);
+      uHeader.appendChild(uTag);
       var uDesc = document.createElement('div');
       uDesc.className = 'nav-card-desc';
       uDesc.textContent = '从眉山走到天涯，看东坡九度起伏。';
-      univCardContent.appendChild(uTitle);
+      univCardContent.appendChild(uHeader);
       univCardContent.appendChild(uDesc);
       var univCard = UI.createInkCard(univCardContent, true, function () {
         Router.navigate('universe');
       });
+      univCard.classList.add('home-nav-card', 'nav-universe');
       navList.appendChild(univCard);
 
-      // 坐一会今日东坡入口
+      // 路径 3: 坐一会
       var dailyCardContent = document.createElement('div');
+      var dHeader = document.createElement('div');
+      dHeader.className = 'nav-card-header';
       var dTitle = document.createElement('div');
       dTitle.className = 'nav-card-title';
       dTitle.textContent = '坐一会｜今日东坡小笺';
+      var dTag = document.createElement('span');
+      dTag.className = 'nav-card-tag';
+      dTag.textContent = '每日一诗';
+      dHeader.appendChild(dTitle);
+      dHeader.appendChild(dTag);
       var dDesc = document.createElement('div');
       dDesc.className = 'nav-card-desc';
       dDesc.textContent = '每天一言一事，给自己十分钟的从容。';
-      dailyCardContent.appendChild(dTitle);
+      dailyCardContent.appendChild(dHeader);
       dailyCardContent.appendChild(dDesc);
       var dailyCard = UI.createInkCard(dailyCardContent, true, function () {
         Router.navigate('daily');
       });
+      dailyCard.classList.add('home-nav-card', 'nav-daily');
       navList.appendChild(dailyCard);
 
       wrap.appendChild(navList);
+
+      // --- 首页底部品牌理念署名 ---
+      var footer = document.createElement('div');
+      footer.className = 'home-footer';
+      var fSlogan = document.createElement('p');
+      fSlogan.className = 'home-footer-slogan';
+      fSlogan.textContent = '生活可以有风雨 · 但不必困在风雨里';
+      var fBrand = document.createElement('p');
+      fBrand.className = 'home-footer-brand';
+      fBrand.textContent = 'SuShi Universe · 中国诗词宇宙出品';
+      footer.appendChild(fSlogan);
+      footer.appendChild(fBrand);
+      wrap.appendChild(footer);
+
       return wrap;
     }
   });
@@ -128,7 +265,10 @@
       for (var i = 0; i < sampleOptions.length; i++) {
         (function (optText) {
           var optCard = UI.createInkCard(optText, true, function () {
-            // 原型模拟：进入黄州站点结果
+            // 模拟记录最近测试结果
+            if (Store && typeof Store.saveLastResult === 'function') {
+              Store.saveLastResult({ station_id: 'station_huangzhou', mood_id: 'resilient_restart' });
+            }
             Router.navigate('result', { station_id: 'station_huangzhou', mood_id: 'resilient_restart' });
           });
           optCard.classList.add('quiz-option-card');
