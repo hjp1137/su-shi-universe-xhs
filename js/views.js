@@ -295,17 +295,52 @@
     }
   });
 
-  // 2. 「东坡人生实验」七幕宇宙微游戏配置 (Experiment Scenes)
+  // 统一水墨星体矢量图标生成器 (100% 纯矢量 SVG，零系统彩色 Emoji，跨端与 Chrome 61 严格一致)
+  function getExpSymbolSvg(key) {
+    var svgs = {
+      'target_a': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l2.4 7.6H22l-6.2 4.5 2.4 7.5-6.2-4.6-6.2 4.6 2.4-7.5L2 9.6h7.6z"/></svg>',
+      'target_b': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><line x1="4" y1="12" x2="20" y2="12"/></svg>',
+      'target_c': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M2 12h20M5 5l14 14M5 19L19 5"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>',
+      'target_d': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="13" rx="8" ry="5"/><path d="M7 13a4 4 0 0 1 8-2 3.5 3.5 0 0 1 3.5 3.5" stroke-dasharray="2 2"/></svg>',
+      'action_a': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l6.73-5.19"/></svg>',
+      'action_b': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>',
+      'action_c': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l9 17H3z"/></svg>',
+      'action_d': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 18c3-3 6-3 8 0s5 3 8 0M4 14c3-3 6-3 8 0s5 3 8 0M4 10c3-3 6-3 8 0s5 3 8 0"/></svg>',
+      'merge_a': '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>',
+      'merge_b': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4" fill="currentColor"/><circle cx="12" cy="12" r="9" stroke-dasharray="3 3"/></svg>',
+      'merge_c': '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><circle cx="6" cy="12" r="2"/><circle cx="14" cy="8" r="2.5"/><circle cx="18" cy="16" r="1.5"/><circle cx="11" cy="17" r="2"/></svg>',
+      'merge_d': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="12" r="5"/><circle cx="16" cy="12" r="5"/></svg>',
+      'split_a': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 7v10M7 12h10"/></svg>',
+      'split_b': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>',
+      'split_c': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/></svg>',
+      'split_d': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12a7 7 0 0 0 14 0M8 9h.01M16 9h.01"/></svg>',
+      'gravity_a': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3" fill="currentColor"/><ellipse cx="12" cy="12" rx="9" ry="4" transform="rotate(-30 12 12)"/></svg>',
+      'gravity_b': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l4 6 5-8 5 8 4-6v10H3z"/></svg>',
+      'gravity_c': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 16c-2.2 0-4-1.8-4-4s1.8-4 4-4c.5-2.3 2.5-4 5-4 3 0 5.4 2.1 5.9 5 2.3.3 4.1 2.3 4.1 4.7 0 2.6-2.1 4.7-4.7 4.7H6z"/></svg>',
+      'gravity_d': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3" fill="currentColor"/><circle cx="19" cy="8" r="1.5" fill="currentColor"/><circle cx="5" cy="7" r="1.5" fill="currentColor"/><circle cx="18" cy="17" r="2" fill="currentColor"/><circle cx="7" cy="18" r="1.5" fill="currentColor"/></svg>',
+      'cross_a': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l7 20-7-4-7 4 7-20z"/></svg>',
+      'cross_b': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12c4-4 8-4 12 0s8 4 12 0"/></svg>',
+      'cross_c': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="5" r="3"/><line x1="12" y1="8" x2="12" y2="20"/><path d="M5 14c0 3.9 3.1 7 7 7s7-3.1 7-7"/></svg>',
+      'cross_d': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 17L17 7M7 7h10v10"/></svg>',
+      'tether_a': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="12" r="4"/><circle cx="16" cy="12" r="4"/><path d="M12 8v8"/></svg>',
+      'tether_b': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+      'tether_c': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>',
+      'tether_d': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1l2.1-2.1M17 7l2.1-2.1"/></svg>'
+    };
+    return svgs[key] || '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><circle cx="12" cy="12" r="4"/></svg>';
+  }
+
+  // 2. 「东坡人生实验」七幕宇宙微游戏配置 (Experiment Scenes，零系统 Emoji)
   var EXPERIMENT_SCENES = [
     {
       id: 'experiment_01', num: '01', name: '星体靠近',
       prompt: '自我星体置于中央，直面突如其来的心境扰动',
-      actionText: '拖动你的星体靠近目标，或直接轻触星核',
+      actionText: '拖动你的星体靠近目标，或直接轻触星宿',
       targets: [
-        { key: 'target_a', label: '骤变星', icon: '✦', desc: '工作或生活里突如其来的临时变动' },
-        { key: 'target_b', label: '阻滞星', icon: '◆', desc: '付出了很多心力，事情却没能按预期推进' },
-        { key: 'target_c', label: '寒语星', icon: '❄', desc: '别人无意间的一句挑剔或冷淡反馈' },
-        { key: 'target_d', label: '倦怠星', icon: '☁', desc: '其实没发生什么，但就是觉得身上没劲' }
+        { key: 'target_a', label: '骤变星', desc: '工作或生活里突如其来的临时变动' },
+        { key: 'target_b', label: '阻滞星', desc: '付出了很多心力，事情却没能按预期推进' },
+        { key: 'target_c', label: '寒语星', desc: '别人无意间的一句挑剔或冷淡反馈' },
+        { key: 'target_d', label: '倦怠星', desc: '其实没发生什么，但就是觉得身上没劲' }
       ]
     },
     {
@@ -313,10 +348,10 @@
       prompt: '一颗压力流星正沿轨道逼近，如何应对这次突发撞击？',
       actionText: '选择你的轨道应激对策',
       targets: [
-        { key: 'action_a', label: '反复推演', icon: '⟳', desc: '在心里反复推演各种最坏的结果' },
-        { key: 'action_b', label: '遁入暗区', icon: '☽', desc: '想找个没人的地方彻底安静呆着' },
-        { key: 'action_c', label: '正面硬撑', icon: '▲', desc: '逼着自己硬撑着继续做，直到做完为止' },
-        { key: 'action_d', label: '变轨释怀', icon: '♨', desc: '先不管了，吃一顿好吃的或者出去转转' }
+        { key: 'action_a', label: '反复推演', desc: '在心里反复推演各种最坏的结果' },
+        { key: 'action_b', label: '遁入暗区', desc: '想找个没人的地方彻底安静呆着' },
+        { key: 'action_c', label: '正面硬撑', desc: '逼着自己硬撑着继续做，直到做完为止' },
+        { key: 'action_d', label: '变轨释怀', desc: '先不管了，吃一顿好吃的或者出去转转' }
       ]
     },
     {
@@ -324,10 +359,10 @@
       prompt: '眼前漂浮着三颗微光星宿，偷得半日清闲时分',
       actionText: '凝聚你当下最渴望的归宿',
       targets: [
-        { key: 'merge_a', label: '休眠黑洞', icon: '◉', desc: '拉上窗帘，不受打扰地昏天黑地睡一觉' },
-        { key: 'merge_b', label: '专注光团', icon: '☀', desc: '专心做一件完全出于喜欢、不计产出的事' },
-        { key: 'merge_c', label: '游离星尘', icon: '◌', desc: '出门漫无目的地走走，看看树、吹吹风' },
-        { key: 'merge_d', label: '双星共振', icon: '❖', desc: '找个完全懂你的朋友，毫无负担地聊聊天' }
+        { key: 'merge_a', label: '休眠黑洞', desc: '拉上窗帘，不受打扰地昏天黑地睡一觉' },
+        { key: 'merge_b', label: '专注光团', desc: '专心做一件完全出于喜欢、不计产出的事' },
+        { key: 'merge_c', label: '游离星尘', desc: '出门漫无目的地走走，看看树、吹吹风' },
+        { key: 'merge_d', label: '双星共振', desc: '找个完全懂你的朋友，毫无负担地聊聊天' }
       ]
     },
     {
@@ -335,10 +370,10 @@
       prompt: '星核承受着外界评议过载，如何释放内部张力？',
       actionText: '释放星体张力，重塑心境形态',
       targets: [
-        { key: 'split_a', label: '向内收缩', icon: '◎', desc: '第一反应是反思自己哪里做得不够周全' },
-        { key: 'split_b', label: '辐射呼叫', icon: '⚡', desc: '心里很委屈，想立刻找信任的人把话说清楚' },
-        { key: 'split_c', label: '引力钝化', desc: '懒得解释，时间久了大家自然知道我是什么人', icon: '⏳' },
-        { key: 'split_d', label: '幽默消解', desc: '心里暗暗吐槽，甚至觉得整件事有点荒诞好笑', icon: '☆' }
+        { key: 'split_a', label: '向内收缩', desc: '第一反应是反思自己哪里做得不够周全' },
+        { key: 'split_b', label: '辐射呼叫', desc: '心里很委屈，想立刻找信任的人把话说清楚' },
+        { key: 'split_c', label: '引力钝化', desc: '懒得解释，时间久了大家自然知道我是什么人' },
+        { key: 'split_d', label: '幽默消解', desc: '心里暗暗吐槽，甚至觉得整件事有点荒诞好笑' }
       ]
     },
     {
@@ -346,10 +381,10 @@
       prompt: '宇宙深处有不同引力场呼唤，你最向往的立足锚点是？',
       actionText: '将星体泊入你认同的引力场',
       targets: [
-        { key: 'gravity_a', label: '独省星云', icon: '✧', desc: '拥有完全属于自己的安全感与平静' },
-        { key: 'gravity_b', label: '荣耀星核', icon: '♕', desc: '在自己热爱的领域做成一件拿得出手的大事' },
-        { key: 'gravity_c', label: '旷达苍穹', icon: '☁', desc: '不管经历什么，都能有随时重新出发的底气' },
-        { key: 'gravity_d', label: '烟火星流', icon: '✦', desc: '家人朋友健康平安，每天能吃好睡踏实' }
+        { key: 'gravity_a', label: '独省星云', desc: '拥有完全属于自己的安全感与平静' },
+        { key: 'gravity_b', label: '荣耀星核', desc: '在自己热爱的领域做成一件拿得出手的大事' },
+        { key: 'gravity_c', label: '旷达苍穹', desc: '不管经历什么，都能有随时重新出发的底气' },
+        { key: 'gravity_d', label: '烟火星流', desc: '家人朋友健康平安，每天能吃好睡踏实' }
       ]
     },
     {
@@ -357,10 +392,10 @@
       prompt: '前方星雾弥漫、轨道分岔，行进至关键十字星门',
       actionText: '确定你的穿越航线',
       targets: [
-        { key: 'cross_a', label: '逆风破浪', icon: '▲', desc: '即使很累，也想再搏一把看看上限在哪里' },
-        { key: 'cross_b', label: '顺流滑行', icon: '〜', desc: '累了就停，好了就走，不再跟自己死磕' },
-        { key: 'cross_c', label: '暂泊星湾', icon: '⚓', desc: '先稳住眼下的生活，不轻易做冒险的变动' },
-        { key: 'cross_d', label: '开拓新径', icon: '↗', desc: '很想换个环境或赛道，哪怕从头开始' }
+        { key: 'cross_a', label: '逆风破浪', desc: '即使很累，也想再搏一把看看上限在哪里' },
+        { key: 'cross_b', label: '顺流滑行', desc: '累了就停，好了就走，不再跟自己死磕' },
+        { key: 'cross_c', label: '暂泊星湾', desc: '先稳住眼下的生活，不轻易做冒险的变动' },
+        { key: 'cross_d', label: '开拓新径', desc: '很想换个环境或赛道，哪怕从头开始' }
       ]
     },
     {
@@ -368,15 +403,15 @@
       prompt: '旅途最后一程，偶遇一颗偏离轨道的流浪微星',
       actionText: '做出东坡式的人间终极回应',
       targets: [
-        { key: 'tether_a', label: '同舟相挽', icon: '♥', desc: '只要我还有余力，总想尽力多帮对方一把' },
-        { key: 'tether_b', label: '各自奔赴', icon: '→', desc: '每个人有各自的命途，尊重界限是最好的善意' },
-        { key: 'tether_c', label: '平淡对视', icon: '⊙', desc: '默默陪伴在旁，不强行指点也不过分干预' },
-        { key: 'tether_d', label: '分享火种', icon: '☼', desc: '用幽默或一件小事逗对方笑一笑，这就够了' }
+        { key: 'tether_a', label: '同舟相挽', desc: '只要我还有余力，总想尽力多帮对方一把' },
+        { key: 'tether_b', label: '各自奔赴', desc: '每个人有各自的命途，尊重界限是最好的善意' },
+        { key: 'tether_c', label: '平淡对视', desc: '默默陪伴在旁，不强行指点也不过分干预' },
+        { key: 'tether_d', label: '分享火种', desc: '用幽默或一件小事逗对方笑一笑，这就够了' }
       ]
     }
   ];
 
-  // 2. 「东坡人生实验」视图 Quiz (七幕宇宙微游戏、双通道交互、返航星门、确定性评分)
+  // 2. 「东坡人生实验」视图 Quiz (彻底去问卷化、纯净微游戏舞台、折叠Fallback、确定性评分)
   Router.register('quiz', {
     render: function () {
       var wrap = document.createElement('div');
@@ -435,15 +470,37 @@
       sceneIntro.className = 'exp-scene-intro';
       wrap.appendChild(sceneIntro);
 
-      // 2. 动态实验主舞台 (互动微游戏核心场景)
+      // 2. 动态实验主舞台 (互动微游戏核心场景，高度充足，纯净无问卷卡片)
       var stage = document.createElement('div');
       stage.className = 'quiz-stage exp-cosmic-stage';
       wrap.appendChild(stage);
 
-      // 3. 底部快捷双通道选择器 (支持低性能与点击Fallback，同时兼容旧测试类名)
+      // 3. 底部折叠式辅助入口面板 (默认隐藏，首屏绝不显示大矩形答案卡，去问卷感)
+      var fallbackPanel = document.createElement('div');
+      fallbackPanel.className = 'exp-fallback-panel';
+
+      var fallbackToggle = document.createElement('button');
+      fallbackToggle.type = 'button';
+      fallbackToggle.className = 'exp-fallback-toggle';
+      fallbackToggle.innerHTML = '<span class="fallback-toggle-label">操作不便？轻触选择</span><span class="fallback-toggle-arrow">▾</span>';
+      fallbackPanel.appendChild(fallbackToggle);
+
       var choiceGrid = document.createElement('div');
-      choiceGrid.className = 'exp-choice-grid quiz-option-list';
-      wrap.appendChild(choiceGrid);
+      choiceGrid.className = 'exp-choice-grid quiz-option-list is-collapsed';
+      fallbackPanel.appendChild(choiceGrid);
+
+      fallbackToggle.addEventListener('click', function () {
+        var isCol = choiceGrid.classList.contains('is-collapsed');
+        if (isCol) {
+          choiceGrid.classList.remove('is-collapsed');
+          fallbackToggle.querySelector('.fallback-toggle-arrow').textContent = '▴';
+        } else {
+          choiceGrid.classList.add('is-collapsed');
+          fallbackToggle.querySelector('.fallback-toggle-arrow').textContent = '▾';
+        }
+      });
+
+      wrap.appendChild(fallbackPanel);
 
       // 4. 底部辅助操作条 (上一幕 / 重新测)
       var bottomBar = document.createElement('div');
@@ -512,13 +569,33 @@
         var stageBox = document.createElement('div');
         stageBox.className = 'exp-stage-box exp-scene-' + scene.num;
 
+        // 七幕差异化宇宙场景图层背景
+        var sceneBackdrop = document.createElement('div');
+        sceneBackdrop.className = 'exp-scene-backdrop exp-backdrop-' + scene.num;
+        if (scene.num === '01') {
+          sceneBackdrop.innerHTML = '<div class="exp-bg-pulse-ring ring-1"></div><div class="exp-bg-pulse-ring ring-2"></div>';
+        } else if (scene.num === '02') {
+          sceneBackdrop.innerHTML = '<div class="exp-meteor-trail"></div><div class="exp-impact-zone"></div>';
+        } else if (scene.num === '03') {
+          sceneBackdrop.innerHTML = '<div class="exp-gravity-rays"></div>';
+        } else if (scene.num === '04') {
+          sceneBackdrop.innerHTML = '<div class="exp-split-ring"></div>';
+        } else if (scene.num === '05') {
+          sceneBackdrop.innerHTML = '<div class="exp-gravity-field-lines"></div>';
+        } else if (scene.num === '06') {
+          sceneBackdrop.innerHTML = '<div class="exp-cross-rails"></div>';
+        } else if (scene.num === '07') {
+          sceneBackdrop.innerHTML = '<div class="exp-drift-star"></div>';
+        }
+        stageBox.appendChild(sceneBackdrop);
+
         // 中心自我星体 (Soul Star)
         var soulStar = document.createElement('div');
         soulStar.className = 'exp-soul-star';
         soulStar.innerHTML = '<span class="soul-core"></span><span class="soul-halo"></span><span class="soul-label">心识</span>';
         stageBox.appendChild(soulStar);
 
-        // 4 颗环境目标星体 / 引力场
+        // 4 颗环境目标星体 (支持轻触点击与拖拽吸附，纯矢量 SVG 零 Emoji)
         var targetNodes = [];
         var targets = scene.targets || [];
         var posClasses = ['target-top-left', 'target-top-right', 'target-bottom-left', 'target-bottom-right'];
@@ -528,11 +605,17 @@
             var orb = document.createElement('div');
             orb.className = 'exp-target-orb ' + posClasses[tIndex];
             orb.setAttribute('data-target-key', tItem.key);
-            orb.innerHTML = '<span class="orb-icon">' + (tItem.icon || '✦') + '</span>' +
+            orb.setAttribute('role', 'button');
+            orb.setAttribute('tabindex', '0');
+            orb.setAttribute('aria-label', tItem.label + '：' + tItem.desc);
+
+            var svgIcon = getExpSymbolSvg(tItem.key);
+            orb.innerHTML = '<span class="orb-icon">' + svgIcon + '</span>' +
                             '<span class="orb-name">' + tItem.label + '</span>';
 
+            // 点击场景星宿直接完成
             orb.addEventListener('click', function () {
-              triggerOutcome(tItem, currentQ.id);
+              triggerOutcome(tItem, currentQ.id, orb);
             });
             stageBox.appendChild(orb);
             targetNodes.push({ el: orb, item: tItem });
@@ -567,7 +650,7 @@
             var orbCenterX = rect.left + rect.width * 0.5;
             var orbCenterY = rect.top + rect.height * 0.5;
             var dist = Math.hypot(clientX - orbCenterX, clientY - orbCenterY);
-            if (dist < 55) {
+            if (dist < 60) {
               targetNodes[i].el.classList.add('is-hovered');
             } else {
               targetNodes[i].el.classList.remove('is-hovered');
@@ -584,7 +667,8 @@
           var clientY = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0].clientY : (e.clientY || 0);
 
           var chosen = null;
-          var minDist = 65;
+          var chosenOrb = null;
+          var minDist = 70;
           for (var i = 0; i < targetNodes.length; i++) {
             var rect = targetNodes[i].el.getBoundingClientRect();
             var orbCenterX = rect.left + rect.width * 0.5;
@@ -593,12 +677,13 @@
             if (dist < minDist) {
               minDist = dist;
               chosen = targetNodes[i].item;
+              chosenOrb = targetNodes[i].el;
             }
             targetNodes[i].el.classList.remove('is-hovered');
           }
 
-          if (chosen) {
-            triggerOutcome(chosen, currentQ.id);
+          if (chosen && chosenOrb) {
+            triggerOutcome(chosen, currentQ.id, chosenOrb);
           } else {
             soulStar.style.transform = 'translate(0px, 0px)';
           }
@@ -613,7 +698,7 @@
 
         stage.appendChild(stageBox);
 
-        // 刷新底部快捷双通道选项卡
+        // 刷新折叠式 Fallback 选项卡 (紧凑小尺寸，矢量 SVG 零 Emoji)
         choiceGrid.innerHTML = '';
         var selectedOptId = session ? session.getSelectedOption(currentQ.id) : null;
 
@@ -634,7 +719,7 @@
 
             var iconTag = document.createElement('span');
             iconTag.className = 'exp-choice-icon';
-            iconTag.textContent = targetItem.icon || '✦';
+            iconTag.innerHTML = getExpSymbolSvg(targetItem.key);
 
             var contentBox = document.createElement('div');
             contentBox.className = 'exp-choice-content';
@@ -651,7 +736,8 @@
             card.appendChild(contentBox);
 
             card.addEventListener('click', function () {
-              triggerOutcome(targetItem, currentQ.id);
+              var orb = stage.querySelector('[data-target-key="' + targetItem.key + '"]');
+              triggerOutcome(targetItem, currentQ.id, orb);
             });
 
             choiceGrid.appendChild(card);
@@ -659,7 +745,7 @@
         }
       }
 
-      function triggerOutcome(targetItem, qId) {
+      function triggerOutcome(targetItem, qId, orbEl) {
         if (isTransitioning) return;
         isTransitioning = true;
 
@@ -677,9 +763,11 @@
           session.selectOption(qId, mappedOptId);
         }
 
-        // 播放聚敛星辉反馈
-        var activeOrb = stage.querySelector('[data-target-key="' + targetItem.key + '"]');
-        if (activeOrb) activeOrb.classList.add('is-selected');
+        // 播放水墨星芒吸附与定格动效 (0.4秒，兼顾反馈与流畅度)
+        if (orbEl) {
+          orbEl.classList.add('is-selected');
+          orbEl.classList.add('is-absorbed');
+        }
 
         var allCards = choiceGrid.querySelectorAll('.exp-choice-card');
         for (var c = 0; c < allCards.length; c++) {
@@ -694,7 +782,7 @@
           } else {
             showCalculatingState();
           }
-        }, 260);
+        }, 420);
       }
 
       function showCalculatingState() {
@@ -1239,7 +1327,7 @@
         var enterBtn = document.createElement('button');
         enterBtn.className = 'universe-sheet-btn';
         enterBtn.type = 'button';
-        enterBtn.textContent = '进入本站小宇宙 →';
+        enterBtn.textContent = '✦ 漫游本站星门 →';
         enterBtn.addEventListener('click', function () {
           closeQuickSheet();
           var c = document.getElementById('view-container');
@@ -1560,7 +1648,7 @@
       chap2.appendChild(sStream);
       scrollContainer.appendChild(chap2);
 
-      // 第三章：代表作品与本站诗词星群 (以精神星核为中心的交互星群)
+      // 第三章：代表作品与本站诗词星群 (以精神星核为中心的2D空间拓扑交互星群)
       var chap3 = document.createElement('div');
       chap3.className = 'station-chapter-box station-chapter-3 chapter-works station-chapter-constellation';
       var wBadge = document.createElement('div');
@@ -1581,56 +1669,28 @@
         }
       }
 
-      // 核心精神星核
-      var coreStar = document.createElement('div');
-      coreStar.className = 'station-prime-work-card constellation-core-star is-main-star';
-      var coreTag = document.createElement('span');
-      coreTag.className = 'station-prime-tag core-star-tag is-main-star';
-      coreTag.textContent = '✦ 精神星核';
-      var coreTitleText = primeWorkObj ? ('《' + primeWorkObj.title + '》') : (primeQuoteObj ? '《代表作》' : '东坡精神星核');
-      var coreQuoteText = primeQuoteObj ? primeQuoteObj.text : (station.theme || '');
-      coreStar.appendChild(coreTag);
-      coreStar.appendChild(UI.createQuoteBlock(coreQuoteText, coreTitleText));
-
-      if (primeWorkObj) {
-        var hint = document.createElement('div');
-        hint.className = 'station-work-more-hint core-star-hint';
-        hint.textContent = '进入精神星核现场与全文 →';
-        coreStar.appendChild(hint);
-        (function (targetWorkId, currentStationId) {
-          coreStar.addEventListener('click', function () {
-            Router.navigate('work', { work_id: targetWorkId, from_station_id: currentStationId });
-          });
-        })(primeWorkObj.id, station.id);
-      }
-      constellationBox.appendChild(coreStar);
-
-      // 环绕次级作品星 (连线与可点击星点)
+      // 获取本站所有收录作品 (包含精神星核作品与环绕群星)
       var stationWorkIds = station.work_ids || [];
-      var subWorks = [];
+      var allStationWorks = [];
       for (var wIdx = 0; wIdx < stationWorkIds.length; wIdx++) {
-        var otherWork = Data.getWorkById(stationWorkIds[wIdx]);
-        if (otherWork && (!primeWorkObj || otherWork.id !== primeWorkObj.id)) {
-          subWorks.push(otherWork);
-        }
+        var sWork = Data.getWorkById(stationWorkIds[wIdx]);
+        if (sWork) allStationWorks.push(sWork);
+      }
+      if (primeWorkObj && allStationWorks.indexOf(primeWorkObj) === -1) {
+        allStationWorks.unshift(primeWorkObj);
       }
 
-      if (subWorks.length > 0) {
-        var satellitesWrap = document.createElement('div');
-        satellitesWrap.className = 'constellation-satellites-orbit';
-        var satTitle = document.createElement('div');
-        satTitle.className = 'satellites-orbit-title';
-        satTitle.textContent = '环绕作品星宿 · 点击跃迁';
-        satellitesWrap.appendChild(satTitle);
+      // 精神星核与诗词星宿空间拓扑 (constellation-core-star is-main-star)
+      var satellitesWrap = document.createElement('div');
+      satellitesWrap.className = 'constellation-satellites-orbit';
 
-        if (UI && typeof UI.createConstellationGroup === 'function') {
-          var clusterGroup = UI.createConstellationGroup(subWorks, function (swork) {
-            Router.navigate('work', { work_id: swork.id, from_station_id: station.id });
-          });
-          satellitesWrap.appendChild(clusterGroup);
-        }
-        constellationBox.appendChild(satellitesWrap);
+      if (UI && typeof UI.createConstellationGroup === 'function') {
+        var clusterGroup = UI.createConstellationGroup(allStationWorks, function (swork) {
+          Router.navigate('work', { work_id: swork.id, from_station_id: station.id });
+        }, primeWorkObj, station.theme);
+        satellitesWrap.appendChild(clusterGroup);
       }
+      constellationBox.appendChild(satellitesWrap);
 
       chap3.appendChild(constellationBox);
       scrollContainer.appendChild(chap3);
@@ -2043,12 +2103,12 @@
                      UI.createBackPathButton('上一程', function () { Router.back(); });
       wrap.appendChild(backRail);
 
-      // --- 第 1 层：今日东坡 3:4 独立收藏级诗签主视觉 (页面加载自动异步生成) ---
+      // --- 第 1 层：今日东坡 3:4 独立收藏级诗签主视觉 (去除卡中卡与多余DOM日期叠层，直接以Canvas诗签为第一视觉中心) ---
       var slipContainer = document.createElement('div');
       slipContainer.className = 'daily-slip-container daily-quote-card has-moon-halo daily-poetry-slip';
 
       var dateHeader = document.createElement('div');
-      dateHeader.className = 'daily-date-header';
+      dateHeader.className = 'daily-date-header u-visually-hidden';
 
       var dateText = document.createElement('div');
       dateText.className = 'daily-date-text';

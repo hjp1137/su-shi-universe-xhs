@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Harness 15.6.2</title>
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/views.css">
+</head>
+<body>
+  <div id="app-container">
+    <header class="app-header" id="app-header">
+      <div class="header-left" id="nav-left"></div>
+      <div class="header-title" id="nav-title">苏轼宇宙</div>
+      <div class="header-right" id="nav-right"></div>
+    </header>
+    <main id="main-content">
+      <div id="view-container"></div>
+    </main>
+    <nav class="cosmic-dock" id="cosmic-dock"></nav>
+  </div>
+  <script src="../js/namespace.js"></script>
+  <script src="../js/data.js"></script>
+  <script src="../js/art_assets.js"></script>
+  <script src="../js/store.js"></script>
+  <script src="../js/bridge.js"></script>
+  <script src="../js/ui.js"></script>
+  <script src="../js/card_canvas.js"></script>
+  <script src="../js/quiz.js"></script>
+  <script src="../js/daily.js"></script>
+  <script src="../js/lib/three.min.js"></script>
+  <script src="../js/effects/quality-manager.js"></script>
+  <script src="../js/effects/fallback.js"></script>
+  <script src="../js/effects/hero-scene.js"></script>
+  <script src="../js/effects/universe-scene.js"></script>
+  <script src="../js/effects/result-scene.js"></script>
+  <script src="../js/effects/webgl-engine.js"></script>
+  <script src="../js/effects/index.js"></script>
+  <script src="../js/router.js"></script>
+  <script src="../js/views.js"></script>
+  <script src="../js/app.js"></script>
+  <script>
+    window.addEventListener('load', function () {
+      var params = new URLSearchParams(window.location.search);
+      var mode = params.get('mode');
+
+      if (mode === 'quiz_s1') {
+        SuShiUniverse.Router.navigate('quiz');
+      } else if (mode === 'quiz_s2') {
+        SuShiUniverse.Router.navigate('quiz');
+        setTimeout(function () {
+          var target = document.querySelector('.exp-target-orb');
+          if (target) target.click();
+        }, 300);
+      } else if (mode === 'quiz_s3') {
+        SuShiUniverse.Router.navigate('quiz');
+        setTimeout(function () {
+          var target1 = document.querySelector('.exp-target-orb');
+          if (target1) target1.click();
+          setTimeout(function () {
+            var target2 = document.querySelector('.exp-target-orb');
+            if (target2) target2.click();
+          }, 500);
+        }, 300);
+      } else if (mode === 'quiz_s4') {
+        SuShiUniverse.Router.navigate('quiz');
+        setTimeout(function () {
+          var t = document.querySelector('.exp-target-orb');
+          if (t) t.click();
+          setTimeout(function () {
+            var t2 = document.querySelector('.exp-target-orb');
+            if (t2) t2.click();
+            setTimeout(function () {
+              var t3 = document.querySelector('.exp-target-orb');
+              if (t3) t3.click();
+            }, 500);
+          }, 500);
+        }, 300);
+      } else if (mode === 'quiz_fallback') {
+        SuShiUniverse.Router.navigate('quiz');
+        setTimeout(function () {
+          var toggle = document.querySelector('.exp-fallback-toggle');
+          if (toggle) toggle.click();
+        }, 300);
+      } else if (mode === 'station_constellation') {
+        SuShiUniverse.Router.navigate('station', { station_id: 'station_huangzhou' });
+        setTimeout(function () {
+          var ch3 = document.querySelector('.station-chapter-constellation');
+          if (ch3) ch3.scrollIntoView({ block: 'start' });
+        }, 300);
+      } else if (mode === 'constellation_bubble') {
+        SuShiUniverse.Router.navigate('station', { station_id: 'station_huangzhou' });
+        setTimeout(function () {
+          var ch3 = document.querySelector('.station-chapter-constellation');
+          if (ch3) ch3.scrollIntoView({ block: 'start' });
+          setTimeout(function () {
+            var star = document.querySelector('.constellation-star-node.is-prime') || document.querySelector('.constellation-star-node.is-spatial');
+            if (star) star.click();
+          }, 400);
+        }, 300);
+      } else if (mode === 'daily_full') {
+        SuShiUniverse.Router.navigate('daily');
+      } else if (mode === 'daily_date_detail') {
+        SuShiUniverse.Router.navigate('daily');
+        setTimeout(function () {
+          var slip = document.querySelector('.daily-sign-poster-wrap');
+          if (slip) slip.scrollIntoView({ block: 'center' });
+        }, 400);
+      } else if (mode === 'share_station') {
+        SuShiUniverse.Router.navigate('share-card', { type: 'station', station_id: 'station_huangzhou' });
+      } else if (mode === 'share_daily') {
+        SuShiUniverse.Router.navigate('share-card', { type: 'daily' });
+      } else if (mode === 'share_node') {
+        SuShiUniverse.Router.navigate('share-card', { type: 'node', station_id: 'station_huangzhou' });
+      } else if (mode === 'quiz_low') {
+        if (SuShiUniverse.Effects && SuShiUniverse.Effects.QualityManager) {
+          SuShiUniverse.Effects.QualityManager.setManualTier('low');
+        }
+        SuShiUniverse.Router.navigate('quiz');
+      }
+    });
+  </script>
+</body>
+</html>

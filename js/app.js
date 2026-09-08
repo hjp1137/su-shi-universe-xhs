@@ -13,9 +13,9 @@
 
   var viewTitles = {
     'home': '苏轼宇宙',
-    'quiz': '人生问答',
+    'quiz': '东坡人生实验',
     'result': '东坡站点',
-    'universe': '宇宙生命线',
+    'universe': '人生星河',
     'station': '站点详情',
     'work': '作品赏析',
     'daily': '今日东坡',
@@ -68,7 +68,7 @@
       navLeftEl = document.getElementById('nav-left');
     }
 
-    // 1. 动态更新顶部标题
+    // 1. 动态更新顶部标题 (东坡人生实验 / 人生星河 / 苏轼宇宙)
     if (navTitleEl) {
       var titleText = viewTitles[info.name] || '苏轼宇宙';
       navTitleEl.textContent = titleText;
@@ -85,6 +85,14 @@
     updateCosmicDock(info.name);
 
     // 4. WebGL 东方水墨宇宙特效协同 (完全解耦，不阻断主流程)
+    var bgCanvas = document.getElementById('universe-bg-canvas');
+    if (info.name === 'quiz' || info.name === 'share-card') {
+      // 在人生实验与全屏分享卡状态，淡出 WebGL Canvas，彻底防止前置场景残余月亮抢夺注意力
+      if (bgCanvas) bgCanvas.style.opacity = '0';
+    } else {
+      if (bgCanvas) bgCanvas.style.opacity = '1';
+    }
+
     if (SuShi.Effects && typeof SuShi.Effects.mount === 'function') {
       try {
         if (info.name === 'home') {

@@ -675,6 +675,362 @@
   margin-top: var(--space-2);
 }
 
+/* 15. 诗词星群组件 2D 空间拓扑星图与次级目录 */
+.constellation-sky-stage {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  height: 330px;
+  margin: var(--space-3) auto;
+  border-radius: var(--radius-lg);
+  background: radial-gradient(circle at 50% 48%, rgba(26, 44, 76, 0.7) 0%, rgba(13, 22, 40, 0.95) 75%);
+  border: 1px solid rgba(111, 175, 194, 0.28);
+  box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.55), 0 8px 24px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+}
+
+.constellation-nebula-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle at 75% 30%, rgba(217, 185, 120, 0.08) 0%, transparent 40%),
+                    radial-gradient(circle at 25% 70%, rgba(111, 175, 194, 0.08) 0%, transparent 40%);
+}
+
+.constellation-gravity-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.constellation-orbit-ring {
+  fill: none;
+  stroke: rgba(217, 185, 120, 0.16);
+  stroke-dasharray: 4 4;
+}
+
+.constellation-orbit-ring.ring-inner {
+  animation: orbitRingSpin 40s linear infinite;
+  transform-origin: 180px 155px;
+}
+
+.constellation-orbit-ring.ring-outer {
+  animation: orbitRingSpinRev 60s linear infinite;
+  transform-origin: 180px 155px;
+}
+
+@keyframes orbitRingSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes orbitRingSpinRev {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+.constellation-gravity-line {
+  stroke: rgba(111, 175, 194, 0.28);
+  stroke-dasharray: 3 3;
+}
+
+/* 中央精神星核 (Central Spiritual Core Star) */
+.constellation-core-star.constellation-center-orb {
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  transform: translate(-50%, -50%);
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  touch-action: manipulation;
+  text-align: center;
+}
+
+.core-beacon {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fbf8ee 25%, #d9b978 70%, rgba(217, 185, 120, 0.2) 100%);
+  box-shadow: 0 0 20px rgba(217, 185, 120, 0.8), 0 0 35px rgba(217, 185, 120, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.core-sun-dot {
+  font-size: 16px;
+  color: #1a1613;
+  line-height: 1;
+}
+
+.core-pulse-ring {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  bottom: -6px;
+  border-radius: 50%;
+  border: 1px dashed rgba(217, 185, 120, 0.5);
+  animation: corePulse 3s infinite ease-in-out;
+}
+
+@keyframes corePulse {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.22); opacity: 1; border-color: #fbf8ee; }
+}
+
+.core-label-box {
+  margin-top: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.core-star-badge {
+  font-size: 10px;
+  color: #d9b978;
+  background: rgba(217, 185, 120, 0.15);
+  border: 1px solid rgba(217, 185, 120, 0.4);
+  padding: 1px 6px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.core-star-name {
+  font-size: 12px;
+  font-family: var(--font-family-serif);
+  font-weight: 600;
+  color: #fbf8ee;
+  margin-top: 2px;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+}
+
+/* 空间拓扑作品星 (Spatial Star Nodes) */
+.constellation-star-node.is-spatial {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 0.22s ease, filter 0.22s ease;
+}
+
+.constellation-star-node.is-spatial:active,
+.constellation-star-node.is-spatial.is-active {
+  transform: translate(-50%, -50%) scale(1.15);
+  filter: brightness(1.25);
+}
+
+.constellation-star-node.is-spatial .star-node-visual {
+  margin-right: 0;
+  transition: all 0.22s ease;
+}
+
+.constellation-star-node.is-spatial.is-prime .star-node-visual {
+  width: 48px;
+  height: 48px;
+  border: 2px solid rgba(217, 185, 120, 0.85);
+  box-shadow: 0 0 16px rgba(217, 185, 120, 0.65);
+}
+
+.constellation-star-node.is-spatial.is-major .star-node-visual {
+  width: 42px;
+  height: 42px;
+  border: 1.5px solid rgba(111, 175, 194, 0.75);
+  box-shadow: 0 0 12px rgba(111, 175, 194, 0.5);
+}
+
+.constellation-star-node.is-spatial.is-satellite .star-node-visual {
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(111, 175, 194, 0.55);
+  box-shadow: 0 0 8px rgba(111, 175, 194, 0.35);
+}
+
+.constellation-star-node.is-spatial .star-node-text {
+  align-items: center;
+  margin-top: 3px;
+  pointer-events: none;
+}
+
+.constellation-star-node.is-spatial .star-node-title {
+  font-size: 11px;
+  font-family: var(--font-family-serif);
+  color: #f5eedc;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+}
+
+.constellation-star-node.is-spatial .star-node-genre {
+  display: none;
+}
+
+/* 浮动微名片气泡 (Star Callout Bubble) */
+.star-callout-bubble {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  width: 88%;
+  max-width: 320px;
+  background: rgba(16, 27, 47, 0.94);
+  border: 1px solid rgba(217, 185, 120, 0.5);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7), 0 0 15px rgba(217, 185, 120, 0.25);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.star-callout-bubble.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(10px);
+}
+
+.star-callout-bubble.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.bubble-work-title {
+  font-size: 13px;
+  font-family: var(--font-family-serif);
+  font-weight: 600;
+  color: #fbf8ee;
+  letter-spacing: 0.5px;
+}
+
+.bubble-work-quote {
+  font-size: 11px;
+  color: #d9b978;
+  margin: 3px 0 6px 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.bubble-jump-btn {
+  font-size: 11px;
+  color: #101b2f;
+  background: #d9b978;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 3px 10px;
+  cursor: pointer;
+  font-weight: 500;
+  touch-action: manipulation;
+}
+
+/* 次级全部作品折叠面板 */
+.constellation-catalog-panel {
+  margin-top: var(--space-2);
+  width: 100%;
+}
+
+.constellation-catalog-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  background: rgba(22, 34, 56, 0.45);
+  border: 1px dashed rgba(111, 175, 194, 0.25);
+  border-radius: var(--radius-md);
+  color: var(--color-river);
+  font-size: var(--font-size-tag);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: all var(--motion-fast);
+}
+
+.constellation-catalog-toggle:active {
+  background: rgba(28, 44, 72, 0.65);
+  border-color: var(--color-warm);
+}
+
+.catalog-toggle-arrow {
+  margin-left: 6px;
+  font-size: 10px;
+}
+
+.constellation-catalog-list.is-collapsed {
+  display: none;
+}
+
+.constellation-catalog-list {
+  margin-top: var(--space-2);
+  display: flex;
+  flex-direction: column;
+}
+
+.constellation-catalog-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: rgba(22, 34, 56, 0.5);
+  border: 1px solid rgba(111, 175, 194, 0.2);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  touch-action: manipulation;
+  margin-bottom: 6px;
+}
+
+.constellation-catalog-item:active {
+  background: rgba(28, 44, 72, 0.7);
+  border-color: var(--color-warm);
+}
+
+.catalog-item-title {
+  font-size: var(--font-size-body);
+  font-weight: 600;
+  color: var(--color-moon);
+}
+
+.catalog-item-genre {
+  font-size: var(--font-size-tag);
+  color: var(--color-river);
+  margin-left: auto;
+  margin-right: 8px;
+}
+
+.catalog-item-arrow {
+  font-size: 12px;
+  color: var(--color-warm);
+}
+
 .constellation-star-node {
   display: flex;
   align-items: center;

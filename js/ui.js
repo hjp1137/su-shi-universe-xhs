@@ -367,7 +367,8 @@
   }
 
   // 15. 诗词星群组件 (Constellation Cluster)
-  function createConstellationGroup(works, onSelect) {
+  // 15. 诗词星群组件 (Constellation Cluster - 2D空间拓扑星图与折叠目录)
+  function createConstellationGroup(works, onSelect, primeWork, stationTheme) {
     works = works || [];
     var cluster = document.createElement('div');
     cluster.className = 'constellation-cluster';
@@ -376,23 +377,157 @@
     header.className = 'constellation-header';
     var hTitle = document.createElement('div');
     hTitle.className = 'constellation-title';
-    hTitle.textContent = '本站诗词星群';
+    hTitle.textContent = '本站诗词星宿拓扑 · 精神引力场';
     var hSub = document.createElement('span');
     hSub.className = 'constellation-sub';
-    hSub.textContent = '点击星点入画 · 共 ' + works.length + ' 篇';
+    hSub.textContent = '点击星点入画 · 精神星核与代表作空间互映 (收录 ' + works.length + ' 篇)';
     header.appendChild(hTitle);
     header.appendChild(hSub);
     cluster.appendChild(header);
 
-    var grid = document.createElement('div');
-    grid.className = 'constellation-grid';
+    // 1. 2D 空间拓扑星图舞台 (绝非普通纵向列表)
+    var skyStage = document.createElement('div');
+    skyStage.className = 'constellation-sky-stage';
 
-    for (var i = 0; i < works.length; i++) {
+    // 背景水墨星尘与微弱星云
+    var nebula = document.createElement('div');
+    nebula.className = 'constellation-nebula-glow';
+    skyStage.appendChild(nebula);
+
+    // 计算空间排布坐标 (360 x 320 viewBox 空间映射)
+    var primeItem = primeWork || (works.length > 0 ? works[0] : null);
+    // 选出环绕作品 (至多6颗形成黄金拓扑，多余的进入下方折叠目录)
+    var satelliteWorks = [];
+    for (var k = 0; k < works.length; k++) {
+      if (!primeItem || works[k].id !== primeItem.id) {
+        satelliteWorks.push(works[k]);
+      }
+    }
+    if (satelliteWorks.length === 0 && works.length > 0) {
+      satelliteWorks = works.slice(0);
+    }
+    var displaySatellites = satelliteWorks.slice(0, 6);
+
+    // 空间相对坐标与尺寸 (百分比与对应 360x320 SVG 坐标)
+    var starLayouts = [
+      { top: '12%', left: '50%', x: 180, y: 40, sizeClass: 'is-prime', labelPos: 'top' },
+      { top: '28%', left: '17%', x: 62, y: 90, sizeClass: 'is-major', labelPos: 'left' },
+      { top: '28%', left: '83%', x: 298, y: 90, sizeClass: 'is-major', labelPos: 'right' },
+      { top: '74%', left: '20%', x: 72, y: 236, sizeClass: 'is-satellite', labelPos: 'bottom' },
+      { top: '74%', left: '80%', x: 288, y: 236, sizeClass: 'is-satellite', labelPos: 'bottom' },
+      { top: '88%', left: '50%', x: 180, y: 280, sizeClass: 'is-satellite', labelPos: 'bottom' }
+    ];
+
+    // SVG 虚线轨道与引力连线
+    var svgNs = 'http://www.w3.org/2000/svg';
+    var svg = document.createElementNS(svgNs, 'svg');
+    svg.setAttribute('class', 'constellation-gravity-svg');
+    svg.setAttribute('viewBox', '0 0 360 320');
+    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+
+    // 两个同心引力圆轨道
+    var orbit1 = document.createElementNS(svgNs, 'circle');
+    orbit1.setAttribute('cx', '180');
+    orbit1.setAttribute('cy', '155');
+    orbit1.setAttribute('r', '75');
+    orbit1.setAttribute('class', 'constellation-orbit-ring ring-inner');
+    svg.appendChild(orbit1);
+
+    var orbit2 = document.createElementNS(svgNs, 'circle');
+    orbit2.setAttribute('cx', '180');
+    orbit2.setAttribute('cy', '155');
+    orbit2.setAttribute('r', '125');
+    orbit2.setAttribute('class', 'constellation-orbit-ring ring-outer');
+    svg.appendChild(orbit2);
+
+    // 引力连线：从中心 (180, 155) 连接至每颗展示的作品星
+    for (var l = 0; l < displaySatellites.length; l++) {
+      var layout = starLayouts[l] || starLayouts[starLayouts.length - 1];
+      var line = document.createElementNS(svgNs, 'line');
+      line.setAttribute('x1', '180');
+      line.setAttribute('y1', '155');
+      line.setAttribute('x2', String(layout.x));
+      line.setAttribute('y2', String(layout.y));
+      line.setAttribute('class', 'constellation-gravity-line line-' + l);
+      svg.appendChild(line);
+    }
+    skyStage.appendChild(svg);
+
+    // 中央精神星核 (Central Core Star)
+    var coreNode = document.createElement('div');
+    coreNode.className = 'constellation-core-star is-main-star constellation-center-orb';
+    coreNode.setAttribute('role', 'button');
+    coreNode.setAttribute('tabindex', '0');
+    coreNode.setAttribute('aria-label', primeItem ? primeItem.title : '精神星核');
+
+    var coreBeacon = document.createElement('div');
+    coreBeacon.className = 'core-beacon';
+    coreBeacon.innerHTML = '<span class="core-pulse-ring"></span><span class="core-sun-dot">✦</span>';
+    coreNode.appendChild(coreBeacon);
+
+    var coreLabelBox = document.createElement('div');
+    coreLabelBox.className = 'core-label-box';
+    var coreBadge = document.createElement('span');
+    coreBadge.className = 'core-star-badge';
+    coreBadge.textContent = '精神星核';
+    var coreTitle = document.createElement('div');
+    coreTitle.className = 'core-star-name';
+    coreTitle.textContent = primeItem ? ('《' + primeItem.title + '》') : (stationTheme || '精神星宿');
+    coreLabelBox.appendChild(coreBadge);
+    coreLabelBox.appendChild(coreTitle);
+    coreNode.appendChild(coreLabelBox);
+
+    if (primeItem) {
+      coreNode.addEventListener('click', function () {
+        if (typeof onSelect === 'function') onSelect(primeItem);
+      });
+    }
+    skyStage.appendChild(coreNode);
+
+    // 浮动交互气泡 (轻触星点弹出金句微名片)
+    var calloutBubble = document.createElement('div');
+    calloutBubble.className = 'star-callout-bubble is-hidden';
+    skyStage.appendChild(calloutBubble);
+
+    function showBubble(work) {
+      calloutBubble.innerHTML = '';
+      var bTitle = document.createElement('div');
+      bTitle.className = 'bubble-work-title';
+      bTitle.textContent = '《' + work.title + '》';
+
+      var bQuote = document.createElement('div');
+      bQuote.className = 'bubble-work-quote';
+      var sampleQuote = (work.quotes && work.quotes[0]) || work.genre || '千古名篇 · 精神回响';
+      bQuote.textContent = '“' + sampleQuote + '”';
+
+      var bAction = document.createElement('button');
+      bAction.type = 'button';
+      bAction.className = 'bubble-jump-btn';
+      bAction.textContent = '进入作品赏析 →';
+      bAction.addEventListener('click', function (ev) {
+        ev.stopPropagation();
+        if (typeof onSelect === 'function') onSelect(work);
+      });
+
+      calloutBubble.appendChild(bTitle);
+      calloutBubble.appendChild(bQuote);
+      calloutBubble.appendChild(bAction);
+
+      calloutBubble.classList.remove('is-hidden');
+      calloutBubble.classList.add('is-visible');
+    }
+
+    // 渲染环绕作品星宿
+    for (var i = 0; i < displaySatellites.length; i++) {
       (function (w, idx) {
+        var layout = starLayouts[idx] || starLayouts[starLayouts.length - 1];
         var node = document.createElement('div');
-        node.className = 'constellation-star-node';
+        node.className = 'constellation-star-node is-spatial ' + layout.sizeClass + ' pos-' + idx;
+        node.style.top = layout.top;
+        node.style.left = layout.left;
         node.setAttribute('role', 'button');
         node.setAttribute('tabindex', '0');
+        node.setAttribute('data-work-id', w.id);
         node.setAttribute('aria-label', w.title || '诗词');
 
         var starVisual = document.createElement('div');
@@ -400,7 +535,6 @@
 
         var starImg = document.createElement('img');
         starImg.className = 'star-node-img';
-        // 优先使用作品配图，无则回退站点图或星光
         starImg.src = (SuShi.ArtAssets && SuShi.ArtAssets.getPoemScene(w.id)) ||
                       (SuShi.ArtAssets && SuShi.ArtAssets.cosmos && SuShi.ArtAssets.cosmos.planetSecondary) ||
                       './assets/images/cosmos/planet-entry-secondary.webp';
@@ -412,30 +546,101 @@
         starVisual.appendChild(glowRing);
 
         var starText = document.createElement('div');
-        starText.className = 'star-node-text';
+        starText.className = 'star-node-text star-node-pos-' + layout.labelPos;
         var starTitle = document.createElement('div');
         starTitle.className = 'star-node-title';
         starTitle.textContent = '《' + w.title + '》';
         var starGenre = document.createElement('div');
         starGenre.className = 'star-node-genre';
-        starGenre.textContent = (w.genre || '名篇') + (w.time_label ? ' · ' + w.time_label : '');
+        starGenre.textContent = (w.genre || '名篇');
         starText.appendChild(starTitle);
         starText.appendChild(starGenre);
 
         node.appendChild(starVisual);
         node.appendChild(starText);
 
-        node.addEventListener('click', function () {
-          if (typeof onSelect === 'function') {
-            onSelect(w);
+        var hasClickedOnce = false;
+        node.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var allNodes = skyStage.querySelectorAll('.constellation-star-node');
+          for (var a = 0; a < allNodes.length; a++) allNodes[a].classList.remove('is-active');
+          node.classList.add('is-active');
+
+          showBubble(w);
+
+          if (hasClickedOnce) {
+            if (typeof onSelect === 'function') onSelect(w);
+          } else {
+            hasClickedOnce = true;
+            setTimeout(function () { hasClickedOnce = false; }, 2500);
           }
         });
 
-        grid.appendChild(node);
-      })(works[i], i);
+        skyStage.appendChild(node);
+      })(displaySatellites[i], i);
     }
 
-    cluster.appendChild(grid);
+    cluster.appendChild(skyStage);
+
+    // 2. 次级折叠收纳全部作品目录 (保留完整收录作品访问，但绝不侵占首屏视觉)
+    var catalogPanel = document.createElement('div');
+    catalogPanel.className = 'constellation-catalog-panel';
+
+    var catalogToggle = document.createElement('button');
+    catalogToggle.type = 'button';
+    catalogToggle.className = 'constellation-catalog-toggle';
+    catalogToggle.innerHTML = '<span class="catalog-toggle-text">✦ 展开本站全部收录作品 (共 ' + works.length + ' 篇)</span><span class="catalog-toggle-arrow">▾</span>';
+    catalogPanel.appendChild(catalogToggle);
+
+    var catalogList = document.createElement('div');
+    catalogList.className = 'constellation-catalog-list constellation-grid is-collapsed';
+
+    for (var m = 0; m < works.length; m++) {
+      (function (cw) {
+        var row = document.createElement('div');
+        row.className = 'constellation-catalog-item constellation-star-node';
+        row.setAttribute('role', 'button');
+        row.setAttribute('tabindex', '0');
+        row.setAttribute('data-work-id', cw.id);
+
+        var rTitle = document.createElement('span');
+        rTitle.className = 'catalog-item-title star-node-title';
+        rTitle.textContent = '《' + cw.title + '》';
+
+        var rGenre = document.createElement('span');
+        rGenre.className = 'catalog-item-genre star-node-genre';
+        rGenre.textContent = (cw.genre || '诗词') + (cw.time_label ? ' · ' + cw.time_label : '');
+
+        var rArrow = document.createElement('span');
+        rArrow.className = 'catalog-item-arrow';
+        rArrow.textContent = '→';
+
+        row.appendChild(rTitle);
+        row.appendChild(rGenre);
+        row.appendChild(rArrow);
+
+        row.addEventListener('click', function () {
+          if (typeof onSelect === 'function') onSelect(cw);
+        });
+
+        catalogList.appendChild(row);
+      })(works[m]);
+    }
+
+    catalogToggle.addEventListener('click', function () {
+      var isCol = catalogList.classList.contains('is-collapsed');
+      if (isCol) {
+        catalogList.classList.remove('is-collapsed');
+        catalogToggle.querySelector('.catalog-toggle-arrow').textContent = '▴';
+      } else {
+        catalogList.classList.add('is-collapsed');
+        catalogToggle.querySelector('.catalog-toggle-arrow').textContent = '▾';
+      }
+    });
+
+    catalogPanel.appendChild(catalogList);
+    cluster.appendChild(catalogPanel);
+
     return cluster;
   }
 

@@ -42,28 +42,28 @@
     this.group = new THREE.Group();
     this.scene.add(this.group);
 
-    // 1. 低亮度月轮 (圆形平面，微透柔和月白)
-    var moonGeo = new THREE.CircleGeometry(1.2, 32);
+    // 1. 低亮度月轮 (缩小29%退居背景，微透柔和月白，不抢夺中心交互焦点)
+    var moonGeo = new THREE.CircleGeometry(0.85, 32);
     var moonMat = new THREE.MeshBasicMaterial({
       color: 0xf6f1e8,
       transparent: true,
-      opacity: 0.78,
+      opacity: 0.52,
       depthWrite: false
     });
     this.moonMesh = new THREE.Mesh(moonGeo, moonMat);
-    this.moonMesh.position.set(2.8, 2.6, -5);
+    this.moonMesh.position.set(2.6, 2.7, -5.5);
     this.group.add(this.moonMesh);
 
-    // 月晕光环
-    var haloGeo = new THREE.CircleGeometry(2.0, 32);
+    // 月晕光环 (同步缩小30%并降低亮度)
+    var haloGeo = new THREE.CircleGeometry(1.4, 32);
     var haloMat = new THREE.MeshBasicMaterial({
       color: 0xc8a26e,
       transparent: true,
-      opacity: 0.12,
+      opacity: 0.08,
       depthWrite: false
     });
     var haloMesh = new THREE.Mesh(haloGeo, haloMat);
-    haloMesh.position.set(2.8, 2.6, -5.1);
+    haloMesh.position.set(2.6, 2.7, -5.6);
     this.group.add(haloMesh);
 
     // 2. 三层远山剪影 (由浅入深，墨色渐浓)
