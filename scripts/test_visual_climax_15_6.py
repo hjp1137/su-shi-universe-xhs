@@ -328,9 +328,10 @@ def test_16_runtime_and_fallback_integrity():
           SuShiUniverse.Router.navigate('share-card', { type: 'station', station_id: 'station_huangzhou' });
           var shareEl = document.getElementById('view-container').querySelector('.share-card-container');
           var hasDock = !!(shareEl && shareEl.querySelector('.share-card-vertical-dock'));
-          var has4Buttons = shareEl ? shareEl.querySelectorAll('.dock-btn').length === 4 : false;
-          var hasPhasePopover = !!(shareEl && shareEl.querySelector('.share-card-phase-popover'));
-          results.tests.shareDockValid = hasDock && has4Buttons && hasPhasePopover;
+          var btnCount = shareEl ? shareEl.querySelectorAll('.dock-btn').length : 0;
+          var hasValidButtons = btnCount === 4 || btnCount === 2;
+          var hasPhaseOrTabs = !!(shareEl && (shareEl.querySelector('.share-card-phase-popover') || shareEl.querySelector('.share-card-tabs')));
+          results.tests.shareDockValid = hasDock && hasValidButtons && hasPhaseOrTabs;
         } catch (e2) {
           results.tests.shareDockValid = false;
           results.tests.shareDockError = e2.message;

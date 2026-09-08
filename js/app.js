@@ -142,9 +142,28 @@
       console.log('[SuShiUniverse] 运行于离线 H5 预览环境');
     }
 
-    // 初始导航至首页视图
+    // 初始导航至目标视图 (优先支持 URL search 参数，方便自动化测试与单页精准直达)
+    var initialView = 'home';
+    var initialParams = {};
+    try {
+      if (typeof window !== 'undefined' && window.location && window.location.search) {
+        var queryStr = window.location.search.substring(1);
+        var pairs = queryStr.split('&');
+        for (var pi = 0; pi < pairs.length; pi++) {
+          var pair = pairs[pi].split('=');
+          var k = decodeURIComponent(pair[0] || '');
+          var v = decodeURIComponent(pair[1] || '');
+          if (k === 'view') {
+            initialView = v;
+          } else if (k) {
+            initialParams[k] = v;
+          }
+        }
+      }
+    } catch (e) {}
+
     if (Router && typeof Router.navigate === 'function') {
-      Router.navigate('home', {}, true);
+      Router.navigate(initialView, initialParams, true);
     }
   }
 

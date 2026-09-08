@@ -392,7 +392,7 @@
     ctx.fillText(workTitle, width * 0.5, quoteBoxY + 54 + qTextH + 16);
 
     // 5. 东坡式理解 (当代生活启发)
-    var dongpoViewY = quoteBoxY + quoteBoxH + 36;
+    var dongpoViewY = quoteBoxY + quoteBoxH + 32;
     ctx.fillStyle = '#d9b978';
     ctx.font = 'bold 16px ' + FONT_SANS;
     ctx.textAlign = 'left';
@@ -401,12 +401,24 @@
     var dongpoText = vm.dongpo_view || '生活可以有风雨，但不必困在风雨里。放慢步调，把日子安顿好。';
     ctx.fillStyle = '#dcd7c9';
     ctx.font = '18px ' + FONT_SANS;
-    drawWrappedText(ctx, dongpoText, 80, dongpoViewY + 30, width - 160, 32, 4, 'left');
+    var dH = drawWrappedText(ctx, dongpoText, 80, dongpoViewY + 28, width - 160, 32, 4, 'left');
 
-    // 属性与免责提示
+    // 6. 当下微小行动 (消除下半部大片空白，强化行动启发)
+    var actY = dongpoViewY + 28 + dH + 24;
+    ctx.fillStyle = '#82b6a2';
+    ctx.font = 'bold 16px ' + FONT_SANS;
+    ctx.textAlign = 'left';
+    ctx.fillText('当下微小行动', 80, actY);
+
+    var actText = vm.today_action || '试着把手头的事做慢一点，晚饭后出门散步看一看天色。';
+    ctx.fillStyle = '#fbf8ee';
+    ctx.font = '16px ' + FONT_SANS;
+    drawWrappedText(ctx, actText, 80, actY + 26, width - 160, 28, 2, 'left');
+
+    // 属性与免责提示 (贴合底栏上方)
     ctx.fillStyle = 'rgba(244, 240, 230, 0.35)';
     ctx.font = '12px ' + FONT_SANS;
-    ctx.fillText('* 本解读为苏轼宇宙当代生活启发，非古人原话', 80, dongpoViewY + 180);
+    ctx.fillText('* 本解读为苏轼宇宙当代生活启发，非古人原话', 80, height - 116);
 
     drawCardFooter(ctx, width, height, '遇到烦心事，先去东坡那里坐一会儿 · 测测你的站点');
   }
@@ -461,7 +473,7 @@
     ctx.fillText(sourceText, width * 0.5, quoteBoxY + 36 + qTextH + 20);
 
     // 放到今天
-    var viewY = quoteBoxY + quoteBoxH + 45;
+    var viewY = quoteBoxY + quoteBoxH + 34;
     ctx.fillStyle = '#d9b978';
     ctx.font = 'bold 16px ' + FONT_SANS;
     ctx.textAlign = 'left';
@@ -470,10 +482,10 @@
     var dongpoText = vm.dongpo_view || '风雨扑面而来时，越慌乱越容易失足。不让外界动荡打乱呼吸。';
     ctx.fillStyle = '#dcd7c9';
     ctx.font = '18px ' + FONT_SANS;
-    drawWrappedText(ctx, dongpoText, 80, viewY + 30, width - 160, 32, 3, 'left');
+    var vH2 = drawWrappedText(ctx, dongpoText, 80, viewY + 28, width - 160, 32, 3, 'left');
 
     // 今天只做一件小事
-    var actY = viewY + 150;
+    var actY = viewY + 28 + vH2 + 28;
     ctx.fillStyle = '#82b6a2';
     ctx.font = 'bold 16px ' + FONT_SANS;
     ctx.textAlign = 'left';
@@ -482,12 +494,12 @@
     var actText = vm.today_action || '放下眼前解决不了的焦虑，出门走走十分钟。';
     ctx.fillStyle = '#fbf8ee';
     ctx.font = '16px ' + FONT_SANS;
-    drawWrappedText(ctx, actText, 80, actY + 28, width - 160, 28, 2, 'left');
+    drawWrappedText(ctx, actText, 80, actY + 26, width - 160, 28, 2, 'left');
 
-    // 免责标注
+    // 免责标注 (贴合底栏上方)
     ctx.fillStyle = 'rgba(244, 240, 230, 0.35)';
     ctx.font = '12px ' + FONT_SANS;
-    ctx.fillText('* 本解读为苏轼宇宙当代生活启发，非古人原话', 80, actY + 105);
+    ctx.fillText('* 本解读为苏轼宇宙当代生活启发，非古人原话', 80, height - 116);
 
     drawCardFooter(ctx, width, height, '每天一言一事 · 给生活留十分钟的从容');
   }
@@ -549,7 +561,7 @@
     ctx.fillText(workTitle, width * 0.5, quoteBoxY + 36 + qTextH + 16);
 
     // 真实史实简介
-    var factY = quoteBoxY + quoteBoxH + 40;
+    var factY = quoteBoxY + quoteBoxH + 34;
     ctx.fillStyle = '#d9b978';
     ctx.font = 'bold 16px ' + FONT_SANS;
     ctx.textAlign = 'left';
@@ -558,19 +570,38 @@
     var factText = vm.summary_fact || '元丰三年苏轼贬谪黄州团练副使，在此耕作东坡，完成精神重构。';
     ctx.fillStyle = '#dcd7c9';
     ctx.font = '17px ' + FONT_SANS;
-    drawWrappedText(ctx, factText, 80, factY + 28, width - 160, 30, 4, 'left');
+    var fH = drawWrappedText(ctx, factText, 80, factY + 26, width - 160, 30, 3, 'left');
 
     // 现代启示
-    var viewY = factY + 160;
+    var viewY = factY + 26 + fH + 24;
     ctx.fillStyle = '#82b6a2';
     ctx.font = 'bold 16px ' + FONT_SANS;
     ctx.textAlign = 'left';
-    ctx.fillText('这一站的启发', 80, viewY);
+    ctx.fillText('这一站的当代启发', 80, viewY);
 
     var viewText = vm.dongpo_view || '真正的豁达不是没有痛楚，而是在认清人生的风雨后依然深爱日常。';
     ctx.fillStyle = '#dcd7c9';
     ctx.font = '17px ' + FONT_SANS;
-    drawWrappedText(ctx, viewText, 80, viewY + 28, width - 160, 30, 3, 'left');
+    var vH3 = drawWrappedText(ctx, viewText, 80, viewY + 26, width - 160, 30, 3, 'left');
+
+    // 生活践行 (充实下部空间)
+    var actY = viewY + 26 + vH3 + 22;
+    if (actY < height - 160) {
+      ctx.fillStyle = '#e5b263';
+      ctx.font = 'bold 15px ' + FONT_SANS;
+      ctx.textAlign = 'left';
+      ctx.fillText('生活践行', 80, actY);
+
+      var actText = vm.today_action || '如东坡在黄州自修雪堂一般，给今天的自己留片刻清简与专注。';
+      ctx.fillStyle = '#fbf8ee';
+      ctx.font = '15px ' + FONT_SANS;
+      drawWrappedText(ctx, actText, 80, actY + 24, width - 160, 26, 2, 'left');
+    }
+
+    // 免责标注 (贴合底栏上方)
+    ctx.fillStyle = 'rgba(244, 240, 230, 0.35)';
+    ctx.font = '12px ' + FONT_SANS;
+    ctx.fillText('* 本解读为苏轼宇宙当代生活启发，非古人原话', 80, height - 116);
 
     drawCardFooter(ctx, width, height, '九万里风鹏正举 · 人生随处是东坡');
   }

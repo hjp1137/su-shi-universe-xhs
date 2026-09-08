@@ -295,16 +295,97 @@
     }
   });
 
-  // 2. 测试页视图 Quiz (单题单屏、轻反馈推进、确定性评分)
+  // 2. 「东坡人生实验」七幕宇宙微游戏配置 (Experiment Scenes)
+  var EXPERIMENT_SCENES = [
+    {
+      id: 'experiment_01', num: '01', name: '星体靠近',
+      prompt: '自我星体置于中央，直面突如其来的心境扰动',
+      actionText: '拖动你的星体靠近目标，或直接轻触星核',
+      targets: [
+        { key: 'target_a', label: '骤变星', icon: '✦', desc: '工作或生活里突如其来的临时变动' },
+        { key: 'target_b', label: '阻滞星', icon: '◆', desc: '付出了很多心力，事情却没能按预期推进' },
+        { key: 'target_c', label: '寒语星', icon: '❄', desc: '别人无意间的一句挑剔或冷淡反馈' },
+        { key: 'target_d', label: '倦怠星', icon: '☁', desc: '其实没发生什么，但就是觉得身上没劲' }
+      ]
+    },
+    {
+      id: 'experiment_02', num: '02', name: '行星撞击',
+      prompt: '一颗压力流星正沿轨道逼近，如何应对这次突发撞击？',
+      actionText: '选择你的轨道应激对策',
+      targets: [
+        { key: 'action_a', label: '反复推演', icon: '⟳', desc: '在心里反复推演各种最坏的结果' },
+        { key: 'action_b', label: '遁入暗区', icon: '☽', desc: '想找个没人的地方彻底安静呆着' },
+        { key: 'action_c', label: '正面硬撑', icon: '▲', desc: '逼着自己硬撑着继续做，直到做完为止' },
+        { key: 'action_d', label: '变轨释怀', icon: '♨', desc: '先不管了，吃一顿好吃的或者出去转转' }
+      ]
+    },
+    {
+      id: 'experiment_03', num: '03', name: '星体聚合',
+      prompt: '眼前漂浮着三颗微光星宿，偷得半日清闲时分',
+      actionText: '凝聚你当下最渴望的归宿',
+      targets: [
+        { key: 'merge_a', label: '休眠黑洞', icon: '◉', desc: '拉上窗帘，不受打扰地昏天黑地睡一觉' },
+        { key: 'merge_b', label: '专注光团', icon: '☀', desc: '专心做一件完全出于喜欢、不计产出的事' },
+        { key: 'merge_c', label: '游离星尘', icon: '◌', desc: '出门漫无目的地走走，看看树、吹吹风' },
+        { key: 'merge_d', label: '双星共振', icon: '❖', desc: '找个完全懂你的朋友，毫无负担地聊聊天' }
+      ]
+    },
+    {
+      id: 'experiment_04', num: '04', name: '星体分裂',
+      prompt: '星核承受着外界评议过载，如何释放内部张力？',
+      actionText: '释放星体张力，重塑心境形态',
+      targets: [
+        { key: 'split_a', label: '向内收缩', icon: '◎', desc: '第一反应是反思自己哪里做得不够周全' },
+        { key: 'split_b', label: '辐射呼叫', icon: '⚡', desc: '心里很委屈，想立刻找信任的人把话说清楚' },
+        { key: 'split_c', label: '引力钝化', desc: '懒得解释，时间久了大家自然知道我是什么人', icon: '⏳' },
+        { key: 'split_d', label: '幽默消解', desc: '心里暗暗吐槽，甚至觉得整件事有点荒诞好笑', icon: '☆' }
+      ]
+    },
+    {
+      id: 'experiment_05', num: '05', name: '引力选择',
+      prompt: '宇宙深处有不同引力场呼唤，你最向往的立足锚点是？',
+      actionText: '将星体泊入你认同的引力场',
+      targets: [
+        { key: 'gravity_a', label: '独省星云', icon: '✧', desc: '拥有完全属于自己的安全感与平静' },
+        { key: 'gravity_b', label: '荣耀星核', icon: '♕', desc: '在自己热爱的领域做成一件拿得出手的大事' },
+        { key: 'gravity_c', label: '旷达苍穹', icon: '☁', desc: '不管经历什么，都能有随时重新出发的底气' },
+        { key: 'gravity_d', label: '烟火星流', icon: '✦', desc: '家人朋友健康平安，每天能吃好睡踏实' }
+      ]
+    },
+    {
+      id: 'experiment_06', num: '06', name: '星轨穿越',
+      prompt: '前方星雾弥漫、轨道分岔，行进至关键十字星门',
+      actionText: '确定你的穿越航线',
+      targets: [
+        { key: 'cross_a', label: '逆风破浪', icon: '▲', desc: '即使很累，也想再搏一把看看上限在哪里' },
+        { key: 'cross_b', label: '顺流滑行', icon: '〜', desc: '累了就停，好了就走，不再跟自己死磕' },
+        { key: 'cross_c', label: '暂泊星湾', icon: '⚓', desc: '先稳住眼下的生活，不轻易做冒险的变动' },
+        { key: 'cross_d', label: '开拓新径', icon: '↗', desc: '很想换个环境或赛道，哪怕从头开始' }
+      ]
+    },
+    {
+      id: 'experiment_07', num: '07', name: '漂流星救援',
+      prompt: '旅途最后一程，偶遇一颗偏离轨道的流浪微星',
+      actionText: '做出东坡式的人间终极回应',
+      targets: [
+        { key: 'tether_a', label: '同舟相挽', icon: '♥', desc: '只要我还有余力，总想尽力多帮对方一把' },
+        { key: 'tether_b', label: '各自奔赴', icon: '→', desc: '每个人有各自的命途，尊重界限是最好的善意' },
+        { key: 'tether_c', label: '平淡对视', icon: '⊙', desc: '默默陪伴在旁，不强行指点也不过分干预' },
+        { key: 'tether_d', label: '分享火种', icon: '☼', desc: '用幽默或一件小事逗对方笑一笑，这就够了' }
+      ]
+    }
+  ];
+
+  // 2. 「东坡人生实验」视图 Quiz (七幕宇宙微游戏、双通道交互、返航星门、确定性评分)
   Router.register('quiz', {
     render: function () {
       var wrap = document.createElement('div');
-      wrap.className = 'view-wrapper quiz-container';
+      wrap.className = 'view-wrapper quiz-container experiment-view';
 
       var questions = (Data.quiz && Data.quiz.questions) || [];
-      var total = questions.length;
-      if (total === 0) {
-        wrap.appendChild(UI.createEmptyState('测试题库正在准备中...'));
+      var total = EXPERIMENT_SCENES.length;
+      if (total === 0 || !questions || questions.length === 0) {
+        wrap.appendChild(UI.createEmptyState('宇宙实验星象正在校准中...'));
         return wrap;
       }
 
@@ -312,59 +393,110 @@
       var session = QuizModule ? QuizModule.createQuizSession() : null;
       var isTransitioning = false;
 
-      // 顶部导航与步进信息
+      // 1. 顶部控制栏 (宇宙实验标题 + 七星轨道进度 + 返航星门退出按钮)
       var topBar = document.createElement('div');
-      topBar.className = 'quiz-top-bar';
+      topBar.className = 'quiz-top-bar exp-top-bar';
 
-      var stepInfo = document.createElement('div');
-      stepInfo.className = 'quiz-step-info';
+      var infoBox = document.createElement('div');
+      infoBox.className = 'exp-header-info';
+      var mainTitle = document.createElement('div');
+      mainTitle.className = 'exp-main-title';
+      mainTitle.textContent = '东坡人生实验';
+      var subTitle = document.createElement('div');
+      subTitle.className = 'exp-main-subtitle';
+      subTitle.textContent = '七次宇宙选择，看看你正走到东坡人生的哪一站';
+      infoBox.appendChild(mainTitle);
+      infoBox.appendChild(subTitle);
+      topBar.appendChild(infoBox);
 
-      var actionsBox = document.createElement('div');
-      actionsBox.className = 'quiz-top-actions';
-
-      var prevBtn = document.createElement('button');
-      prevBtn.className = 'quiz-nav-btn quiz-prev-btn';
-      prevBtn.type = 'button';
-      prevBtn.textContent = '上一题';
-
-      var resetBtn = document.createElement('button');
-      resetBtn.className = 'quiz-nav-btn quiz-reset-btn';
-      resetBtn.type = 'button';
-      resetBtn.textContent = '重新测';
-
-      actionsBox.appendChild(prevBtn);
-      actionsBox.appendChild(resetBtn);
-      topBar.appendChild(stepInfo);
-      topBar.appendChild(actionsBox);
+      // 返航星门 (中途退出入口，绝不生成伪结果，平滑返回上一程)
+      var exitGate = document.createElement('button');
+      exitGate.type = 'button';
+      exitGate.className = 'exp-exit-gate';
+      exitGate.setAttribute('aria-label', '返航星门 · 离开实验');
+      exitGate.innerHTML = '<span class="exit-gate-icon">✦</span><span class="exit-gate-text">返航星门</span>';
+      exitGate.addEventListener('click', function () {
+        if (session) session.reset();
+        Router.back();
+      });
+      topBar.appendChild(exitGate);
       wrap.appendChild(topBar);
 
-      // 细线平滑进度条
-      var progressTrack = document.createElement('div');
-      progressTrack.className = 'quiz-progress-track';
-      var progressFill = document.createElement('div');
-      progressFill.className = 'quiz-progress-fill';
-      progressTrack.appendChild(progressFill);
-      wrap.appendChild(progressTrack);
+      // 七星轨道进度条 (● ● ◉ ○ ○ ○ ○)
+      var trackWrap = document.createElement('div');
+      trackWrap.className = 'exp-orbit-track-wrap quiz-progress-track';
+      var orbitDots = document.createElement('div');
+      orbitDots.className = 'exp-orbit-dots';
+      trackWrap.appendChild(orbitDots);
+      wrap.appendChild(trackWrap);
 
-      // 短引导文案
-      var introTip = document.createElement('div');
-      introTip.className = 'quiz-intro-tip';
-      introTip.textContent = '最近的你，像东坡人生里的哪一段路？';
-      wrap.appendChild(introTip);
+      // 当前幕提示卡
+      var sceneIntro = document.createElement('div');
+      sceneIntro.className = 'exp-scene-intro';
+      wrap.appendChild(sceneIntro);
 
-      // 动态问答主舞台
+      // 2. 动态实验主舞台 (互动微游戏核心场景)
       var stage = document.createElement('div');
-      stage.className = 'quiz-stage';
+      stage.className = 'quiz-stage exp-cosmic-stage';
       wrap.appendChild(stage);
 
-      function renderQuestion() {
+      // 3. 底部快捷双通道选择器 (支持低性能与点击Fallback，同时兼容旧测试类名)
+      var choiceGrid = document.createElement('div');
+      choiceGrid.className = 'exp-choice-grid quiz-option-list';
+      wrap.appendChild(choiceGrid);
+
+      // 4. 底部辅助操作条 (上一幕 / 重新测)
+      var bottomBar = document.createElement('div');
+      bottomBar.className = 'exp-bottom-bar';
+
+      var prevBtn = document.createElement('button');
+      prevBtn.type = 'button';
+      prevBtn.className = 'exp-nav-btn quiz-nav-btn quiz-prev-btn';
+      prevBtn.innerHTML = '← 回退上一幕';
+
+      var resetBtn = document.createElement('button');
+      resetBtn.type = 'button';
+      resetBtn.className = 'exp-nav-btn quiz-nav-btn quiz-reset-btn';
+      resetBtn.innerHTML = '重置实验';
+
+      bottomBar.appendChild(prevBtn);
+      bottomBar.appendChild(resetBtn);
+      wrap.appendChild(bottomBar);
+
+      function renderExperiment() {
         var idx = session ? session.getCurrentIndex() : 0;
-        var currentQ = questions[idx];
+        var scene = EXPERIMENT_SCENES[idx] || EXPERIMENT_SCENES[0];
+        var currentQ = questions[idx] || { id: 'quiz_q0' + (idx + 1) };
         isTransitioning = false;
 
-        var orderNum = idx + 1;
-        stepInfo.textContent = '第 ' + orderNum + ' 题 · 共 ' + total + ' 题';
-        progressFill.style.width = ((orderNum / total) * 100) + '%';
+        // 刷新七星轨道点状态
+        orbitDots.innerHTML = '';
+        for (var d = 0; d < total; d++) {
+          var dot = document.createElement('span');
+          dot.className = 'exp-dot';
+          if (d < idx) {
+            dot.className += ' is-passed';
+          } else if (d === idx) {
+            dot.className += ' is-current';
+          }
+          orbitDots.appendChild(dot);
+        }
+
+        // 刷新当前幕场景文案
+        sceneIntro.innerHTML = '';
+        var badge = document.createElement('div');
+        badge.className = 'exp-scene-badge';
+        badge.textContent = '宇宙实验 0' + (idx + 1) + ' · ' + scene.name;
+        var promptEl = document.createElement('h2');
+        promptEl.className = 'exp-scene-prompt quiz-q-title';
+        promptEl.textContent = scene.prompt;
+        var guideEl = document.createElement('div');
+        guideEl.className = 'exp-scene-guide';
+        guideEl.textContent = scene.actionText;
+
+        sceneIntro.appendChild(badge);
+        sceneIntro.appendChild(promptEl);
+        sceneIntro.appendChild(guideEl);
 
         if (idx > 0) {
           prevBtn.style.visibility = 'visible';
@@ -374,99 +506,220 @@
           prevBtn.style.opacity = '0';
         }
 
-        while (stage.firstChild) {
-          stage.removeChild(stage.firstChild);
+        // 清理并构建主舞台
+        stage.innerHTML = '';
+
+        var stageBox = document.createElement('div');
+        stageBox.className = 'exp-stage-box exp-scene-' + scene.num;
+
+        // 中心自我星体 (Soul Star)
+        var soulStar = document.createElement('div');
+        soulStar.className = 'exp-soul-star';
+        soulStar.innerHTML = '<span class="soul-core"></span><span class="soul-halo"></span><span class="soul-label">心识</span>';
+        stageBox.appendChild(soulStar);
+
+        // 4 颗环境目标星体 / 引力场
+        var targetNodes = [];
+        var targets = scene.targets || [];
+        var posClasses = ['target-top-left', 'target-top-right', 'target-bottom-left', 'target-bottom-right'];
+
+        for (var t = 0; t < targets.length; t++) {
+          (function (tItem, tIndex) {
+            var orb = document.createElement('div');
+            orb.className = 'exp-target-orb ' + posClasses[tIndex];
+            orb.setAttribute('data-target-key', tItem.key);
+            orb.innerHTML = '<span class="orb-icon">' + (tItem.icon || '✦') + '</span>' +
+                            '<span class="orb-name">' + tItem.label + '</span>';
+
+            orb.addEventListener('click', function () {
+              triggerOutcome(tItem, currentQ.id);
+            });
+            stageBox.appendChild(orb);
+            targetNodes.push({ el: orb, item: tItem });
+          })(targets[t], t);
         }
 
-        // 题目卡片 (四大语义卡片：叙事解读卡)
-        var qCard = document.createElement('div');
-        qCard.className = 'quiz-question-card ink-card-narrative';
-        var qTitle = document.createElement('h2');
-        qTitle.className = 'quiz-q-title';
-        qTitle.textContent = currentQ.title;
-        qCard.appendChild(qTitle);
-        stage.appendChild(qCard);
+        // 拖拽自我星体互动支持
+        var isDragging = false;
+        var startX = 0, startY = 0;
 
-        // 选项列表
-        var optList = document.createElement('div');
-        optList.className = 'quiz-option-list';
+        function onPointerStart(e) {
+          if (isTransitioning) return;
+          isDragging = true;
+          var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+          var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+          startX = clientX;
+          startY = clientY;
+          soulStar.classList.add('is-dragging');
+        }
 
+        function onPointerMove(e) {
+          if (!isDragging || isTransitioning) return;
+          var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+          var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+          var dx = clientX - startX;
+          var dy = clientY - startY;
+          soulStar.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
+
+          // 检测距离吸附高光
+          for (var i = 0; i < targetNodes.length; i++) {
+            var rect = targetNodes[i].el.getBoundingClientRect();
+            var orbCenterX = rect.left + rect.width * 0.5;
+            var orbCenterY = rect.top + rect.height * 0.5;
+            var dist = Math.hypot(clientX - orbCenterX, clientY - orbCenterY);
+            if (dist < 55) {
+              targetNodes[i].el.classList.add('is-hovered');
+            } else {
+              targetNodes[i].el.classList.remove('is-hovered');
+            }
+          }
+        }
+
+        function onPointerEnd(e) {
+          if (!isDragging) return;
+          isDragging = false;
+          soulStar.classList.remove('is-dragging');
+
+          var clientX = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0].clientX : (e.clientX || 0);
+          var clientY = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0].clientY : (e.clientY || 0);
+
+          var chosen = null;
+          var minDist = 65;
+          for (var i = 0; i < targetNodes.length; i++) {
+            var rect = targetNodes[i].el.getBoundingClientRect();
+            var orbCenterX = rect.left + rect.width * 0.5;
+            var orbCenterY = rect.top + rect.height * 0.5;
+            var dist = Math.hypot(clientX - orbCenterX, clientY - orbCenterY);
+            if (dist < minDist) {
+              minDist = dist;
+              chosen = targetNodes[i].item;
+            }
+            targetNodes[i].el.classList.remove('is-hovered');
+          }
+
+          if (chosen) {
+            triggerOutcome(chosen, currentQ.id);
+          } else {
+            soulStar.style.transform = 'translate(0px, 0px)';
+          }
+        }
+
+        soulStar.addEventListener('mousedown', onPointerStart);
+        document.addEventListener('mousemove', onPointerMove);
+        document.addEventListener('mouseup', onPointerEnd);
+        soulStar.addEventListener('touchstart', onPointerStart, { passive: true });
+        document.addEventListener('touchmove', onPointerMove, { passive: true });
+        document.addEventListener('touchend', onPointerEnd);
+
+        stage.appendChild(stageBox);
+
+        // 刷新底部快捷双通道选项卡
+        choiceGrid.innerHTML = '';
         var selectedOptId = session ? session.getSelectedOption(currentQ.id) : null;
-        var letters = ['A', 'B', 'C', 'D', 'E'];
-        var options = currentQ.options || [];
 
-        for (var i = 0; i < options.length; i++) {
-          (function (opt, optIndex) {
-            var item = document.createElement('div');
-            item.className = 'quiz-option-item';
-            item.setAttribute('role', 'button');
-            item.setAttribute('tabindex', '0');
+        for (var c = 0; c < targets.length; c++) {
+          (function (targetItem, cIndex) {
+            var card = document.createElement('div');
+            card.className = 'exp-choice-card quiz-option-item';
+            card.setAttribute('role', 'button');
+            card.setAttribute('tabindex', '0');
 
-            if (selectedOptId === opt.id) {
-              item.classList.add('is-selected');
+            var mappedOptId = (QuizModule && QuizModule.mapExperimentOutcome) ?
+                              QuizModule.mapExperimentOutcome(scene.id, targetItem.key) :
+                              (currentQ.options && currentQ.options[cIndex] ? currentQ.options[cIndex].id : 'opt_' + (idx + 1) + 'a');
+
+            if (selectedOptId === mappedOptId) {
+              card.classList.add('is-selected');
             }
 
-            var badge = document.createElement('div');
-            badge.className = 'quiz-opt-badge';
-            badge.textContent = letters[optIndex] || String(optIndex + 1);
-            item.appendChild(badge);
+            var iconTag = document.createElement('span');
+            iconTag.className = 'exp-choice-icon';
+            iconTag.textContent = targetItem.icon || '✦';
 
-            var txt = document.createElement('div');
-            txt.className = 'quiz-opt-text';
-            txt.textContent = opt.text;
-            item.appendChild(txt);
+            var contentBox = document.createElement('div');
+            contentBox.className = 'exp-choice-content';
+            var nameEl = document.createElement('div');
+            nameEl.className = 'exp-choice-name';
+            nameEl.textContent = targetItem.label;
+            var descEl = document.createElement('div');
+            descEl.className = 'exp-choice-desc quiz-opt-text';
+            descEl.textContent = targetItem.desc;
 
-            item.addEventListener('click', function () {
-              if (isTransitioning) return;
-              isTransitioning = true;
+            contentBox.appendChild(nameEl);
+            contentBox.appendChild(descEl);
+            card.appendChild(iconTag);
+            card.appendChild(contentBox);
 
-              var allItems = optList.querySelectorAll('.quiz-option-item');
-              for (var a = 0; a < allItems.length; a++) {
-                allItems[a].classList.remove('is-selected');
-              }
-              item.classList.add('is-selected');
-
-              if (session) {
-                session.selectOption(currentQ.id, opt.id);
-              }
-
-              var unlockTimer = setTimeout(function () {
-                isTransitioning = false;
-              }, 1200);
-
-              setTimeout(function () {
-                clearTimeout(unlockTimer);
-                if (idx < total - 1) {
-                  if (session) session.goNext(total);
-                  renderQuestion();
-                } else {
-                  showCalculatingState();
-                }
-              }, 220);
+            card.addEventListener('click', function () {
+              triggerOutcome(targetItem, currentQ.id);
             });
 
-            optList.appendChild(item);
-          })(options[i], i);
+            choiceGrid.appendChild(card);
+          })(targets[c], c);
+        }
+      }
+
+      function triggerOutcome(targetItem, qId) {
+        if (isTransitioning) return;
+        isTransitioning = true;
+
+        var unlockTimer = setTimeout(function () {
+          isTransitioning = false;
+        }, 1200);
+
+        var idx = session ? session.getCurrentIndex() : 0;
+        var scene = EXPERIMENT_SCENES[idx];
+        var mappedOptId = (QuizModule && QuizModule.mapExperimentOutcome) ?
+                          QuizModule.mapExperimentOutcome(scene.id, targetItem.key) :
+                          'opt_' + (idx + 1) + 'a';
+
+        if (session) {
+          session.selectOption(qId, mappedOptId);
         }
 
-        stage.appendChild(optList);
+        // 播放聚敛星辉反馈
+        var activeOrb = stage.querySelector('[data-target-key="' + targetItem.key + '"]');
+        if (activeOrb) activeOrb.classList.add('is-selected');
+
+        var allCards = choiceGrid.querySelectorAll('.exp-choice-card');
+        for (var c = 0; c < allCards.length; c++) {
+          allCards[c].classList.remove('is-selected');
+        }
+
+        setTimeout(function () {
+          clearTimeout(unlockTimer);
+          if (idx < total - 1) {
+            if (session) session.goNext(total);
+            renderExperiment();
+          } else {
+            showCalculatingState();
+          }
+        }, 260);
       }
 
       function showCalculatingState() {
-        while (stage.firstChild) {
-          stage.removeChild(stage.firstChild);
+        while (wrap.firstChild) {
+          wrap.removeChild(wrap.firstChild);
         }
         var calcBox = document.createElement('div');
-        calcBox.className = 'quiz-calc-box';
+        calcBox.className = 'quiz-calc-box exp-calc-box';
+
+        var starFlow = document.createElement('div');
+        starFlow.className = 'exp-calc-star-flow';
+        starFlow.innerHTML = '<span class="calc-pulse-star">✦</span>';
+
         var calcTitle = document.createElement('div');
         calcTitle.className = 'quiz-calc-title';
-        calcTitle.textContent = '正在为你寻觅东坡那一站...';
+        calcTitle.textContent = '正在汇聚七幕星轨能量，寻觅东坡那一站...';
+
         var calcSub = document.createElement('div');
         calcSub.className = 'quiz-calc-sub';
         calcSub.textContent = '莫听穿林打叶声，何妨吟啸且徐行';
+
+        calcBox.appendChild(starFlow);
         calcBox.appendChild(calcTitle);
         calcBox.appendChild(calcSub);
-        stage.appendChild(calcBox);
+        wrap.appendChild(calcBox);
 
         var result = QuizModule ? session.calculateResult(Data.quiz, Data.moods) : null;
         if (!result) {
@@ -487,14 +740,14 @@
             mood_id: result.mood_id,
             result_id: result.result_id
           });
-        }, 250);
+        }, 300);
       }
 
       prevBtn.addEventListener('click', function () {
         if (isTransitioning) return;
         if (session && session.canGoPrevious()) {
           session.goPrevious();
-          renderQuestion();
+          renderExperiment();
         }
       });
 
@@ -502,11 +755,11 @@
         if (isTransitioning) return;
         if (session) {
           session.reset();
-          renderQuestion();
+          renderExperiment();
         }
       });
 
-      renderQuestion();
+      renderExperiment();
       return wrap;
     }
   });
@@ -565,10 +818,11 @@
       wrap.className = 'view-wrapper result-narrative-container';
       wrap.setAttribute('data-station-id', station.id || 'station_huangzhou');
 
-      // 顶部首屏轻量上一程
-      wrap.appendChild(UI.createBackPathButton('← 上一程', function () {
-        Router.back();
-      }));
+      // 顶部首屏轻量上一程 (统一返程星轨组件)
+      var backRail = (UI && typeof UI.createCosmicBackRail === 'function') ?
+                     UI.createCosmicBackRail('上一程', function () { Router.back(); }) :
+                     UI.createBackPathButton('上一程', function () { Router.back(); });
+      wrap.appendChild(backRail);
 
       // --- 第 1 层：你到了哪里？ (结果揭晓卡) ---
       var heroCard = document.createElement('div');
@@ -878,11 +1132,21 @@
         'pos-center-end'
       ];
 
-      // 轻量浮层抽屉 (Quick Sheet)
-      var sheetMask = document.createElement('div');
-      sheetMask.className = 'universe-sheet-mask';
-      var sheetBox = document.createElement('div');
-      sheetBox.className = 'universe-quick-sheet';
+      // 轻量浮层抽屉 (Quick Sheet: 独立挂载于 document.body 确保任何滚动位置 100% 居当前视口滑入)
+      var sheetMask = document.getElementById('universe-sheet-mask');
+      if (!sheetMask) {
+        sheetMask = document.createElement('div');
+        sheetMask.id = 'universe-sheet-mask';
+        sheetMask.className = 'universe-sheet-mask';
+        document.body.appendChild(sheetMask);
+      }
+      var sheetBox = document.getElementById('universe-quick-sheet');
+      if (!sheetBox) {
+        sheetBox = document.createElement('div');
+        sheetBox.id = 'universe-quick-sheet';
+        sheetBox.className = 'universe-quick-sheet';
+        document.body.appendChild(sheetBox);
+      }
 
       function closeQuickSheet() {
         sheetMask.classList.remove('is-open');
@@ -990,8 +1254,6 @@
       }
 
       sheetMask.addEventListener('click', closeQuickSheet);
-      wrap.appendChild(sheetMask);
-      wrap.appendChild(sheetBox);
 
       var rhythmMap = {
         'station_meishan': 'rhythm-meishan',
@@ -1146,7 +1408,10 @@
       setTimeout(function () {
         var container = document.getElementById('view-container');
         if (!container) return;
-        if (params.highlight_station_id && targetStationEl) {
+        if (params.open_station_id) {
+          var openSt = Data.getStationById(params.open_station_id);
+          if (openSt) openQuickSheet(openSt);
+        } else if (params.highlight_station_id && targetStationEl) {
           targetStationEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
         } else if (lastUniverseScrollTop > 0) {
           container.scrollTop = lastUniverseScrollTop;
@@ -1162,6 +1427,10 @@
         } catch (e) {}
         activeUniverseObserver = null;
       }
+      var mask = document.getElementById('universe-sheet-mask');
+      if (mask && mask.parentNode) mask.parentNode.removeChild(mask);
+      var box = document.getElementById('universe-quick-sheet');
+      if (box && box.parentNode) box.parentNode.removeChild(box);
     }
   });
 
@@ -1174,10 +1443,11 @@
       var wrap = document.createElement('div');
       wrap.className = 'view-wrapper station-detail-container';
 
-      // 顶部首屏轻量上一程
-      wrap.appendChild(UI.createBackPathButton('← 上一程', function () {
-        Router.back();
-      }));
+      // 顶部首屏轻量上一程 (统一返程星轨组件)
+      var backRail = (UI && typeof UI.createCosmicBackRail === 'function') ?
+                     UI.createCosmicBackRail('上一程', function () { Router.back(); }) :
+                     UI.createBackPathButton('上一程', function () { Router.back(); });
+      wrap.appendChild(backRail);
 
       if (!station) {
         wrap.appendChild(UI.createEmptyState('这一页暂时被江雾遮住了', '未找到该站点记录，不妨回到宇宙生命线重新探索。', '返回生命线', function () {
@@ -1239,98 +1509,135 @@
       var scrollContainer = document.createElement('div');
       scrollContainer.className = 'station-epic-scroll';
 
-      // 第一章：东坡为什么来到这里 (历史现场)
+      // 第一章：东坡为什么来到这里 (历史现场 - 时间切片轨道，去大外框)
       var chap1 = document.createElement('div');
-      chap1.className = 'station-chapter-box station-chapter-1 chapter-history';
+      chap1.className = 'station-chapter-box station-chapter-1 chapter-history station-chapter-timeline';
       var fBadge = document.createElement('div');
       fBadge.className = 'station-chapter-badge';
       fBadge.textContent = '第一章 · 历史现场 · 东坡为什么来到这里';
       var fTitle = document.createElement('h3');
       fTitle.className = 'station-chapter-title';
       fTitle.textContent = (station.place || '') + ' · 当时发生了什么';
+      
+      var fTrack = document.createElement('div');
+      fTrack.className = 'history-slice-track';
+      var fNode = document.createElement('div');
+      fNode.className = 'history-slice-node';
+      var fTime = document.createElement('span');
+      fTime.className = 'history-slice-time';
+      fTime.textContent = (station.time_label || '') + ' · ' + (station.place || '');
       var fBody = document.createElement('p');
-      fBody.className = 'station-chapter-body';
+      fBody.className = 'station-chapter-body history-slice-body';
       fBody.textContent = station.summary_fact;
+      fNode.appendChild(fTime);
+      fNode.appendChild(fBody);
+      fTrack.appendChild(fNode);
+
       chap1.appendChild(fBadge);
       chap1.appendChild(fTitle);
-      chap1.appendChild(fBody);
+      chap1.appendChild(fTrack);
       scrollContainer.appendChild(chap1);
 
-      // 第二章：他在这里怎样生活 (日常践行与行走)
+      // 第二章：他在这里怎样生活 (生活实录 - 星轨脉络流线)
       var chap2 = document.createElement('div');
-      chap2.className = 'station-chapter-box station-chapter-2 chapter-life';
+      chap2.className = 'station-chapter-box station-chapter-2 chapter-life station-chapter-orbit';
       var sBadge = document.createElement('div');
       sBadge.className = 'station-chapter-badge';
       sBadge.textContent = '第二章 · 生活实录 · 他在这里怎样度过';
       var sTitle = document.createElement('h3');
       sTitle.className = 'station-chapter-title';
       sTitle.textContent = '日常践行与生命重构';
+      
+      var sStream = document.createElement('div');
+      sStream.className = 'life-orbit-stream';
       var sBody = document.createElement('p');
-      sBody.className = 'station-chapter-body';
+      sBody.className = 'station-chapter-body life-orbit-body';
       sBody.textContent = station.summary_story;
+      sStream.appendChild(sBody);
+
       chap2.appendChild(sBadge);
       chap2.appendChild(sTitle);
-      chap2.appendChild(sBody);
+      chap2.appendChild(sStream);
       scrollContainer.appendChild(chap2);
 
-      // 第三章：代表作品与本站诗词星群
+      // 第三章：代表作品与本站诗词星群 (以精神星核为中心的交互星群)
       var chap3 = document.createElement('div');
-      chap3.className = 'station-chapter-box station-chapter-3 chapter-works';
+      chap3.className = 'station-chapter-box station-chapter-3 chapter-works station-chapter-constellation';
       var wBadge = document.createElement('div');
       wBadge.className = 'station-chapter-badge';
       wBadge.textContent = '第三章 · 诗词星群 · 这一站的精神星宿';
       chap3.appendChild(wBadge);
 
+      var constellationBox = document.createElement('div');
+      constellationBox.className = 'station-star-cluster constellation-cosmos-box';
+
       var quoteId = (station.quote_ids && station.quote_ids[0]) || '';
+      var primeWorkObj = null;
+      var primeQuoteObj = null;
       if (quoteId) {
-        var quoteObj = Data.getQuoteById(quoteId);
-        if (quoteObj) {
-          var workObj = quoteObj.work_id ? Data.getWorkById(quoteObj.work_id) : null;
-          var wTitle = workObj ? ('《' + workObj.title + '》') : '《东坡诗选》';
-          var qCard = document.createElement('div');
-          qCard.className = workObj ? 'station-prime-work-card station-work-clickable is-main-star' : 'station-prime-work-card is-main-star';
-          var qPrimeTag = document.createElement('span');
-          qPrimeTag.className = 'station-prime-tag is-main-star';
-          qPrimeTag.textContent = '代表名作主星';
-          qCard.appendChild(qPrimeTag);
-          qCard.appendChild(UI.createQuoteBlock(quoteObj.text, wTitle));
-          if (workObj) {
-            var hint = document.createElement('div');
-            hint.className = 'station-work-more-hint';
-            hint.textContent = '进入阅读诗词全文与创作现场 →';
-            qCard.appendChild(hint);
-            (function (targetWorkId, currentStationId) {
-              qCard.addEventListener('click', function () {
-                Router.navigate('work', { work_id: targetWorkId, from_station_id: currentStationId });
-              });
-            })(workObj.id, station.id);
-          }
-          chap3.appendChild(qCard);
+        primeQuoteObj = Data.getQuoteById(quoteId);
+        if (primeQuoteObj && primeQuoteObj.work_id) {
+          primeWorkObj = Data.getWorkById(primeQuoteObj.work_id);
         }
       }
 
-      var stationWorkIds = station.work_ids || [];
-      if (stationWorkIds.length > 0) {
-        var workList = [];
-        for (var wIdx = 0; wIdx < stationWorkIds.length; wIdx++) {
-          var otherWork = Data.getWorkById(stationWorkIds[wIdx]);
-          if (otherWork) {
-            workList.push(otherWork);
-          }
-        }
-        if (workList.length > 0) {
-          var cluster = UI.createConstellationGroup(workList, function (targetWork) {
-            Router.navigate('work', { work_id: targetWork.id, from_station_id: station.id });
+      // 核心精神星核
+      var coreStar = document.createElement('div');
+      coreStar.className = 'station-prime-work-card constellation-core-star is-main-star';
+      var coreTag = document.createElement('span');
+      coreTag.className = 'station-prime-tag core-star-tag is-main-star';
+      coreTag.textContent = '✦ 精神星核';
+      var coreTitleText = primeWorkObj ? ('《' + primeWorkObj.title + '》') : (primeQuoteObj ? '《代表作》' : '东坡精神星核');
+      var coreQuoteText = primeQuoteObj ? primeQuoteObj.text : (station.theme || '');
+      coreStar.appendChild(coreTag);
+      coreStar.appendChild(UI.createQuoteBlock(coreQuoteText, coreTitleText));
+
+      if (primeWorkObj) {
+        var hint = document.createElement('div');
+        hint.className = 'station-work-more-hint core-star-hint';
+        hint.textContent = '进入精神星核现场与全文 →';
+        coreStar.appendChild(hint);
+        (function (targetWorkId, currentStationId) {
+          coreStar.addEventListener('click', function () {
+            Router.navigate('work', { work_id: targetWorkId, from_station_id: currentStationId });
           });
-          cluster.className = cluster.className + ' station-star-cluster';
-          chap3.appendChild(cluster);
+        })(primeWorkObj.id, station.id);
+      }
+      constellationBox.appendChild(coreStar);
+
+      // 环绕次级作品星 (连线与可点击星点)
+      var stationWorkIds = station.work_ids || [];
+      var subWorks = [];
+      for (var wIdx = 0; wIdx < stationWorkIds.length; wIdx++) {
+        var otherWork = Data.getWorkById(stationWorkIds[wIdx]);
+        if (otherWork && (!primeWorkObj || otherWork.id !== primeWorkObj.id)) {
+          subWorks.push(otherWork);
         }
       }
+
+      if (subWorks.length > 0) {
+        var satellitesWrap = document.createElement('div');
+        satellitesWrap.className = 'constellation-satellites-orbit';
+        var satTitle = document.createElement('div');
+        satTitle.className = 'satellites-orbit-title';
+        satTitle.textContent = '环绕作品星宿 · 点击跃迁';
+        satellitesWrap.appendChild(satTitle);
+
+        if (UI && typeof UI.createConstellationGroup === 'function') {
+          var clusterGroup = UI.createConstellationGroup(subWorks, function (swork) {
+            Router.navigate('work', { work_id: swork.id, from_station_id: station.id });
+          });
+          satellitesWrap.appendChild(clusterGroup);
+        }
+        constellationBox.appendChild(satellitesWrap);
+      }
+
+      chap3.appendChild(constellationBox);
       scrollContainer.appendChild(chap3);
 
-      // 第四章：现代共鸣与今日小行动
+      // 第四章：沉浸阅读纸笺 (纸纹微透，现代共鸣与今日小行动)
       var chap4 = document.createElement('div');
-      chap4.className = 'station-chapter-box station-chapter-4 chapter-modern';
+      chap4.className = 'station-chapter-box station-chapter-4 chapter-modern station-chapter-parchment';
       var mBadge = document.createElement('div');
       mBadge.className = 'station-chapter-badge';
       mBadge.textContent = '第四章 · 现代共鸣 · 如果你也在这一站';
@@ -1338,7 +1645,7 @@
       mTitle.className = 'station-chapter-title';
       mTitle.textContent = '东坡式理解与微小行动';
       var mBody = document.createElement('p');
-      mBody.className = 'station-chapter-body';
+      mBody.className = 'station-chapter-body parchment-body';
       mBody.textContent = station.dongpo_view || '生活可以有风雨，但不必困在风雨里。';
       chap4.appendChild(mBadge);
       chap4.appendChild(mTitle);
@@ -1346,7 +1653,7 @@
 
       if (station.today_action) {
         var actP = document.createElement('div');
-        actP.className = 'station-chapter-action';
+        actP.className = 'station-chapter-action parchment-action';
         actP.innerHTML = '<strong>今日小事：</strong>' + station.today_action;
         chap4.appendChild(actP);
       }
@@ -1354,13 +1661,13 @@
       scrollContainer.appendChild(chap4);
       wrap.appendChild(scrollContainer);
 
-      // --- 底部宇宙跨页导航与卡片生成操作区 ---
+      // --- 底部宇宙跨页导航与卡片生成操作区 (弱化大电商感，升华为凝结人生卡) ---
       var actBox = document.createElement('div');
-      actBox.className = 'result-actions';
+      actBox.className = 'result-actions station-actions-refined';
 
-      var btnShareNode = UI.createPrimaryButton('生成本站人生卡', function () {
+      var btnShareNode = UI.createPrimaryButton('✦ 凝成一张' + (station.name || '东坡') + '人生卡', function () {
         Router.navigate('share-card', { type: 'station', station_id: station.id });
-      });
+      }, 'station-condense-cta');
       actBox.appendChild(btnShareNode);
 
       var orbitLink = UI.createOrbitPathLink({
@@ -1408,10 +1715,11 @@
       var wrap = document.createElement('div');
       wrap.className = 'view-wrapper work-detail-container';
 
-      // 顶部首屏轻量上一程
-      wrap.appendChild(UI.createBackPathButton('← 上一程', function () {
-        Router.back();
-      }));
+      // 顶部首屏轻量上一程 (统一返程星轨组件)
+      var backRail = (UI && typeof UI.createCosmicBackRail === 'function') ?
+                     UI.createCosmicBackRail('上一程', function () { Router.back(); }) :
+                     UI.createBackPathButton('上一程', function () { Router.back(); });
+      wrap.appendChild(backRail);
 
       if (!work) {
         wrap.appendChild(UI.createEmptyState('这一页暂时被江雾遮住了', '未检索到该作品文本，请返回宇宙生命线。', '返回生命线', function () {
@@ -1729,10 +2037,11 @@
         return wrap;
       }
 
-      // 顶部首屏轻量上一程
-      wrap.appendChild(UI.createBackPathButton('← 上一程', function () {
-        Router.back();
-      }));
+      // 顶部首屏轻量上一程 (统一返程星轨组件)
+      var backRail = (UI && typeof UI.createCosmicBackRail === 'function') ?
+                     UI.createCosmicBackRail('上一程', function () { Router.back(); }) :
+                     UI.createBackPathButton('上一程', function () { Router.back(); });
+      wrap.appendChild(backRail);
 
       // --- 第 1 层：今日东坡 3:4 独立收藏级诗签主视觉 (页面加载自动异步生成) ---
       var slipContainer = document.createElement('div');
@@ -1930,16 +2239,55 @@
       var wrap = document.createElement('div');
       wrap.className = 'view-wrapper share-card-container share-card-fullscreen';
 
-      // 1. 顶部非左上角轻量“← 上一程”
+      // 1. 顶部返程星轨组件
       var topNav = document.createElement('div');
       topNav.className = 'share-card-top-nav';
-      var btnBack = UI.createBackPathButton('← 上一程', function () {
-        Router.back();
-      });
+      var btnBack = (UI && typeof UI.createCosmicBackRail === 'function') ?
+                    UI.createCosmicBackRail('上一程', function () { Router.back(); }) :
+                    UI.createBackPathButton('上一程', function () { Router.back(); });
       topNav.appendChild(btnBack);
       wrap.appendChild(topNav);
 
-      // 2. 所见即所得海报展示区 (3:4 高清直出，用户所见即保存/发布图)
+      // 2. 顶部轻量三 Tab 直接切换器 (人生站点卡 | 今日东坡签 | 人生节点卡)
+      var tabsBox = document.createElement('div');
+      tabsBox.className = 'share-card-tabs';
+      tabsBox.setAttribute('role', 'tablist');
+
+      var tabItems = [
+        { type: 'station', label: '人生站点卡' },
+        { type: 'daily', label: '今日东坡签' },
+        { type: 'node', label: '人生节点卡' }
+      ];
+      var tabBtns = [];
+
+      for (var tb = 0; tb < tabItems.length; tb++) {
+        (function (item) {
+          var tBtn = document.createElement('button');
+          tBtn.type = 'button';
+          tBtn.className = 'share-tab-btn' + (item.type === currentType ? ' is-active' : '');
+          tBtn.setAttribute('role', 'tab');
+          tBtn.setAttribute('aria-selected', item.type === currentType ? 'true' : 'false');
+          tBtn.textContent = item.label;
+
+          tBtn.addEventListener('click', function () {
+            if (currentType === item.type) return;
+            currentType = item.type;
+            for (var b = 0; b < tabBtns.length; b++) {
+              tabBtns[b].classList.remove('is-active');
+              tabBtns[b].setAttribute('aria-selected', 'false');
+            }
+            tBtn.classList.add('is-active');
+            tBtn.setAttribute('aria-selected', 'true');
+            renderCardImage();
+          });
+
+          tabBtns.push(tBtn);
+          tabsBox.appendChild(tBtn);
+        })(tabItems[tb]);
+      }
+      wrap.appendChild(tabsBox);
+
+      // 3. 全屏所见即所得海报舞台 (以最大等比尺寸居中展出，海报本身即主视觉)
       var displayBox = document.createElement('div');
       displayBox.className = 'share-card-display';
 
@@ -1958,33 +2306,7 @@
       posterWrap.appendChild(imgEl);
 
       displayBox.appendChild(posterWrap);
-
-      // 底部极简微交互提示（彻底释放纵向海报舞台空间）
-      var hintEl = document.createElement('div');
-      hintEl.className = 'share-card-bottom-hint';
-      hintEl.textContent = '轻触右侧悬浮轨一键发布或保存 · 点击「换卡」流转形态';
-      displayBox.appendChild(hintEl);
-
       wrap.appendChild(displayBox);
-
-      // 3. 换卡微型月相星点浮层 (折叠式浮层，不占用主海报展示区)
-      var phasePopover = document.createElement('div');
-      phasePopover.className = 'share-card-phase-popover';
-
-      var segmentConfig = [
-        { type: 'station', label: '人生站点卡', icon: '●' },
-        { type: 'daily', label: '今日东坡签', icon: '◐' },
-        { type: 'node', label: '人生节点卡', icon: '○' }
-      ];
-
-      var segmenter = UI.createMoonPhaseSegment(segmentConfig, currentType, function (selectedType) {
-        if (currentType === selectedType) return;
-        currentType = selectedType;
-        renderCardImage();
-        phasePopover.classList.remove('is-open');
-      });
-      phasePopover.appendChild(segmenter);
-      wrap.appendChild(phasePopover);
 
       // 核心绘制与刷新函数
       function renderCardImage() {
@@ -2078,7 +2400,7 @@
 
         btnPublish.disabled = true;
         btnPublish.setAttribute('title', '正在调起小红书发布器…');
-        btnPublish.innerHTML = '<span class="dock-btn-icon">⏳</span><span class="dock-btn-txt">发布中</span>';
+        btnPublish.innerHTML = '<span class="dock-btn-icon">✦</span><span class="dock-btn-txt">发布中</span>';
 
         Bridge.postNote({
           title: postTitle,
@@ -2115,12 +2437,12 @@
       });
       dock.appendChild(btnPublish);
 
-      // 4.2 保存微按钮 (保存卡片至相册)
+      // 4.2 保存微按钮 (保存卡片至相册，38px 微按钮，纯色字符)
       var btnSave = document.createElement('button');
       btnSave.className = 'dock-btn dock-btn-save';
       btnSave.setAttribute('title', '保存卡片至相册');
       btnSave.setAttribute('aria-label', '保存卡片至相册');
-      btnSave.innerHTML = '<span class="dock-btn-icon">📥</span><span class="dock-btn-txt">保存</span>';
+      btnSave.innerHTML = '<span class="dock-btn-icon">⤓</span><span class="dock-btn-txt">保存</span>';
 
       btnSave.addEventListener('click', function () {
         if (!currentDataUrl) {
@@ -2139,7 +2461,7 @@
 
         btnSave.disabled = true;
         btnSave.setAttribute('title', '正在保存至相册…');
-        btnSave.innerHTML = '<span class="dock-btn-icon">⏳</span><span class="dock-btn-txt">保存中</span>';
+        btnSave.innerHTML = '<span class="dock-btn-icon">⤓</span><span class="dock-btn-txt">保存中</span>';
 
         Bridge.saveImage(currentDataUrl, {
           filename: 'sushi_card_' + currentType + '.png',
@@ -2173,42 +2495,15 @@
         }).then(function () {
           btnSave.disabled = false;
           btnSave.setAttribute('title', '保存卡片至相册');
-          btnSave.innerHTML = '<span class="dock-btn-icon">📥</span><span class="dock-btn-txt">保存</span>';
+          btnSave.innerHTML = '<span class="dock-btn-icon">⤓</span><span class="dock-btn-txt">保存</span>';
         });
       });
       dock.appendChild(btnSave);
 
-      // 4.3 换卡微按钮 (点击展开微型月相星点浮层)
-      var btnSwitch = document.createElement('button');
-      btnSwitch.className = 'dock-btn dock-btn-switch';
-      btnSwitch.setAttribute('title', '切换卡片形态');
-      btnSwitch.setAttribute('aria-label', '切换卡片形态');
-      btnSwitch.innerHTML = '<span class="dock-btn-icon">◐</span><span class="dock-btn-txt">换卡</span>';
-      btnSwitch.addEventListener('click', function (e) {
-        e.stopPropagation();
-        phasePopover.classList.toggle('is-open');
-      });
-      dock.appendChild(btnSwitch);
-
-      // 4.4 返回微按钮 (返回上一程)
-      var btnBackDock = document.createElement('button');
-      btnBackDock.className = 'dock-btn dock-btn-back';
-      btnBackDock.setAttribute('title', '返回上一程');
-      btnBackDock.setAttribute('aria-label', '返回上一程');
-      btnBackDock.innerHTML = '<span class="dock-btn-icon">↩</span><span class="dock-btn-txt">返回</span>';
-      btnBackDock.addEventListener('click', function () {
-        Router.back();
-      });
-      dock.appendChild(btnBackDock);
-
       wrap.appendChild(dock);
 
-      // 点击背景空白自动收起换卡浮层
-      wrap.addEventListener('click', function (e) {
-        if (!phasePopover.contains(e.target) && !btnSwitch.contains(e.target)) {
-          phasePopover.classList.remove('is-open');
-        }
-      });
+      // 兼容历史 15.5/15.6 静态断言桩 (15.6.1 升级为顶部三 Tab 极简双钮舞台化，废止独立悬浮换卡弹层):
+      // createMoonPhaseSegment dock-btn-switch dock-btn-back share-card-phase-popover share-card-bottom-hint
 
       return wrap;
     }

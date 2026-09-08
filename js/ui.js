@@ -472,28 +472,43 @@
     return link;
   }
 
-  // 17. 非左上角轻量“← 上一程”导航按钮
-  function createBackPathButton(label, actionHandler) {
+  // 17. 宇宙资源型“返程星轨 · 上一程”导航组件 (Cosmic Back Rail)
+  function createCosmicBackRail(label, actionHandler) {
+    var cleanLabel = (label || '').replace(/^[←\s]+/, '') || '上一程';
+    var fullText = '返程星轨 · ' + cleanLabel;
+
     var btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = 'back-path-btn';
-    btn.setAttribute('aria-label', label || '返回上一程');
+    btn.className = 'cosmic-back-rail back-path-btn';
+    btn.setAttribute('aria-label', fullText);
 
-    var arrow = document.createElement('span');
-    arrow.className = 'back-path-arrow';
-    arrow.innerHTML = '&#8592;';
+    var orbitSpan = document.createElement('span');
+    orbitSpan.className = 'back-rail-track';
+
+    var starNode = document.createElement('span');
+    starNode.className = 'back-rail-star';
+    orbitSpan.appendChild(starNode);
+
+    var gateIcon = document.createElement('span');
+    gateIcon.className = 'back-rail-gate';
+    gateIcon.textContent = '✦';
 
     var txt = document.createElement('span');
-    txt.className = 'back-path-text';
-    txt.textContent = label || '上一程';
+    txt.className = 'back-rail-text';
+    txt.textContent = fullText;
 
-    btn.appendChild(arrow);
+    btn.appendChild(orbitSpan);
+    btn.appendChild(gateIcon);
     btn.appendChild(txt);
 
     if (typeof actionHandler === 'function') {
       btn.addEventListener('click', actionHandler);
     }
     return btn;
+  }
+
+  function createBackPathButton(label, actionHandler) {
+    return createCosmicBackRail(label, actionHandler);
   }
 
   // 18. 紧凑月相分段切换器 (Moon Phase Segmenter)
@@ -563,6 +578,7 @@
   UI.createPlanetPortal = createPlanetPortal;
   UI.createConstellationGroup = createConstellationGroup;
   UI.createOrbitPathLink = createOrbitPathLink;
+  UI.createCosmicBackRail = createCosmicBackRail;
   UI.createBackPathButton = createBackPathButton;
   UI.createMoonPhaseSegment = createMoonPhaseSegment;
 

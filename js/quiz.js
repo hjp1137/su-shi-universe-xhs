@@ -278,10 +278,70 @@
     };
   }
 
+  var ExperimentScoring = {
+    experiment_01: {
+      id: 'experiment_01',
+      question_id: 'quiz_q01',
+      title: '星体靠近',
+      theme: '骤变与心防',
+      outcomes: { target_a: 'opt_1a', target_b: 'opt_1b', target_c: 'opt_1c', target_d: 'opt_1d' }
+    },
+    experiment_02: {
+      id: 'experiment_02',
+      question_id: 'quiz_q02',
+      title: '行星撞击',
+      theme: '应激与轨道',
+      outcomes: { action_a: 'opt_2a', action_b: 'opt_2b', action_c: 'opt_2c', action_d: 'opt_2d' }
+    },
+    experiment_03: {
+      id: 'experiment_03',
+      question_id: 'quiz_q03',
+      title: '星体聚合',
+      theme: '专注与释怀',
+      outcomes: { merge_a: 'opt_3a', merge_b: 'opt_3b', merge_c: 'opt_3c', merge_d: 'opt_3d' }
+    },
+    experiment_04: {
+      id: 'experiment_04',
+      question_id: 'quiz_q04',
+      title: '星体分裂',
+      theme: '承压与重构',
+      outcomes: { split_a: 'opt_4a', split_b: 'opt_4b', split_c: 'opt_4c', split_d: 'opt_4d' }
+    },
+    experiment_05: {
+      id: 'experiment_05',
+      question_id: 'quiz_q05',
+      title: '引力选择',
+      theme: '价值与锚点',
+      outcomes: { gravity_a: 'opt_5a', gravity_b: 'opt_5b', gravity_c: 'opt_5c', gravity_d: 'opt_5d' }
+    },
+    experiment_06: {
+      id: 'experiment_06',
+      question_id: 'quiz_q06',
+      title: '星轨穿越',
+      theme: '迷雾与抉择',
+      outcomes: { cross_a: 'opt_6a', cross_b: 'opt_6b', cross_c: 'opt_6c', cross_d: 'opt_6d' }
+    },
+    experiment_07: {
+      id: 'experiment_07',
+      question_id: 'quiz_q07',
+      title: '漂流星救援',
+      theme: '同行与心境',
+      outcomes: { tether_a: 'opt_7a', tether_b: 'opt_7b', tether_c: 'opt_7c', tether_d: 'opt_7d' }
+    }
+  };
+
+  function mapExperimentOutcome(experimentId, outcomeKey) {
+    var exp = ExperimentScoring[experimentId];
+    if (!exp) return null;
+    return exp.outcomes[outcomeKey] || exp.outcomes[Object.keys(exp.outcomes)[0]];
+  }
+
   Quiz.calculateQuizResult = calculateQuizResult;
   Quiz.createQuizSession = createQuizSession;
   Quiz.buildShareCardViewModel = buildShareCardViewModel;
   Quiz.buildStationNodeCardViewModel = buildStationNodeCardViewModel;
+  Quiz.ExperimentScoring = ExperimentScoring;
+  Quiz.mapExperimentOutcome = mapExperimentOutcome;
 
   root.SuShiUniverse.Quiz = Quiz;
 })();
