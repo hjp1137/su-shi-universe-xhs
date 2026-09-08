@@ -1621,7 +1621,7 @@
         return wrap;
       }
 
-      // Scene 0｜站点Hero (全宽场景图原色直出，不做整图统一蒙版，依据安全区tone自适应字色)
+      // Scene 0｜站点Hero (大幅原生场景图 + 独立信息区双段式垂直重排，图文彻底分层)
       var heroScene = document.createElement('div');
       heroScene.className = 'station-scene-hero station-hero-card scene-0-hero';
 
@@ -1634,6 +1634,9 @@
         imgEl.src = sceneImg;
         imgEl.alt = station.name;
         coverBox.appendChild(imgEl);
+        var coverMask = document.createElement('div');
+        coverMask.className = 'station-hero-cover-mask';
+        coverBox.appendChild(coverMask);
         heroScene.appendChild(coverBox);
       }
 
@@ -1641,8 +1644,8 @@
       var isDarkTone = safeZone.tone === 'dark';
 
       var headerContent = document.createElement('div');
-      headerContent.className = 'result-hero-content station-safe-zone-content ' + (isDarkTone ? 'tone-dark-bg' : 'tone-light-bg');
-      headerContent.style.maxWidth = (safeZone.width || 350) + 'px';
+      headerContent.className = 'result-hero-content station-safe-zone-content station-hero-info ' + (isDarkTone ? 'tone-dark-bg' : 'tone-light-bg');
+      headerContent.setAttribute('data-text-safe-zone', 'true');
 
       var badge = document.createElement('div');
       badge.className = 'result-moment-badge';
@@ -1678,6 +1681,7 @@
       // Scene 1｜历史现场 (纵向时间轨迹轴推进，无整块大底卡，文字沿轨迹分段2~4行呈现)
       var chap1 = document.createElement('div');
       chap1.className = 'station-scroll-section station-chapter-box station-chapter-1 station-section-history station-chapter-timeline scene-1-history';
+      chap1.setAttribute('data-text-safe-zone', 'true');
       var fBadge = document.createElement('div');
       fBadge.className = 'station-chapter-badge';
       fBadge.textContent = '✦ 时空现场 · 东坡因何至此';
@@ -1713,6 +1717,7 @@
         }
         var fBody = document.createElement('p');
         fBody.className = 'station-chapter-body history-slice-body';
+        fBody.setAttribute('data-text-safe-zone', 'true');
         fBody.textContent = factChunks[fci];
         fNode.appendChild(fBody);
         fTrack.appendChild(fNode);
@@ -1744,9 +1749,13 @@
         vImg.src = stationSceneImg;
         vImg.alt = station.name + ' · 意境场景';
         verseStage.appendChild(vImg);
+        var vOverlay = document.createElement('div');
+        vOverlay.className = 'station-verse-scene-overlay';
+        verseStage.appendChild(vOverlay);
       }
       var verseContent = document.createElement('div');
       verseContent.className = 'station-verse-scene-content station-safe-zone-content ' + (isDarkTone ? 'tone-dark-bg' : 'tone-light-bg');
+      verseContent.setAttribute('data-text-safe-zone', 'true');
       var qText = primeQuoteObj ? primeQuoteObj.text : (station.theme || '人生到处知何似，应似飞鸿踏雪泥。');
       var vQuote = document.createElement('blockquote');
       vQuote.className = 'station-verse-quote-text';
@@ -1763,6 +1772,7 @@
       // Scene 3｜生活实录 (星轨脚步脉络，碎片式生活节点)
       var chap2 = document.createElement('div');
       chap2.className = 'station-scroll-section station-chapter-box station-chapter-2 station-section-life station-chapter-orbit scene-3-life';
+      chap2.setAttribute('data-text-safe-zone', 'true');
       var sBadge = document.createElement('div');
       sBadge.className = 'station-chapter-badge';
       sBadge.textContent = '✦ 生活实录 · 日常践行与生命重构';
@@ -1789,6 +1799,7 @@
       for (var sci = 0; sci < storyChunks.length; sci++) {
         var sBody = document.createElement('p');
         sBody.className = 'station-chapter-body life-orbit-body';
+        sBody.setAttribute('data-text-safe-zone', 'true');
         sBody.textContent = storyChunks[sci];
         sStream.appendChild(sBody);
       }
@@ -1837,6 +1848,7 @@
       // Scene 5｜现代共鸣与今日小事 (宣纸便签轻质感，低干扰收束)
       var chap4 = document.createElement('div');
       chap4.className = 'station-scroll-section station-chapter-box station-chapter-4 station-section-modern station-chapter-parchment scene-5-resonance';
+      chap4.setAttribute('data-text-safe-zone', 'true');
       var mBadge = document.createElement('div');
       mBadge.className = 'station-chapter-badge';
       mBadge.textContent = '✦ 现代共鸣 · 东坡式理解与今日微步';
@@ -1845,6 +1857,7 @@
       mTitle.textContent = '东坡式理解与微小行动';
       var mBody = document.createElement('p');
       mBody.className = 'station-chapter-body parchment-body';
+      mBody.setAttribute('data-text-safe-zone', 'true');
       mBody.textContent = station.dongpo_view || '生活可以有风雨，但不必困在风雨里。';
       chap4.appendChild(mBadge);
       chap4.appendChild(mTitle);
@@ -1853,6 +1866,7 @@
       if (station.today_action) {
         var actP = document.createElement('div');
         actP.className = 'station-chapter-action parchment-action';
+        actP.setAttribute('data-text-safe-zone', 'true');
         actP.innerHTML = '<strong>今日小事：</strong>' + station.today_action;
         chap4.appendChild(actP);
       }
@@ -2242,7 +2256,116 @@
                      UI.createBackPathButton('上一程', function () { Router.back(); });
       wrap.appendChild(backRail);
 
-      // --- 第 1 层：今日东坡 3:4 独立收藏级诗签主视觉 (去除卡中卡与多余DOM日期叠层，直接以Canvas诗签为第一视觉中心) ---
+      // --- 任务 15.6.7: 镜头0 · 今日大幅原生场景图 + 独立诗句出处信息区 (图文彻底分层) ---
+      var dailyHeroCard = document.createElement('div');
+      dailyHeroCard.className = 'daily-hero-card';
+
+      var stationSceneImg = (dailyBundle.station && SuShi.ArtAssets && SuShi.ArtAssets.getStationScene(dailyBundle.station.id)) ||
+                            (SuShi.ArtAssets && SuShi.ArtAssets.getStationScene('station_huangzhou')) || '';
+      if (stationSceneImg) {
+        var dailyCoverBox = document.createElement('div');
+        dailyCoverBox.className = 'daily-hero-cover-box';
+        var dailyCoverImg = document.createElement('img');
+        dailyCoverImg.className = 'daily-hero-cover-img';
+        dailyCoverImg.src = stationSceneImg;
+        dailyCoverImg.alt = (dailyBundle.quote && dailyBundle.quote.text) || '今日东坡场景';
+        dailyCoverBox.appendChild(dailyCoverImg);
+        var dailyCoverMask = document.createElement('div');
+        dailyCoverMask.className = 'daily-hero-cover-mask';
+        dailyCoverBox.appendChild(dailyCoverMask);
+        dailyHeroCard.appendChild(dailyCoverBox);
+      }
+
+      var dailyQuoteStage = document.createElement('div');
+      dailyQuoteStage.className = 'daily-hero-quote';
+      dailyQuoteStage.setAttribute('data-text-safe-zone', 'true');
+
+      var qMain = document.createElement('div');
+      qMain.className = 'daily-hero-quote-text';
+      qMain.textContent = (dailyBundle.quote && dailyBundle.quote.text) ? ('“' + dailyBundle.quote.text + '”') : '“小舟从此逝，江海寄余生。”';
+
+      var qSource = document.createElement('div');
+      qSource.className = 'daily-hero-quote-source';
+      var wTitle = (dailyBundle.work && dailyBundle.work.title) ? ('《' + dailyBundle.work.title + '》') : '';
+      var sPlace = (dailyBundle.station && dailyBundle.station.short_name) ? (' · ' + dailyBundle.station.short_name) : '';
+      qSource.textContent = (wTitle || '《东坡选粹》') + sPlace;
+
+      var qDate = document.createElement('div');
+      qDate.className = 'daily-hero-quote-date';
+      qDate.textContent = dailyBundle.date_display || '今日东坡 · 诗笺小札';
+
+      dailyQuoteStage.appendChild(qMain);
+      dailyQuoteStage.appendChild(qSource);
+      dailyQuoteStage.appendChild(qDate);
+      dailyHeroCard.appendChild(dailyQuoteStage);
+      wrap.appendChild(dailyHeroCard);
+
+      // --- 第 1 层：一段真实生活背景 ---
+      var factCard = document.createElement('div');
+      factCard.className = 'work-narrative-card';
+      factCard.setAttribute('data-text-safe-zone', 'true');
+      var factBadge = document.createElement('div');
+      factBadge.className = 'work-narrative-badge';
+      factBadge.textContent = '第一幕 · 真实生活现场';
+      var factTitle = document.createElement('h3');
+      factTitle.className = 'work-narrative-title';
+      factTitle.textContent = '苏轼当时面对着什么？';
+      var factBody = document.createElement('p');
+      factBody.className = 'work-narrative-body';
+      factBody.setAttribute('data-text-safe-zone', 'true');
+      factBody.textContent = dailyBundle.fact_text;
+
+      factCard.appendChild(factBadge);
+      factCard.appendChild(factTitle);
+      factCard.appendChild(factBody);
+      wrap.appendChild(factCard);
+
+      // --- 第 2 层：一句东坡式理解 ---
+      var viewCard = document.createElement('div');
+      viewCard.className = 'work-narrative-card work-modern-card';
+      viewCard.setAttribute('data-text-safe-zone', 'true');
+      var viewBadge = document.createElement('div');
+      viewBadge.className = 'work-narrative-badge';
+      viewBadge.textContent = '第二幕 · 放到今天';
+      var viewTitle = document.createElement('h3');
+      viewTitle.className = 'work-narrative-title';
+      viewTitle.textContent = '在今天可以怎样理解？';
+      var viewBody = document.createElement('p');
+      viewBody.className = 'work-narrative-body';
+      viewBody.setAttribute('data-text-safe-zone', 'true');
+      viewBody.textContent = dailyBundle.dongpo_view;
+
+      var viewDisclaimer = document.createElement('div');
+      viewDisclaimer.className = 'work-modern-disclaimer';
+      viewDisclaimer.textContent = '* 本解读为苏轼宇宙当代生活启发，围绕面对不可控、接受绕路与安顿日常展开，非古人原话。';
+
+      viewCard.appendChild(viewBadge);
+      viewCard.appendChild(viewTitle);
+      viewCard.appendChild(viewBody);
+      viewCard.appendChild(viewDisclaimer);
+      wrap.appendChild(viewCard);
+
+      // --- 第 3 层：一个今日小行动 ---
+      var actionCard = document.createElement('div');
+      actionCard.className = 'ink-card result-action-card';
+      actionCard.setAttribute('data-text-safe-zone', 'true');
+      var actBadge = document.createElement('div');
+      actBadge.className = 'result-card-badge';
+      actBadge.textContent = '第三幕 · 今天只做一件小事';
+      var actTitle = document.createElement('h3');
+      actTitle.className = 'result-card-title';
+      actTitle.textContent = '微小而确定的行动';
+      var actBody = document.createElement('p');
+      actBody.className = 'result-card-body';
+      actBody.setAttribute('data-text-safe-zone', 'true');
+      actBody.textContent = dailyBundle.today_action;
+
+      actionCard.appendChild(actBadge);
+      actionCard.appendChild(actTitle);
+      actionCard.appendChild(actBody);
+      wrap.appendChild(actionCard);
+
+      // --- 第 4 层：今日东坡 3:4 独立收藏级诗签主视觉 (WYSIWYG 自动渲染) ---
       var slipContainer = document.createElement('div');
       slipContainer.className = 'daily-slip-container daily-quote-card has-moon-halo daily-poetry-slip';
 
@@ -2321,65 +2444,6 @@
       }
 
       wrap.appendChild(slipContainer);
-
-      // --- 第 2 层：一段真实生活背景 ---
-      var factCard = document.createElement('div');
-      factCard.className = 'work-narrative-card';
-      var factBadge = document.createElement('div');
-      factBadge.className = 'work-narrative-badge';
-      factBadge.textContent = '第一幕 · 真实生活现场';
-      var factTitle = document.createElement('h3');
-      factTitle.className = 'work-narrative-title';
-      factTitle.textContent = '苏轼当时面对着什么？';
-      var factBody = document.createElement('p');
-      factBody.className = 'work-narrative-body';
-      factBody.textContent = dailyBundle.fact_text;
-
-      factCard.appendChild(factBadge);
-      factCard.appendChild(factTitle);
-      factCard.appendChild(factBody);
-      wrap.appendChild(factCard);
-
-      // --- 第 3 层：一句东坡式理解 ---
-      var viewCard = document.createElement('div');
-      viewCard.className = 'work-narrative-card work-modern-card';
-      var viewBadge = document.createElement('div');
-      viewBadge.className = 'work-narrative-badge';
-      viewBadge.textContent = '第二幕 · 放到今天';
-      var viewTitle = document.createElement('h3');
-      viewTitle.className = 'work-narrative-title';
-      viewTitle.textContent = '在今天可以怎样理解？';
-      var viewBody = document.createElement('p');
-      viewBody.className = 'work-narrative-body';
-      viewBody.textContent = dailyBundle.dongpo_view;
-
-      var viewDisclaimer = document.createElement('div');
-      viewDisclaimer.className = 'work-modern-disclaimer';
-      viewDisclaimer.textContent = '* 本解读为苏轼宇宙当代生活启发，围绕面对不可控、接受绕路与安顿日常展开，非古人原话。';
-
-      viewCard.appendChild(viewBadge);
-      viewCard.appendChild(viewTitle);
-      viewCard.appendChild(viewBody);
-      viewCard.appendChild(viewDisclaimer);
-      wrap.appendChild(viewCard);
-
-      // --- 第 4 层：一个今日小行动 ---
-      var actionCard = document.createElement('div');
-      actionCard.className = 'ink-card result-action-card';
-      var actBadge = document.createElement('div');
-      actBadge.className = 'result-card-badge';
-      actBadge.textContent = '第三幕 · 今天只做一件小事';
-      var actTitle = document.createElement('h3');
-      actTitle.className = 'result-card-title';
-      actTitle.textContent = '微小而确定的行动';
-      var actBody = document.createElement('p');
-      actBody.className = 'result-card-body';
-      actBody.textContent = dailyBundle.today_action;
-
-      actionCard.appendChild(actBadge);
-      actionCard.appendChild(actTitle);
-      actionCard.appendChild(actBody);
-      wrap.appendChild(actionCard);
 
       // --- 底部多向操作区 ---
       var actBox = document.createElement('div');

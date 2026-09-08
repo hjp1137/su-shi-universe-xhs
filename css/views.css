@@ -1839,25 +1839,24 @@
 .station-hero-card {
   position: relative;
   overflow: hidden;
-  min-height: 280px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  padding: 120px var(--space-4) var(--space-4);
+  justify-content: flex-start;
+  padding: 0;
   border: none;
-  box-shadow: none;
-  background: transparent;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+  background: rgba(13, 21, 38, 0.96);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-4);
 }
 
 .station-hero-cover-box {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  position: relative;
+  width: 100%;
   height: 280px;
   overflow: hidden;
   pointer-events: none;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
 
 .station-hero-cover-img {
@@ -1867,6 +1866,7 @@
   object-position: center 25%;
   opacity: 0.90;
   filter: saturate(1.1) contrast(1.05);
+  display: block;
 }
 
 .station-hero-cover-mask {
@@ -1875,21 +1875,59 @@
   left: 0;
   right: 0;
   bottom: 0;
-  /* 任务15.6.4: 废除整图深色覆盖，仅底部与文字边缘微弱水墨羽化 */
-  background: linear-gradient(180deg, rgba(14, 24, 48, 0.05) 0%, rgba(14, 24, 48, 0.2) 60%, rgba(14, 24, 48, 0.75) 100%);
+  /* 任务 15.6.7: 仅在与下方独立信息区衔接的底部做微弱水墨羽化 (<= 15%) */
+  background: linear-gradient(180deg, transparent 80%, rgba(13, 21, 38, 0.96) 100%);
   pointer-events: none;
 }
 
-/* 任务15.6.4: 安全排字区与图文色彩自适应 */
-.station-safe-zone-content {
+/* 镜头0.5 · 独立文字信息区 (完全垂直独立于大图下方，WCAG AA 高对比) */
+.station-safe-zone-content,
+.station-hero-info {
   position: relative;
   z-index: 5;
-  padding: 8px 12px;
-  border-radius: var(--radius-md);
-  /* 局部轻量水墨承托，面积 <= 25% 图面 */
-  background: radial-gradient(ellipse at center, rgba(12, 20, 36, 0.68) 0%, rgba(12, 20, 36, 0.35) 75%, transparent 100%);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  width: 100%;
+  padding: var(--space-4) var(--space-4) var(--space-4);
+  background: rgba(13, 21, 38, 0.96);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  box-sizing: border-box;
+}
+
+.station-safe-zone-content .result-moment-badge {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--color-warm, #d9b978);
+  border: 1px solid rgba(217, 185, 120, 0.4);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  margin-bottom: 8px;
+}
+
+.station-safe-zone-content .result-station-name {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #fbf8ee;
+  margin: 0 0 6px 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+}
+
+.station-safe-zone-content .result-station-meta {
+  font-size: 13px;
+  color: #8ca0b8;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.station-safe-zone-content .result-hero-guide {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #f5eedc;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(217, 185, 120, 0.25);
+  font-style: italic;
+  letter-spacing: 0.04em;
 }
 
 .station-safe-zone-content.tone-dark-bg .result-station-name {
@@ -1898,7 +1936,7 @@
 }
 
 .station-safe-zone-content.tone-dark-bg .result-station-meta {
-  color: #e5d8b8;
+  color: #8ca0b8;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
 }
 
@@ -1908,21 +1946,21 @@
 }
 
 .station-safe-zone-content.tone-light-bg {
-  background: radial-gradient(ellipse at center, rgba(245, 238, 220, 0.78) 0%, rgba(245, 238, 220, 0.45) 75%, transparent 100%);
-  border: 1px solid rgba(217, 185, 120, 0.4);
+  background: rgba(13, 21, 38, 0.96);
+  border: none;
 }
 
 .station-safe-zone-content.tone-light-bg .result-station-name {
-  color: #1a293b;
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+  color: #fdf8eb;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
 }
 
 .station-safe-zone-content.tone-light-bg .result-station-meta {
-  color: #3b4e68;
+  color: #8ca0b8;
 }
 
 .station-safe-zone-content.tone-light-bg .result-hero-guide {
-  color: #24354c;
+  color: #f5eedc;
 }
 
 .station-detail-container {
@@ -2081,34 +2119,28 @@
 .station-verse-scene-stage {
   position: relative;
   width: 100%;
-  min-height: 200px;
   border-radius: var(--radius-md);
   overflow: hidden;
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.65);
   background: #0d1526;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
   margin-top: var(--space-2);
 }
 
 .station-verse-scene-img {
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: relative;
   width: 100%;
-  height: 100%;
+  height: 220px;
   object-fit: cover;
+  object-position: center 30%;
   opacity: 0.98;
   filter: saturate(1.08) contrast(1.02);
+  display: block;
 }
 
 .station-verse-scene-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  display: none;
   /* 任务 15.6.6: 彻底废除整图深色遮罩，保持山水原色通透直出 */
   background: transparent;
   pointer-events: none;
@@ -2117,62 +2149,65 @@
 .station-verse-scene-content {
   position: relative;
   z-index: 2;
-  padding: var(--space-2) var(--space-3);
+  padding: var(--space-4) var(--space-3) var(--space-4);
   text-align: center;
-  width: 90%;
-  max-width: 340px;
+  width: 100%;
+  max-width: 100%;
   background: transparent;
   border-radius: 0;
+  border-top: 1px solid rgba(217, 185, 120, 0.2);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
+  box-sizing: border-box;
 }
 
 /* 亮色场景图（如杭州、惠州）高对比度文字保障 (WCAG AA 4.5:1) */
 .station-verse-scene-content.tone-light-bg {
   background: transparent;
   border: none;
+  border-top: 1px solid rgba(217, 185, 120, 0.2);
 }
 
 .station-verse-scene-content.tone-light-bg .station-verse-quote-text {
-  color: #121d2f;
-  color: #1a2638;
-  font-weight: 700;
-  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.95), 0 0 12px rgba(255, 255, 255, 0.85);
+  color: #fbf8ee;
+  font-weight: 600;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
 }
 
 .station-verse-scene-content.tone-light-bg .station-verse-source {
-  color: #7a5c22;
-  font-weight: 600;
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9);
+  color: #d9b978;
+  font-weight: 500;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
 }
 
 .station-verse-scene-content.tone-dark-bg .station-verse-quote-text {
-  color: #ffffff;
+  color: #fbf8ee;
   font-weight: 600;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95), 0 1px 3px rgba(0, 0, 0, 0.9);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95);
 }
 
 .station-verse-scene-content.tone-dark-bg .station-verse-source {
-  color: #ffe082;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+  color: #d9b978;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
 }
 
 .station-verse-quote-text {
   font-family: var(--font-family-serif);
-  font-size: 19px;
-  line-height: 1.65;
+  font-size: 22px;
+  line-height: 1.6;
   color: #fbf8ee;
   margin: 0 0 var(--space-2) 0;
   font-weight: 600;
-  letter-spacing: 1px;
+  letter-spacing: 0.08em;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
 }
 
 .station-verse-source {
-  font-size: 13px;
+  font-family: var(--font-family-serif);
+  font-size: 14px;
   color: var(--color-warm, #d9b978);
-  letter-spacing: 0.5px;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  font-style: italic;
+  letter-spacing: 0.06em;
 }
 
 /* 第三卷：生活实录 - 星轨脉络流线 (去大卡片框) */
@@ -4012,6 +4047,130 @@
   line-height: 1.8;
   margin: var(--space-6) 0;
   color: #1a1613;
+}
+
+/* ==========================================================================
+   任务 15.6.7 全站图文分层、图片原生张力与 Text Safe Zone 统一规范
+   ========================================================================== */
+
+/* 1. 今日东坡原生场景大图与独立名句区 */
+.daily-hero-card {
+  position: relative;
+  width: 100%;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+  background: rgba(13, 21, 38, 0.96);
+  margin-bottom: var(--space-4);
+  display: flex;
+  flex-direction: column;
+}
+
+.daily-hero-cover-box {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  overflow: hidden;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.daily-hero-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  opacity: 0.96;
+  filter: saturate(1.08) contrast(1.02);
+  display: block;
+}
+
+.daily-hero-cover-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, transparent 80%, rgba(13, 21, 38, 0.96) 100%);
+  pointer-events: none;
+}
+
+.daily-hero-quote {
+  position: relative;
+  z-index: 5;
+  padding: var(--space-4) var(--space-4);
+  text-align: center;
+  background: rgba(13, 21, 38, 0.96);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  box-sizing: border-box;
+}
+
+.daily-hero-quote-text {
+  font-family: var(--font-family-serif);
+  font-size: 24px;
+  line-height: 1.6;
+  color: #fbf8ee;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+}
+
+.daily-hero-quote-source {
+  font-family: var(--font-family-serif);
+  font-size: 14px;
+  color: #d9b978;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+
+.daily-hero-quote-date {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: #8ca0b8;
+  border: 1px solid rgba(140, 160, 184, 0.25);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  margin-top: 6px;
+}
+
+/* 2. 全站 Text Safe Zone（文字安全区）保护机制 */
+[data-text-safe-zone="true"],
+.text-safe-zone {
+  position: relative;
+  z-index: 4;
+}
+
+/* 正文容器自带高对比投影，隔绝底层动态粒子直接刺穿字形 */
+.history-slice-body[data-text-safe-zone="true"],
+.life-orbit-body[data-text-safe-zone="true"],
+.parchment-body[data-text-safe-zone="true"],
+.work-narrative-body[data-text-safe-zone="true"],
+.result-card-body[data-text-safe-zone="true"] {
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+}
+
+/* 3. 深色页面文字色彩三层收敛 (WCAG AA 达标) */
+/* 主层：暖白/米白高对比正文 */
+.station-chapter-body,
+.work-narrative-body,
+.result-card-body,
+.parchment-body {
+  color: #fbf8ee !important;
+}
+
+/* 强调层：古金/淡金徽标与重点 */
+.station-chapter-badge,
+.work-narrative-badge,
+.result-card-badge {
+  color: #d9b978 !important;
+}
+
+/* 辅助层：天青/青灰时间与说明，弃用纯蓝纯绿 */
+.history-slice-time,
+.work-meta-chip,
+.work-modern-disclaimer {
+  color: #8ca0b8 !important;
 }
 
 /* ==========================================================================
