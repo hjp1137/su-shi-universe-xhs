@@ -453,7 +453,7 @@
     }
     skyStage.appendChild(svg);
 
-    // 中央精神星核 (Central Core Star)
+    // 中央精神星核 (Central Core Star - 彻底去矩形外框，发光恒星)
     var coreNode = document.createElement('div');
     coreNode.className = 'constellation-core-star is-main-star constellation-center-orb';
     coreNode.setAttribute('role', 'button');
@@ -467,13 +467,9 @@
 
     var coreLabelBox = document.createElement('div');
     coreLabelBox.className = 'core-label-box';
-    var coreBadge = document.createElement('span');
-    coreBadge.className = 'core-star-badge';
-    coreBadge.textContent = '精神星核';
     var coreTitle = document.createElement('div');
     coreTitle.className = 'core-star-name';
     coreTitle.textContent = primeItem ? ('《' + primeItem.title + '》') : (stationTheme || '精神星宿');
-    coreLabelBox.appendChild(coreBadge);
     coreLabelBox.appendChild(coreTitle);
     coreNode.appendChild(coreLabelBox);
 
@@ -484,10 +480,27 @@
     }
     skyStage.appendChild(coreNode);
 
-    // 浮动交互气泡 (轻触星点弹出金句微名片)
+    // 浮动微名片气泡 (轻触星点弹出微名片，面积 ≤20% 舞台，点击空白自动收起)
     var calloutBubble = document.createElement('div');
     calloutBubble.className = 'star-callout-bubble is-hidden';
+    calloutBubble.addEventListener('click', function (e) {
+      e.stopPropagation();
+    });
     skyStage.appendChild(calloutBubble);
+
+    function hideBubble() {
+      calloutBubble.classList.remove('is-visible');
+      calloutBubble.classList.add('is-hidden');
+      var allNodes = skyStage.querySelectorAll('.constellation-star-node');
+      for (var a = 0; a < allNodes.length; a++) {
+        allNodes[a].classList.remove('is-active');
+      }
+    }
+
+    // 点击星空舞台空白处自动关闭微名片
+    skyStage.addEventListener('click', function () {
+      hideBubble();
+    });
 
     function showBubble(work) {
       calloutBubble.innerHTML = '';
@@ -498,6 +511,9 @@
       var bQuote = document.createElement('div');
       bQuote.className = 'bubble-work-quote';
       var sampleQuote = (work.quotes && work.quotes[0]) || work.genre || '千古名篇 · 精神回响';
+      if (sampleQuote.length > 18) {
+        sampleQuote = sampleQuote.substring(0, 18) + '…';
+      }
       bQuote.textContent = '“' + sampleQuote + '”';
 
       var bAction = document.createElement('button');
@@ -559,21 +575,17 @@
         node.appendChild(starVisual);
         node.appendChild(starText);
 
-        var hasClickedOnce = false;
         node.addEventListener('click', function (e) {
           e.stopPropagation();
+          if (node.classList.contains('is-active')) {
+            hideBubble();
+            return;
+          }
           var allNodes = skyStage.querySelectorAll('.constellation-star-node');
           for (var a = 0; a < allNodes.length; a++) allNodes[a].classList.remove('is-active');
           node.classList.add('is-active');
 
           showBubble(w);
-
-          if (hasClickedOnce) {
-            if (typeof onSelect === 'function') onSelect(w);
-          } else {
-            hasClickedOnce = true;
-            setTimeout(function () { hasClickedOnce = false; }, 2500);
-          }
         });
 
         skyStage.appendChild(node);

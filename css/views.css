@@ -819,10 +819,30 @@
   text-align: center;
 }
 
+.orb-hint {
+  display: block;
+  position: absolute;
+  bottom: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  color: #e5b263;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
+  background: rgba(12, 20, 36, 0.92);
+  padding: 1px 6px;
+  border-radius: 8px;
+  border: 1px solid rgba(217, 185, 120, 0.4);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+  pointer-events: none;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95);
+  z-index: 6;
+}
+
 .target-top-left { top: 12px; left: 16px; }
 .target-top-right { top: 12px; right: 16px; }
-.target-bottom-left { bottom: 12px; left: 16px; }
-.target-bottom-right { bottom: 12px; right: 16px; }
+.target-bottom-left { bottom: 22px; left: 16px; }
+.target-bottom-right { bottom: 22px; right: 16px; }
 
 /* 底部折叠式辅助入口面板 (默认收起，首屏去问卷感) */
 .exp-fallback-panel {
@@ -1019,6 +1039,14 @@
   font-weight: 600;
   color: var(--color-moon);
   line-height: 1.2;
+}
+
+.exp-choice-hint {
+  font-size: 11px;
+  color: var(--color-gold);
+  margin-left: 6px;
+  font-weight: normal;
+  opacity: 0.9;
 }
 
 .exp-choice-desc {
@@ -1759,24 +1787,19 @@
   margin-top: var(--space-4);
 }
 
+.station-scroll-section,
 .station-chapter-box {
   position: relative;
-  background: rgba(16, 27, 47, 0.72);
-  border: 1px solid rgba(217, 185, 120, 0.25);
-  border-radius: var(--radius-lg);
-  padding: var(--space-4);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  overflow: hidden;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: var(--space-3) 0;
+  box-shadow: none;
+  overflow: visible;
 }
 
-.station-chapter-box.station-chapter-1 {
-  border-left: 3px solid rgba(217, 185, 120, 0.85);
-  background: linear-gradient(135deg, rgba(28, 42, 68, 0.75) 0%, rgba(14, 23, 38, 0.75) 100%);
-}
-
-/* 第一章：历史现场 - 时间切片轨道 (去除第二层大卡片嵌套，轻盈时间切片) */
+/* 第一卷：历史现场 - 竖向时间轨迹轴 (长卷去外框) */
+.station-scroll-section.station-section-history.station-chapter-timeline,
 .station-chapter-box.station-chapter-1.station-chapter-timeline {
   border: none;
   background: transparent;
@@ -1809,20 +1832,86 @@
   font-size: var(--font-size-body, 14px);
   line-height: 1.75;
   color: var(--color-text-secondary, #d2d9e4);
+  background: rgba(12, 20, 36, 0.65);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  border-left: 2px solid rgba(217, 185, 120, 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
-.station-chapter-box.station-chapter-2 {
-  border-left: 3px solid rgba(132, 172, 142, 0.85);
-  background: linear-gradient(135deg, rgba(20, 42, 42, 0.7) 0%, rgba(14, 23, 38, 0.75) 100%);
+/* 第二卷：代表名句场景大图 (大幅意境大图全宽浸润铺展，视觉锚点) */
+.station-section-verse-scene {
+  position: relative;
+  margin: var(--space-3) 0;
 }
 
-/* 第二章：生活实录 - 星轨脉络流线 */
-.station-chapter-box.station-chapter-2.station-chapter-orbit {
-  border: 1px solid rgba(132, 172, 142, 0.35);
-  border-left: 4px solid rgba(132, 172, 142, 0.85);
-  background: radial-gradient(ellipse at top left, rgba(20, 48, 38, 0.5) 0%, rgba(14, 23, 38, 0.8) 100%);
+.station-verse-scene-stage {
+  position: relative;
+  width: 100%;
+  min-height: 190px;
   border-radius: var(--radius-md);
-  padding: var(--space-4);
+  overflow: hidden;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.65);
+  background: #0d1526;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--space-2);
+}
+
+.station-verse-scene-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.68;
+}
+
+.station-verse-scene-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(16, 27, 47, 0.45) 0%, rgba(13, 21, 38, 0.88) 100%);
+}
+
+.station-verse-scene-content {
+  position: relative;
+  z-index: 2;
+  padding: var(--space-4) var(--space-3);
+  text-align: center;
+  width: 92%;
+}
+
+.station-verse-quote-text {
+  font-family: var(--font-family-serif);
+  font-size: 19px;
+  line-height: 1.65;
+  color: #fbf8ee;
+  margin: 0 0 var(--space-2) 0;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
+}
+
+.station-verse-source {
+  font-size: 13px;
+  color: var(--color-warm, #d9b978);
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* 第三卷：生活实录 - 星轨脉络流线 (去大卡片框) */
+.station-scroll-section.station-section-life.station-chapter-orbit,
+.station-chapter-box.station-chapter-2.station-chapter-orbit {
+  border: none;
+  background: transparent;
+  border-radius: 0;
+  padding: var(--space-2) 0;
 }
 
 .life-orbit-stream {
@@ -1834,20 +1923,22 @@
   font-size: var(--font-size-body, 14px);
   line-height: 1.75;
   color: #e0eee4;
+  background: rgba(12, 20, 36, 0.65);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  border-left: 2px solid rgba(132, 172, 142, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
-.station-chapter-box.station-chapter-3 {
-  border-left: 3px solid rgba(168, 140, 212, 0.85);
-  background: linear-gradient(135deg, rgba(32, 28, 62, 0.7) 0%, rgba(14, 23, 38, 0.75) 100%);
-}
-
-/* 第三章：诗词星群 - 精神星核 + 环绕次级星 */
+/* 第四卷：诗词星群 - 去框化星空融于长卷 */
+.station-scroll-section.station-section-constellation.station-chapter-constellation,
 .station-chapter-box.station-chapter-3.station-chapter-constellation {
-  border: 1px solid rgba(168, 140, 212, 0.35);
-  background: radial-gradient(circle at 50% 10%, rgba(42, 32, 70, 0.6) 0%, rgba(12, 18, 32, 0.9) 100%);
-  border-radius: var(--radius-lg);
-  padding: var(--space-4);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 20px rgba(168, 140, 212, 0.15);
+  border: none;
+  background: transparent;
+  border-radius: 0;
+  padding: var(--space-2) 0;
+  box-shadow: none;
 }
 
 .constellation-cosmos-box {
@@ -1858,13 +1949,13 @@
 
 .constellation-core-star {
   position: relative;
-  border: 1.5px solid rgba(217, 185, 120, 0.7);
-  background: radial-gradient(circle at 80% 20%, rgba(217, 185, 120, 0.18) 0%, rgba(16, 25, 42, 0.95) 75%);
-  border-radius: var(--radius-md);
-  padding: var(--space-3) var(--space-4);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 16px rgba(217, 185, 120, 0.25);
+  border: none;
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease;
 }
 
 .constellation-core-star:active {
@@ -1952,18 +2043,14 @@
   color: var(--color-warm, #d9b978);
 }
 
-.station-chapter-box.station-chapter-4 {
-  border-left: 3px solid rgba(229, 178, 99, 0.85);
-  background: linear-gradient(135deg, rgba(42, 34, 24, 0.7) 0%, rgba(14, 23, 38, 0.75) 100%);
-}
-
-/* 第四章：沉浸阅读纸笺 */
+/* 卷五：现代共鸣与今日小事 (宣纸便签轻质感，低干扰收束) */
+.station-scroll-section.station-section-modern.station-chapter-parchment,
 .station-chapter-box.station-chapter-4.station-chapter-parchment {
-  border: 1px solid rgba(217, 185, 120, 0.35);
-  background: linear-gradient(135deg, rgba(38, 30, 22, 0.8) 0%, rgba(20, 18, 26, 0.9) 100%);
-  border-radius: 6px;
-  padding: var(--space-4);
-  box-shadow: inset 0 0 24px rgba(217, 185, 120, 0.05), 0 4px 16px rgba(0, 0, 0, 0.45);
+  border: 1px dashed rgba(217, 185, 120, 0.35);
+  background: rgba(30, 24, 18, 0.72);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
 }
 
 .parchment-body {
@@ -1971,6 +2058,13 @@
   font-size: 14.5px;
   line-height: 1.8;
   color: #f6ebd8;
+  background: rgba(12, 20, 36, 0.55);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  border-left: 2px solid rgba(217, 185, 120, 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  margin-top: var(--space-2);
 }
 
 .station-condense-cta {
@@ -2633,15 +2727,15 @@
 .share-card-img-wrap,
 .share-card-poster-wrap {
   position: relative;
-  width: calc(100vw - 44px);
-  max-width: 350px;
+  width: 96%;
+  max-width: 440px;
   min-height: 466px; /* Chrome 61 基线回退，防未支持 aspect-ratio 时高度塌陷 (3:4) */
   aspect-ratio: 3 / 4;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   overflow: hidden;
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.75), 0 0 28px rgba(217, 185, 120, 0.28);
-  border: 1.5px solid rgba(217, 185, 120, 0.45);
-  background: radial-gradient(circle at 50% 10%, rgba(229, 178, 99, 0.1) 0%, #0d1526 100%);
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.7), 0 0 24px rgba(217, 185, 120, 0.2);
+  border: none;
+  background: #101b2f;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3538,8 +3632,8 @@
 
 .daily-sign-poster-wrap {
   position: relative;
-  width: 92%;
-  max-width: 350px;
+  width: 96%;
+  max-width: 440px;
   min-height: 466px;
   aspect-ratio: 3 / 4;
   border-radius: var(--radius-md);
@@ -3627,8 +3721,8 @@
   }
 
   .share-card-poster-wrap {
-    width: calc(100vw - 72px);
-    max-width: 270px;
+    width: calc(100vw - 52px);
+    max-width: 320px;
     min-height: 360px;
   }
 

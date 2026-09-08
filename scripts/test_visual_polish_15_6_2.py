@@ -147,10 +147,10 @@ def test_8_canvas_cards_grid_and_typography_polish():
     # 解读字号放大
     assert "20px" in canvas_js, "核心解读字号未提升至 20px"
 
-    # 微行动浅色背衬承托卡片
-    assert "rgba(130, 182, 162, 0.12)" in canvas_js, "站点卡微行动缺少背衬卡色块"
-    assert "rgba(217, 185, 120, 0.12)" in canvas_js, "每日诗签微行动缺少背衬卡色块"
-    assert "rgba(229, 178, 99, 0.12)" in canvas_js, "节点卡生活践行缺少背衬卡色块"
+    # 微行动浅色背衬承托卡片 (兼容15.6.2及15.6.3全屏升级色块)
+    assert any(c in canvas_js for c in ["rgba(130, 182, 162, 0.12)", "rgba(130, 182, 162, 0.15)"]), "站点卡微行动缺少背衬卡色块"
+    assert any(c in canvas_js for c in ["rgba(217, 185, 120, 0.12)", "rgba(217, 185, 120, 0.15)"]), "每日诗签微行动缺少背衬卡色块"
+    assert any(c in canvas_js for c in ["rgba(229, 178, 99, 0.12)", "rgba(229, 178, 99, 0.15)"]), "节点卡生活践行缺少背衬卡色块"
 
     # 免责贴合底栏
     assert "height - 116" in canvas_js, "免责声明位置未严格贴合底栏上方"
@@ -164,8 +164,8 @@ def test_9_viewport_adaptability_css():
     comp_css = read_file("css/components.css")
 
     assert "max-width: 420px" in comp_css, "空间星图舞台缺少 max-width: 420px 限制"
-    assert "max-width: 350px" in views_css, "3:4 诗签容器缺少 max-width: 350px 限制"
-    assert "width: 92%" in views_css, "3:4 诗签容器缺少 width: 92% 比例定义"
+    assert any(m in views_css for m in ["max-width: 350px", "max-width: 440px"]), "3:4 诗签容器缺少 max-width 限制"
+    assert any(w in views_css for w in ["width: 92%", "width: 96%"]), "3:4 诗签容器缺少全屏自适应宽度比例定义"
     print("  [PASS] 9. 320~480px 多视口自适应良好，星图舞台与海报居中自适应，无横向溢出")
 
 

@@ -1871,6 +1871,1079 @@
           }
         ]
       }
+    ],
+    "experiment_bank": [
+      {
+        "id": "exp_q01",
+        "dimension": "sudden_change",
+        "interactionType": "proximity",
+        "name": "星体靠近",
+        "num": "01",
+        "prompt": "自我星体置于中央，直面突如其来的心境扰动",
+        "actionText": "拖动你的星体靠近目标，或直接轻触星宿",
+        "targets": [
+          {
+            "key": "target_a",
+            "label": "骤变星",
+            "hint": "突然发生变化",
+            "desc": "工作或生活里突如其来的临时变动",
+            "scoreVector": {
+              "mood_anxious": 3,
+              "mood_overthinking": 2
+            }
+          },
+          {
+            "key": "target_b",
+            "label": "阻滞星",
+            "hint": "努力却没进展",
+            "desc": "付出了很多心力，事情却没能按预期推进",
+            "scoreVector": {
+              "mood_work_stuck": 3,
+              "mood_lost": 1
+            }
+          },
+          {
+            "key": "target_c",
+            "label": "寒语星",
+            "hint": "被一句话刺到",
+            "desc": "别人无意间的一句挑剔或冷淡反馈",
+            "scoreVector": {
+              "mood_misunderstood": 3,
+              "mood_overthinking": 1
+            }
+          },
+          {
+            "key": "target_d",
+            "label": "倦怠星",
+            "hint": "什么都不想做",
+            "desc": "其实没发生什么，但就是觉得身上没劲",
+            "scoreVector": {
+              "mood_tired": 3,
+              "mood_ordinary": 1
+            }
+          }
+        ]
+      },
+      {
+        "id": "exp_q02",
+        "dimension": "sudden_change",
+        "interactionType": "orbit",
+        "name": "变故避险",
+        "num": "02",
+        "prompt": "突来急雨摧折竹林，如何安顿当下的惊疑与步调？",
+        "actionText": "选择你的避险星轨",
+        "targets": [
+          {
+            "key": "target_a",
+            "label": "避险轨道",
+            "hint": "先避开其锋芒",
+            "desc": "先找个地方避避风雨，不盲目冲撞",
+            "scoreVector": {
+              "mood_anxious": 2,
+              "mood_tired": 2
+            }
+          },
+          {
+            "key": "target_b",
+            "label": "直面迎击",
+            "hint": "硬着头皮顶上",
+            "desc": "纵有骤变也硬着头皮顶上，绝不退缩",
+            "scoreVector": {
+              "mood_work_stuck": 3,
+              "mood_overthinking": 1
+            }
+          },
+          {
+            "key": "target_c",
+            "label": "另辟捷径",
+            "hint": "换条路继续走",
+            "desc": "既然此路不通，那就转头走另一条路",
+            "scoreVector": {
+              "mood_lost": 2,
+              "mood_ordinary": 2
+            }
+          },
+          {
+            "key": "target_d",
+            "label": "静观其变",
+            "hint": "先等等看局势",
+            "desc": "不急于定论，且坐看风云变幻",
+            "scoreVector": {
+              "mood_ordinary": 3,
+              "mood_lonely": 1
+            }
+          }
+        ]
+      },
+      {
+        "id": "exp_q03",
+        "dimension": "pressure_endurance",
+        "interactionType": "impact",
+        "name": "行星撞击",
+        "num": "03",
+        "prompt": "一颗重压流星正沿轨道逼近，如何应对这次突发撞击？",
+        "actionText": "选择你的轨道应激对策",
+        "targets": [
+          {
+            "key": "target_a",
+            "label": "反复推演",
+            "hint": "推演最坏结果",
+            "desc": "在心里反复推演各种最坏的结果",
+            "scoreVector": {
+              "mood_overthinking": 3,
+              "mood_anxious": 2
+            }
+          },
+          {
+            "key": "target_b",
+            "label": "遁入暗区",
+            "hint": "找地方彻底静静",
+            "desc": "想找个没人的地方彻底安静呆着",
+            "scoreVector": {
+              "mood_lonely": 2,
+              "mood_tired": 2
+            }
+          },
+          {
+            "key": "target_c",
+            "label": "正面硬撑",
+            "hint": "逼自己扛到底",
+            "desc": "逼着自己硬撑着继续做，直到做完为止",
+            "scoreVector": {
+              "mood_work_stuck": 2,
+              "mood_tired": 3
+            }
+          },
+          {
+            "key": "target_d",
+            "label": "变轨释怀",
+            "hint": "出门吃顿好的",
+            "desc": "先不管了，吃一顿好吃的或者出去转转",
+            "scoreVector": {
+              "mood_ordinary": 3,
+              "mood_lost": 1
+            }
+          }
+        ]
+      },
+      {
+        "id": "exp_q04",
+        "dimension": "pressure_endurance",
+        "interactionType": "gravity",
+        "name": "负荷过载",
+        "num": "04",
+        "prompt": "周遭重力倍增，身上背负的事务与期望超出负荷",
+        "actionText": "调节星核引力负荷",
+        "targets": [
+          {
+            "key": "target_a",
+            "label": "卸载星尘",
+            "hint": "果断放弃部分",
+            "desc": "果断砍掉一部分不重要的琐事",
+            "scoreVector": {
+              "mood_ordinary": 2,
+              "mood_tired": 2
+            }
+          },
+          {
+            "key": "target_b",
+            "label": "咬牙硬挺",
+            "hint": "硬撑绝不服输",
+            "desc": "再累也要证明自己可以一个人搞定",
+            "scoreVector": {
+              "mood_work_stuck": 3,
+              "mood_anxious": 2
+            }
+          },
+          {
+            "key": "target_c",
+            "label": "呼叫援星",
+            "hint": "向信任的人求助",
+            "desc": "向信任的朋友或伙伴主动开口求援",
+            "scoreVector": {
+              "mood_misunderstood": 2,
+              "mood_lost": 2
+            }
+          },
+          {
+            "key": "target_d",
+            "label": "苦中作乐",
+            "hint": "讲个笑话消解",
+            "desc": "自嘲一番，发现眼下的狼狈也挺好笑",
+            "scoreVector": {
+              "mood_ordinary": 3,
+              "mood_overthinking": 1
+            }
+          }
+        ]
+      },
+      {
+        "id": "exp_q05",
+        "dimension": "interpersonal_criticism",
+        "interactionType": "split",
+        "name": "星体分裂",
+        "num": "05",
+        "prompt": "星核承受着外界评议过载，如何释放内部张力？",
+        "actionText": "释放星体张力，重塑心境形态",
+        "targets": [
+          {
+            "key": "target_a",
+            "label": "向内收缩",
+            "hint": "反思自己不够好",
+            "desc": "第一反应是反思自己哪里做得不够周全",
+            "scoreVector": {
+              "mood_overthinking": 3,
+              "mood_anxious": 2
+            }
+          },
+          {
+            "key": "target_b",
+            "label": "辐射呼叫",
+            "hint": "找人把话说清",
+            "desc": "心里很委屈，想立刻找信任的人把话说清楚",
+            "scoreVector": {
+              "mood_misunderstood": 3,
+              "mood_anxious": 1
+            }
+          },
+          {
+            "key": "target_c",
+            "label": "引力钝化",
+            "hint": "时间自会证明",
+            "desc": "懒得解释，时间久了大家自然知道我是什么人",
+            "scoreVector": {
+              "mood_lonely": 2,
+              "mood_ordinary": 2
+            }
+          },
+          {
+            "key": "target_d",
+            "label": "幽默消解",
+            "hint": "觉得荒诞好笑",
+            "desc": "心里暗暗吐槽，甚至觉得整件事有点荒诞好笑",
+            "scoreVector": {
+              "mood_ordinary": 3,
+              "mood_lost": 1
+            }
+          }
+        ]
+      },
+      {
+        "id": "exp_q06",
+        "dimension": "interpersonal_criticism",
+        "interactionType": "proximity",
+        "name": "冷遇寒潮",
+        "num": "06",
+        "prompt": "周遭投来不解或冷漠的目光，如同穿过一片冰原星带",
+        "actionText": "做出你的星体回应",
+        "targets": [
+          {
+            "key": "target_a",
+            "label": "沉默自处",
+            "hint": "不争辩不迎合",
+            "desc": "不迎合也不争辩，守住内心的清白",
+            "scoreVector": {
+              "mood_lonely": 3,
+              "mood_misunderstood": 2
+            }
+          },
+          {
+            "key": "target_b",
+            "label": "委屈自伤",
+            "hint": "暗自难过失落",
+            "desc": "心里像压了块石头，反复咀嚼对方的话",
+            "scoreVector": {
+              "mood_misunderstood": 3,
+              "mood_overthinking": 2
+            }
+          },
+          {
+            "key": "target_c",
+            "label": "决绝远离",
+            "hint": "果断拉开距离",
+            "desc": "直接退出这个圈子，不再消耗心力",
+            "scoreVector": {
+              "mood_lost": 2,
+              "mood_tired": 2
+            }
+          },
+          {
+            "key": "target_d",
+            "label": "泰然处之",
+            "hint": "当作过眼云烟",
+            "desc": "看破人情冷暖，微笑着继续做自己的事",
+            "scoreVector": {
+              "mood_ordinary": 3,
+              "mood_lonely": 1
+            }
+          }
+        ]
+      },
+      {
+        "id": "exp_q07",
+        "dimension": "action_procrastination",
+        "interactionType": "cross",
+        "name": "星轨穿越",
+        "num": "07",
+        "prompt": "前方星雾弥漫、轨道分岔，行进至关键十字星门",
+        "actionText": "确定你的穿越航线",
+        "targets": [
+          {
+            "key": "target_a",
+            "label": "逆风破浪",
+            "hint": "想再搏一把看看",
+            "desc": "即使很累，也想再搏一把看看上限在哪里",
+            "scoreVector": {
+              "mood_work_stuck": 3,
+              "mood_anxious": 2
+            }
+          },
+          {
+            "key": "target_b",
+            "label": "顺流滑行",
+            "hint": "不再跟自己死磕",
+            "desc": "累了就停，好了就走，不再跟自己死磕",
+            "scoreVector": {
+              "mood_tired": 3,
+              "mood_ordinary": 2
+            }
+          },
+          {
+            "key": "target_c",
+            "label": "暂泊星湾",
+            "hint": "先稳住眼下生活",
+            "desc": "先稳住眼下的生活，不轻易做冒险的变动",
+            "scoreVector": {
+              "mood_lost": 2,
+              "mood_ordinary": 2
+            }
+          },
+          {
+            "key": "target_d",
+            "label": "开拓新径",
+            "hint": "换个赛道从头来",
+            "desc": "很想换个环境或赛道，哪怕从头开始",
+            "scoreVector": {
+              "mood_lost": 3,
+              "mood_work_stuck": 1
+            }
+          }
+        ]
+      },
+      {
+        "id": "exp_q08",
+        "dimension": "action_procrastination",
+        "interactionType": "orbit",
+        "name": "步调迟滞",
+        "num": "08",
+        "prompt": "手头的事情停滞不前，像陷在浓稠的星云粘液中",
+        "actionText": "调整你的运转节拍",
+        "targets": [
+          {
+            "key": "target_a",
+            "label": "慢火细煨",
+            "hint": "放慢节拍慢慢做",
+            "desc": "像炖东坡肉一样，火候到了自然熟",
+            "scoreVector": {
+              "mood_ordinary": 3,
+              "mood_work_stuck": 1
+            }
+          },
+          {
+            "key": "target_b",
+            "label": "突击爆发",
+            "hint": "一鼓作气拼完",
+            "desc": "逼自己通宵熬夜，非要一口气冲过去",
+            "scoreVector": {
+              "mood_anxious": 3,
+              "mood_tired": 2
+            }
+          },
+          {
+            "key": "target_c",
+            "label": "彻底放空",
+            "hint": "今天先什么都不做",
+            "desc": "今天先不管它，睡饱了明天再说",
+            "scoreVector": {
+              "mood_tired": 3,
+              "mood_ordinary": 1
+            }
+          },
+          {
+            "key": "target_d",
+            "label": "拆解微步",
+            "hint": "只做眼前一小步",
+            "desc": "不看宏大目标，先把当下这一两步挪出去",
+            "scoreVector": {
+              "mood_work_stuck": 2,
+              "mood_ordinary": 2
+            }
+          }
+        ]
+      },
+      {
+        "id": "exp_q09",
+        "dimension": "self_regulation",
+        "interactionType": "merge",
+        "name": "星体聚合",
+        "num": "09",
+        "prompt": "眼前漂浮着三颗微光星宿，偷得半日清闲时分",
+        "actionText": "凝聚你当下最渴望的归宿",
+        "targets": [
+          {
+            "key": "target_a",
+            "label": "休眠黑洞",
+            "hint": "昏天黑地睡一觉",
+            "desc": "拉上窗帘，不受打扰地昏天黑地睡一觉",
+            "scoreVector": {
+              "mood_tired": 3,
+              "mood_lonely": 1
+            }
+          },
+          {
+            "key": "target_b",
+            "label": "专注光团",
+            "hint": "专心做喜欢的事",
+            "desc": "专心做一件完全出于喜欢、不计产出的事",
+            "scoreVector": {
+              "mood_work_stuck": 2,
+              "mood_ordinary": 2
+            }
+          },
+          {
+            "key": "target_c",
+            "label": "游离星尘",
+            "hint": "出门漫无目的走走",
+            "desc": "出门漫无目的地走走，看看树、吹吹风",
+            "scoreVector": {
+              "mood_lost": 2,
+              "mood_ordinary": 3
+            }
+          },
+          {
+            "key": "target_d",
+            "label": "双星共振",
+            "hint": "找懂的朋友聊天",
+            "desc": "找个完全懂你的朋友，毫无负担地聊聊天",
+            "scoreVector": {
+              "mood_misunderstood": 2,
+              "mood_lonely": 3
+            }
+          }
+        ]
+      },
+      {
+        "id": "exp_q10",
+        "dimension": "self_regulation",
+        "interactionType": "gravity",
+        "name": "独处自修",
+        "num": "10",
+        "prompt": "夜深万籁俱寂，只剩一盏孤灯与内心对话",
+        "actionText": "安顿独处的心神",
+        "targets": [
+          {
+            "key": "target_a",
+            "label": "烹茶温火",
+            "hint": "给自己煮碗热汤",
+            "desc": "烧一壶水，泡一盏茶，在热气里回暖",
+            "scoreVector": {
+              "mood_ordinary": 3,
+              "mood_tired": 2
+            }
+          },
+          {
+            "key": "target_b",
+            "label": "独对长风",
+            "hint": "吹吹风看云舒卷",
+            "desc": "推窗看月，看云卷云舒，顿觉人间渺小",
+            "scoreVector": {
+              "mood_lonely": 3,
+              "mood_ordinary": 2
+            }
+          },
+          {
+            "key": "target_c",
+            "label": "闭门静读",
+            "hint": "翻闲书不说话",
+            "desc": "随手翻几页闲书，不求甚解但觉心安",
+            "scoreVector": {
+              "mood_overthinking": 2,
+              "mood_ordinary": 2
+            }
+          },
+          {
+            "key": "target_d",
+            "label": "洒扫庭除",
+            "hint": "把屋子收拾干净",
+            "desc": "把书桌和房间收拾整齐，心里也亮堂了",
+            "scoreVector": {
+              "mood_anxious": 2,
+              "mood_work_stuck": 2
+            }
+          }
+        ]
+      },
+      {
+        "id": "exp_q11",
+        "dimension": "empathy_responsibility",
+        "interactionType": "rescue",
+        "name": "漂流星救援",
+        "num": "11",
+        "prompt": "旅途最后一程，偶遇一颗偏离轨道的流浪微星",
+        "actionText": "做出东坡式的人间终极回应",
+        "targets": [
+          {
+            "key": "target_a",
+            "label": "同舟相挽",
+            "hint": "有余力就多帮一把",
+            "desc": "只要我还有余力，总想尽力多帮对方一把",
+            "scoreVector": {
+              "mood_work_stuck": 2,
+              "mood_ordinary": 2
+            }
+          },
+          {
+            "key": "target_b",
+            "label": "各自奔赴",
+            "hint": "尊重界限最好的善",
+            "desc": "每个人有各自的命途，尊重界限是最好的善意",
+            "scoreVector": {
+              "mood_lonely": 2,
+              "mood_ordinary": 2
+            }
+          },
+          {
+            "key": "target_c",
+            "label": "平淡对视",
+            "hint": "默默陪伴不指点",
+            "desc": "默默陪伴在旁，不强行指点也不过分干预",
+            "scoreVector": {
+              "mood_ordinary": 3,
+              "mood_tired": 1
+            }
+          },
+          {
+            "key": "target_d",
+            "label": "分享火种",
+            "hint": "讲个笑话逗对方笑",
+            "desc": "用幽默或一件小事逗对方笑一笑，这就够了",
+            "scoreVector": {
+              "mood_ordinary": 3,
+              "mood_misunderstood": 1
+            }
+          }
+        ]
+      },
+      {
+        "id": "exp_q12",
+        "dimension": "empathy_responsibility",
+        "interactionType": "merge",
+        "name": "羁绊牵引",
+        "num": "12",
+        "prompt": "多颗星宿通过引力丝线与你牵绊，责任与关怀交织",
+        "actionText": "校准你的引力连结",
+        "targets": [
+          {
+            "key": "target_a",
+            "label": "倾力护持",
+            "hint": "护好重要的人",
+            "desc": "把家人和朋友的重担挑在自己肩上",
+            "scoreVector": {
+              "mood_anxious": 2,
+              "mood_work_stuck": 3
+            }
+          },
+          {
+            "key": "target_b",
+            "label": "守好边界",
+            "hint": "不过度背负他人",
+            "desc": "不当无休止的拯救者，先把自己照料好",
+            "scoreVector": {
+              "mood_tired": 2,
+              "mood_ordinary": 2
+            }
+          },
+          {
+            "key": "target_c",
+            "label": "随缘聚散",
+            "hint": "来去皆是寻常事",
+            "desc": "聚散不由人，珍惜当下在一起的每顿饭",
+            "scoreVector": {
+              "mood_lonely": 2,
+              "mood_ordinary": 3
+            }
+          },
+          {
+            "key": "target_d",
+            "label": "温暖照拂",
+            "hint": "给疲惫者留微光",
+            "desc": "不求轰轰烈烈，只给晚归的人留一盏微灯",
+            "scoreVector": {
+              "mood_ordinary": 3,
+              "mood_misunderstood": 1
+            }
+          }
+        ]
+      },
+      {
+        "id": "exp_q13",
+        "dimension": "choice_tradeoff",
+        "interactionType": "gravity",
+        "name": "引力选择",
+        "num": "13",
+        "prompt": "宇宙深处有不同引力场呼唤，你最向往的立足锚点是？",
+        "actionText": "将星体泊入你认同的引力场",
+        "targets": [
+          {
+            "key": "target_a",
+            "label": "独省星云",
+            "hint": "拥有属于自己的平静",
+            "desc": "拥有完全属于自己的安全感与平静",
+            "scoreVector": {
+              "mood_lonely": 2,
+              "mood_tired": 3
+            }
+          },
+          {
+            "key": "target_b",
+            "label": "荣耀星核",
+            "hint": "做成一件大事",
+            "desc": "在自己热爱的领域做成一件拿得出手的大事",
+            "scoreVector": {
+              "mood_work_stuck": 3,
+              "mood_anxious": 1
+            }
+          },
+          {
+            "key": "target_c",
+            "label": "旷达苍穹",
+            "hint": "有随时出发的底气",
+            "desc": "不管经历什么，都能有随时重新出发的底气",
+            "scoreVector": {
+              "mood_ordinary": 3,
+              "mood_lost": 1
+            }
+          },
+          {
+            "key": "target_d",
+            "label": "烟火星流",
+            "hint": "家人平安吃好睡好",
+            "desc": "家人朋友健康平安，每天能吃好睡踏实",
+            "scoreVector": {
+              "mood_ordinary": 3,
+              "mood_tired": 1
+            }
+          }
+        ]
+      },
+      {
+        "id": "exp_q14",
+        "dimension": "choice_tradeoff",
+        "interactionType": "split",
+        "name": "双叉星门",
+        "num": "14",
+        "prompt": "必须在“世俗得失”与“本心从容”之间割舍一方",
+        "actionText": "做出你的取舍决断",
+        "targets": [
+          {
+            "key": "target_a",
+            "label": "守中自保",
+            "hint": "保住安稳底线",
+            "desc": "先求不失，保全现实生存的基础底线",
+            "scoreVector": {
+              "mood_anxious": 2,
+              "mood_lost": 2
+            }
+          },
+          {
+            "key": "target_b",
+            "label": "舍末求本",
+            "hint": "舍弃浮华留初心",
+            "desc": "宁可丢掉虚名利益，也不能丢了内心的清明",
+            "scoreVector": {
+              "mood_lonely": 2,
+              "mood_ordinary": 3
+            }
+          },
+          {
+            "key": "target_c",
+            "label": "随遇而安",
+            "hint": "走到哪就算哪",
+            "desc": "得之我幸失之我命，走到哪里就在哪里生根",
+            "scoreVector": {
+              "mood_ordinary": 3,
+              "mood_lost": 1
+            }
+          },
+          {
+            "key": "target_d",
+            "label": "孤注一掷",
+            "hint": "为热爱的赌一次",
+            "desc": "为了真正看重的事物，哪怕冒险也要试一次",
+            "scoreVector": {
+              "mood_work_stuck": 3,
+              "mood_anxious": 2
+            }
+          }
+        ]
+      },
+      {
+        "id": "exp_q15",
+        "dimension": "failure_recovery",
+        "interactionType": "impact",
+        "name": "陨坑修复",
+        "num": "15",
+        "prompt": "刚经历了一场剧烈的陨石重创，地表满目疮痍",
+        "actionText": "启动星体自愈修复",
+        "targets": [
+          {
+            "key": "target_a",
+            "label": "泥土筑堤",
+            "hint": "收拾残局重建家园",
+            "desc": "像在黄州修雪堂一样，亲自动手一砖一瓦重建",
+            "scoreVector": {
+              "mood_ordinary": 3,
+              "mood_work_stuck": 2
+            }
+          },
+          {
+            "key": "target_b",
+            "label": "卧看残星",
+            "hint": "躺平任风雨过去",
+            "desc": "先痛痛快快躺上几天，等伤口自己结痂",
+            "scoreVector": {
+              "mood_tired": 3,
+              "mood_lonely": 2
+            }
+          },
+          {
+            "key": "target_c",
+            "label": "苦中寻甘",
+            "hint": "废墟里开出花来",
+            "desc": "在最糟的境遇里发掘出微小生机与乐趣",
+            "scoreVector": {
+              "mood_ordinary": 3,
+              "mood_lost": 1
+            }
+          },
+          {
+            "key": "target_d",
+            "label": "拍尘复行",
+            "hint": "拍拍灰尘继续赶路",
+            "desc": "咬咬牙站起来，拍掉身上的尘土继续向前走",
+            "scoreVector": {
+              "mood_work_stuck": 2,
+              "mood_ordinary": 2
+            }
+          }
+        ]
+      },
+      {
+        "id": "exp_q16",
+        "dimension": "failure_recovery",
+        "interactionType": "proximity",
+        "name": "挫败低谷",
+        "num": "16",
+        "prompt": "跌入前所未有的心境谷底，四周一片晦暗",
+        "actionText": "找寻回暖的微光",
+        "targets": [
+          {
+            "key": "target_a",
+            "label": "宣泄泪水",
+            "hint": "释放委屈不甘",
+            "desc": "允许自己软弱一次，痛痛快快哭一场",
+            "scoreVector": {
+              "mood_misunderstood": 3,
+              "mood_tired": 2
+            }
+          },
+          {
+            "key": "target_b",
+            "label": "对饮东坡",
+            "hint": "感受古人旷达",
+            "desc": "翻翻东坡词，原来千年前他经历过更惨的",
+            "scoreVector": {
+              "mood_ordinary": 3,
+              "mood_lonely": 2
+            }
+          },
+          {
+            "key": "target_c",
+            "label": "热汤暖胃",
+            "hint": "把身体先喂饱",
+            "desc": "身体暖了心就不容易冷，好好吃顿热饭",
+            "scoreVector": {
+              "mood_ordinary": 3,
+              "mood_tired": 2
+            }
+          },
+          {
+            "key": "target_d",
+            "label": "梳理盘点",
+            "hint": "理清下一步怎么走",
+            "desc": "拿出纸笔理理账，看看手里还剩下什么牌",
+            "scoreVector": {
+              "mood_work_stuck": 2,
+              "mood_overthinking": 2
+            }
+          }
+        ]
+      },
+      {
+        "id": "exp_q17",
+        "dimension": "achievement_recognition",
+        "interactionType": "orbit",
+        "name": "盛名光环",
+        "num": "17",
+        "prompt": "星体周围环绕着外界赞誉与聚光灯，光芒耀眼",
+        "actionText": "平衡光环与自心",
+        "targets": [
+          {
+            "key": "target_a",
+            "label": "清醒自持",
+            "hint": "盛名更须谨慎",
+            "desc": "深知花无百日红，越是风光越要谨言慎行",
+            "scoreVector": {
+              "mood_overthinking": 2,
+              "mood_anxious": 2
+            }
+          },
+          {
+            "key": "target_b",
+            "label": "坦然受之",
+            "hint": "自己的努力配得上",
+            "desc": "问心无愧，欣然接纳自己应得的成果",
+            "scoreVector": {
+              "mood_ordinary": 2,
+              "mood_work_stuck": 1
+            }
+          },
+          {
+            "key": "target_c",
+            "label": "抽身退步",
+            "hint": "适时退回安宁生活",
+            "desc": "热闹都是别人的，只想早点回家吃碗素面",
+            "scoreVector": {
+              "mood_tired": 2,
+              "mood_ordinary": 3
+            }
+          },
+          {
+            "key": "target_d",
+            "label": "分甘同味",
+            "hint": "荣光分给同行者",
+            "desc": "把功劳归于大家，与身边的同伴共享甘甜",
+            "scoreVector": {
+              "mood_ordinary": 3,
+              "mood_misunderstood": 1
+            }
+          }
+        ]
+      },
+      {
+        "id": "exp_q18",
+        "dimension": "achievement_recognition",
+        "interactionType": "merge",
+        "name": "功名试炼",
+        "num": "18",
+        "prompt": "功名利禄与内心所守发生冲突，如何衡量一生的重力？",
+        "actionText": "校准灵魂恒星价值",
+        "targets": [
+          {
+            "key": "target_a",
+            "label": "济世安民",
+            "hint": "做对世人有益的事",
+            "desc": "做官做事，但求无愧于天下百姓与良知",
+            "scoreVector": {
+              "mood_work_stuck": 3,
+              "mood_ordinary": 2
+            }
+          },
+          {
+            "key": "target_b",
+            "label": "独善其身",
+            "hint": "守好自己的良知",
+            "desc": "外界如何变幻，绝不曲学阿世同流合污",
+            "scoreVector": {
+              "mood_lonely": 3,
+              "mood_misunderstood": 2
+            }
+          },
+          {
+            "key": "target_c",
+            "label": "超然物外",
+            "hint": "功名如浮云过眼",
+            "desc": "富贵于我如浮云，人间有味是清欢",
+            "scoreVector": {
+              "mood_ordinary": 3,
+              "mood_lost": 1
+            }
+          },
+          {
+            "key": "target_d",
+            "label": "寄情笔墨",
+            "hint": "留下经得起时间的作品",
+            "desc": "把悲欢化入诗文书画，留赠岁月后人",
+            "scoreVector": {
+              "mood_ordinary": 3,
+              "mood_lonely": 1
+            }
+          }
+        ]
+      },
+      {
+        "id": "exp_q19",
+        "dimension": "stability_exploration",
+        "interactionType": "cross",
+        "name": "边界拓荒",
+        "num": "19",
+        "prompt": "眼前是熟悉的定居星轨与广阔未知的星外荒原",
+        "actionText": "锚定你的生命疆域",
+        "targets": [
+          {
+            "key": "target_a",
+            "label": "扎根深耕",
+            "hint": "把眼前土地种熟",
+            "desc": "不贪恋远方，把眼下的日子和工作经营出花样",
+            "scoreVector": {
+              "mood_ordinary": 3,
+              "mood_work_stuck": 1
+            }
+          },
+          {
+            "key": "target_b",
+            "label": "扬帆远航",
+            "hint": "渴望探索未知天地",
+            "desc": "胸怀九万里风鹏，永远对未知的世界充满好奇",
+            "scoreVector": {
+              "mood_lost": 2,
+              "mood_ordinary": 2
+            }
+          },
+          {
+            "key": "target_c",
+            "label": "居安思危",
+            "hint": "安稳中留一手退路",
+            "desc": "享受眼前的平静，但随时做好应变准备",
+            "scoreVector": {
+              "mood_anxious": 2,
+              "mood_overthinking": 2
+            }
+          },
+          {
+            "key": "target_d",
+            "label": "顺应天时",
+            "hint": "春耕秋收不违时",
+            "desc": "不刻意强求，随遇而适，该定就定该走就走",
+            "scoreVector": {
+              "mood_ordinary": 3,
+              "mood_tired": 1
+            }
+          }
+        ]
+      },
+      {
+        "id": "exp_q20",
+        "dimension": "stability_exploration",
+        "interactionType": "gravity",
+        "name": "人间定盘",
+        "num": "20",
+        "prompt": "风雨飘摇半生，你最终选择泊宿在何种人间风景中？",
+        "actionText": "确定终生栖宿之所",
+        "targets": [
+          {
+            "key": "target_a",
+            "label": "一叶扁舟",
+            "hint": "万事随风浩荡漂流",
+            "desc": "小舟从此逝，江海寄余生",
+            "scoreVector": {
+              "mood_ordinary": 3,
+              "mood_lonely": 2
+            }
+          },
+          {
+            "key": "target_b",
+            "label": "茅屋雪堂",
+            "hint": "亲手盖避风港",
+            "desc": "亲手耕作筑屋，过接地气烟火日子",
+            "scoreVector": {
+              "mood_ordinary": 3,
+              "mood_work_stuck": 1
+            }
+          },
+          {
+            "key": "target_c",
+            "label": "琼楼玉宇",
+            "hint": "向往高远纯粹境界",
+            "desc": "高处虽不胜寒，但仍向往精神的峰峦",
+            "scoreVector": {
+              "mood_lonely": 3,
+              "mood_misunderstood": 1
+            }
+          },
+          {
+            "key": "target_d",
+            "label": "市井酒旗",
+            "hint": "沉醉寻常市井烟火",
+            "desc": "有酒有肉有知己，随处与农夫渔樵话平生",
+            "scoreVector": {
+              "mood_ordinary": 3,
+              "mood_tired": 1
+            }
+          }
+        ]
+      },
+      {
+        "id": "exp_q21",
+        "dimension": "stability_exploration",
+        "interactionType": "rescue",
+        "name": "终极释怀",
+        "num": "21",
+        "prompt": "回望一路颠簸跌宕的生命星图，东坡式的人生态度是？",
+        "actionText": "收束本次宇宙实验",
+        "targets": [
+          {
+            "key": "target_a",
+            "label": "也无风雨",
+            "hint": "回首也无阴晴",
+            "desc": "回首向来萧瑟处，归去，也无风雨也无晴",
+            "scoreVector": {
+              "mood_ordinary": 4,
+              "mood_anxious": 0
+            }
+          },
+          {
+            "key": "target_b",
+            "label": "试新茶",
+            "hint": "且将新火试新茶",
+            "desc": "休对故人思故国，且将新火试新茶，诗酒趁年华",
+            "scoreVector": {
+              "mood_ordinary": 3,
+              "mood_lost": 1
+            }
+          },
+          {
+            "key": "target_c",
+            "label": "心安即乡",
+            "hint": "此心安处是吾乡",
+            "desc": "万里归来颜愈少，微笑，此心安处是吾乡",
+            "scoreVector": {
+              "mood_ordinary": 4,
+              "mood_lonely": 0
+            }
+          },
+          {
+            "key": "target_d",
+            "label": "不思量",
+            "hint": "十年生死两茫茫",
+            "desc": "深情留在心底，人间依然值得用心走一遭",
+            "scoreVector": {
+              "mood_lonely": 2,
+              "mood_ordinary": 2
+            }
+          }
+        ]
+      }
     ]
   },
   "dailyDongpo": [

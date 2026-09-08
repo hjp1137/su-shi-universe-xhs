@@ -418,14 +418,19 @@
       wrap.className = 'view-wrapper quiz-container experiment-view';
 
       var questions = (Data.quiz && Data.quiz.questions) || [];
-      var total = EXPERIMENT_SCENES.length;
-      if (total === 0 || !questions || questions.length === 0) {
+      var QuizModule = SuShi.Quiz || (typeof SuShiUniverse !== 'undefined' ? SuShiUniverse.Quiz : null);
+      var session = QuizModule ? QuizModule.createQuizSession() : null;
+      var currentScenes = (session && typeof session.getScenes === 'function')
+        ? session.getScenes()
+        : (QuizModule && typeof QuizModule.generateExperimentScenes === 'function'
+          ? QuizModule.generateExperimentScenes().scenes
+          : EXPERIMENT_SCENES);
+      var total = currentScenes.length;
+
+      if (total === 0) {
         wrap.appendChild(UI.createEmptyState('宇宙实验星象正在校准中...'));
         return wrap;
       }
-
-      var QuizModule = SuShi.Quiz;
-      var session = QuizModule ? QuizModule.createQuizSession() : null;
       var isTransitioning = false;
 
       // 1. 顶部控制栏 (宇宙实验标题 + 七星轨道进度 + 返航星门退出按钮)
@@ -522,7 +527,7 @@
 
       function renderExperiment() {
         var idx = session ? session.getCurrentIndex() : 0;
-        var scene = EXPERIMENT_SCENES[idx] || EXPERIMENT_SCENES[0];
+        var scene = currentScenes[idx] || currentScenes[0];
         var currentQ = questions[idx] || { id: 'quiz_q0' + (idx + 1) };
         isTransitioning = false;
 
@@ -595,7 +600,7 @@
         soulStar.innerHTML = '<span class="soul-core"></span><span class="soul-halo"></span><span class="soul-label">心识</span>';
         stageBox.appendChild(soulStar);
 
-        // 4 颗环境目标星体 (支持轻触点击与拖拽吸附，纯矢量 SVG 零 Emoji)
+        // 4 颗环境目标星体 (支持轻触点击与拖拽吸附，纯矢量 SVG 零 Emoji，绑定 4~10 字极短语义提示)
         var targetNodes = [];
         var targets = scene.targets || [];
         var posClasses = ['target-top-left', 'target-top-right', 'target-bottom-left', 'target-bottom-right'];
@@ -610,8 +615,10 @@
             orb.setAttribute('aria-label', tItem.label + '：' + tItem.desc);
 
             var svgIcon = getExpSymbolSvg(tItem.key);
+            var hintText = tItem.hint || '';
             orb.innerHTML = '<span class="orb-icon">' + svgIcon + '</span>' +
-                            '<span class="orb-name">' + tItem.label + '</span>';
+                            '<span class="orb-name">' + tItem.label + '</span>' +
+                            (hintText ? ('<span class="orb-hint">' + hintText + '</span>') : '');
 
             // 点击场景星宿直接完成
             orb.addEventListener('click', function () {
@@ -726,6 +733,12 @@
             var nameEl = document.createElement('div');
             nameEl.className = 'exp-choice-name';
             nameEl.textContent = targetItem.label;
+            if (targetItem.hint) {
+              var hintSpan = document.createElement('span');
+              hintSpan.className = 'exp-choice-hint';
+              hintSpan.textContent = '· ' + targetItem.hint;
+              nameEl.appendChild(hintSpan);
+            }
             var descEl = document.createElement('div');
             descEl.className = 'exp-choice-desc quiz-opt-text';
             descEl.textContent = targetItem.desc;
@@ -754,12 +767,15 @@
         }, 1200);
 
         var idx = session ? session.getCurrentIndex() : 0;
-        var scene = EXPERIMENT_SCENES[idx];
+        var scene = currentScenes[idx] || currentScenes[0];
         var mappedOptId = (QuizModule && QuizModule.mapExperimentOutcome) ?
                           QuizModule.mapExperimentOutcome(scene.id, targetItem.key) :
                           'opt_' + (idx + 1) + 'a';
 
         if (session) {
+          if (typeof session.selectOutcome === 'function') {
+            session.selectOutcome(scene.id, targetItem.key, targetItem.scoreVector);
+          }
           session.selectOption(qId, mappedOptId);
         }
 
@@ -809,7 +825,12 @@
         calcBox.appendChild(calcSub);
         wrap.appendChild(calcBox);
 
-        var result = QuizModule ? session.calculateResult(Data.quiz, Data.moods) : null;
+        var result = null;
+        if (session && typeof session.calculateExperimentResult === 'function') {
+          result = session.calculateExperimentResult(Data.moods, (Data.quiz && Data.quiz.mood_station_matrix) || {});
+        } else if (session && typeof session.calculateResult === 'function') {
+          result = session.calculateResult(Data.quiz, Data.moods);
+        }
         if (!result) {
           result = {
             station_id: 'station_huangzhou',
@@ -842,7 +863,11 @@
       resetBtn.addEventListener('click', function () {
         if (isTransitioning) return;
         if (session) {
-          session.reset();
+          session.reset(true);
+          if (typeof session.getScenes === 'function') {
+            currentScenes = session.getScenes();
+            total = currentScenes.length;
+          }
           renderExperiment();
         }
       });
@@ -1593,16 +1618,16 @@
       headerCard.appendChild(headerContent);
       wrap.appendChild(headerCard);
 
-      // --- 中段：苏轼人生长卷四部曲 (Epic Scroll) ---
+      // --- 中段：苏轼人生长卷五部曲 (Immersive Epic Scroll) ---
       var scrollContainer = document.createElement('div');
       scrollContainer.className = 'station-epic-scroll';
 
-      // 第一章：东坡为什么来到这里 (历史现场 - 时间切片轨道，去大外框)
+      // 卷一：东坡为什么来到这里 (历史现场 - 竖向时间轨迹轴，长卷去外框)
       var chap1 = document.createElement('div');
-      chap1.className = 'station-chapter-box station-chapter-1 chapter-history station-chapter-timeline';
+      chap1.className = 'station-scroll-section station-chapter-box station-chapter-1 station-section-history station-chapter-timeline';
       var fBadge = document.createElement('div');
       fBadge.className = 'station-chapter-badge';
-      fBadge.textContent = '第一章 · 历史现场 · 东坡为什么来到这里';
+      fBadge.textContent = '第一卷 · 历史现场 · 东坡为什么来到这里';
       var fTitle = document.createElement('h3');
       fTitle.className = 'station-chapter-title';
       fTitle.textContent = (station.place || '') + ' · 当时发生了什么';
@@ -1626,12 +1651,52 @@
       chap1.appendChild(fTrack);
       scrollContainer.appendChild(chap1);
 
-      // 第二章：他在这里怎样生活 (生活实录 - 星轨脉络流线)
+      // 卷二：代表名句场景大图 (大幅意境大图全宽浸润铺展，视觉锚点)
+      var quoteId = (station.quote_ids && station.quote_ids[0]) || '';
+      var primeQuoteObj = quoteId ? Data.getQuoteById(quoteId) : null;
+      var primeWorkObj = (primeQuoteObj && primeQuoteObj.work_id) ? Data.getWorkById(primeQuoteObj.work_id) : null;
+      var stationSceneImg = (SuShi.ArtAssets && SuShi.ArtAssets.getStationScene(station.id)) || '';
+
+      var chapVerse = document.createElement('div');
+      chapVerse.className = 'station-scroll-section station-section-verse-scene';
+      var vBadge = document.createElement('div');
+      vBadge.className = 'station-chapter-badge';
+      vBadge.textContent = '第二卷 · 代表名句 · 意境大场景';
+      chapVerse.appendChild(vBadge);
+
+      var verseStage = document.createElement('div');
+      verseStage.className = 'station-verse-scene-stage';
+      if (stationSceneImg) {
+        var vImg = document.createElement('img');
+        vImg.className = 'station-verse-scene-img';
+        vImg.src = stationSceneImg;
+        vImg.alt = station.name + ' · 意境场景';
+        var vOverlay = document.createElement('div');
+        vOverlay.className = 'station-verse-scene-overlay';
+        verseStage.appendChild(vImg);
+        verseStage.appendChild(vOverlay);
+      }
+      var verseContent = document.createElement('div');
+      verseContent.className = 'station-verse-scene-content';
+      var qText = primeQuoteObj ? primeQuoteObj.text : (station.theme || '人生到处知何似，应似飞鸿踏雪泥。');
+      var vQuote = document.createElement('blockquote');
+      vQuote.className = 'station-verse-quote-text';
+      vQuote.textContent = '“' + qText + '”';
+      var vSource = document.createElement('div');
+      vSource.className = 'station-verse-source';
+      vSource.textContent = primeWorkObj ? ('—— 《' + primeWorkObj.title + '》') : ('—— ' + station.name);
+      verseContent.appendChild(vQuote);
+      verseContent.appendChild(vSource);
+      verseStage.appendChild(verseContent);
+      chapVerse.appendChild(verseStage);
+      scrollContainer.appendChild(chapVerse);
+
+      // 卷三：他在这里怎样生活 (生活实录 - 星轨脉络流线)
       var chap2 = document.createElement('div');
-      chap2.className = 'station-chapter-box station-chapter-2 chapter-life station-chapter-orbit';
+      chap2.className = 'station-scroll-section station-chapter-box station-chapter-2 station-section-life station-chapter-orbit';
       var sBadge = document.createElement('div');
       sBadge.className = 'station-chapter-badge';
-      sBadge.textContent = '第二章 · 生活实录 · 他在这里怎样度过';
+      sBadge.textContent = '第三卷 · 生活实录 · 他在这里怎样度过';
       var sTitle = document.createElement('h3');
       sTitle.className = 'station-chapter-title';
       sTitle.textContent = '日常践行与生命重构';
@@ -1648,26 +1713,16 @@
       chap2.appendChild(sStream);
       scrollContainer.appendChild(chap2);
 
-      // 第三章：代表作品与本站诗词星群 (以精神星核为中心的2D空间拓扑交互星群)
+      // 卷四：本站诗词星群 (去框化星空，精神星核与空间拓扑群星)
       var chap3 = document.createElement('div');
-      chap3.className = 'station-chapter-box station-chapter-3 chapter-works station-chapter-constellation';
+      chap3.className = 'station-scroll-section station-chapter-box station-chapter-3 station-section-constellation station-chapter-constellation';
       var wBadge = document.createElement('div');
       wBadge.className = 'station-chapter-badge';
-      wBadge.textContent = '第三章 · 诗词星群 · 这一站的精神星宿';
+      wBadge.textContent = '第四卷 · 诗词星群 · 这一站的精神星宿';
       chap3.appendChild(wBadge);
 
       var constellationBox = document.createElement('div');
       constellationBox.className = 'station-star-cluster constellation-cosmos-box';
-
-      var quoteId = (station.quote_ids && station.quote_ids[0]) || '';
-      var primeWorkObj = null;
-      var primeQuoteObj = null;
-      if (quoteId) {
-        primeQuoteObj = Data.getQuoteById(quoteId);
-        if (primeQuoteObj && primeQuoteObj.work_id) {
-          primeWorkObj = Data.getWorkById(primeQuoteObj.work_id);
-        }
-      }
 
       // 获取本站所有收录作品 (包含精神星核作品与环绕群星)
       var stationWorkIds = station.work_ids || [];
@@ -1691,16 +1746,15 @@
         satellitesWrap.appendChild(clusterGroup);
       }
       constellationBox.appendChild(satellitesWrap);
-
       chap3.appendChild(constellationBox);
       scrollContainer.appendChild(chap3);
 
-      // 第四章：沉浸阅读纸笺 (纸纹微透，现代共鸣与今日小行动)
+      // 卷五：现代共鸣与今日小事 (宣纸便签轻质感，低干扰收束)
       var chap4 = document.createElement('div');
-      chap4.className = 'station-chapter-box station-chapter-4 chapter-modern station-chapter-parchment';
+      chap4.className = 'station-scroll-section station-chapter-box station-chapter-4 station-section-modern station-chapter-parchment';
       var mBadge = document.createElement('div');
       mBadge.className = 'station-chapter-badge';
-      mBadge.textContent = '第四章 · 现代共鸣 · 如果你也在这一站';
+      mBadge.textContent = '第五卷 · 现代共鸣 · 如果你也在这一站';
       var mTitle = document.createElement('h3');
       mTitle.className = 'station-chapter-title';
       mTitle.textContent = '东坡式理解与微小行动';

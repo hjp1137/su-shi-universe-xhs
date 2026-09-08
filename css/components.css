@@ -634,24 +634,25 @@
   opacity: 0.85;
 }
 
-/* 16. 本站诗词星群组件 (Constellation Cluster) */
+/* 16. 本站诗词星群组件 (Constellation Cluster - 彻底去框化，融入长卷星空) */
 .constellation-cluster {
   display: flex;
   flex-direction: column;
-  background: rgba(16, 26, 44, 0.7);
-  border: 1px solid rgba(111, 175, 194, 0.25);
-  border-radius: var(--radius-lg);
-  padding: var(--space-4);
-  margin: var(--space-3) 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: var(--space-2) 0;
+  margin: var(--space-2) 0;
+  box-shadow: none;
 }
 
 .constellation-header {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  margin-bottom: var(--space-3);
-  padding-bottom: var(--space-2);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: var(--space-2);
+  padding-bottom: 0;
+  border-bottom: none;
 }
 
 .constellation-title {
@@ -675,17 +676,17 @@
   margin-top: var(--space-2);
 }
 
-/* 15. 诗词星群组件 2D 空间拓扑星图与次级目录 */
+/* 15. 诗词星群组件 2D 空间拓扑星图与次级目录 (彻底去框化，融入长卷宇宙) */
 .constellation-sky-stage {
   position: relative;
   width: 100%;
   max-width: 420px;
   height: 330px;
-  margin: var(--space-3) auto;
+  margin: var(--space-2) auto;
   border-radius: var(--radius-lg);
-  background: radial-gradient(circle at 50% 48%, rgba(26, 44, 76, 0.7) 0%, rgba(13, 22, 40, 0.95) 75%);
-  border: 1px solid rgba(111, 175, 194, 0.28);
-  box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.55), 0 8px 24px rgba(0, 0, 0, 0.45);
+  background: transparent;
+  border: none;
+  box-shadow: none;
   overflow: hidden;
 }
 
@@ -696,8 +697,7 @@
   right: 0;
   bottom: 0;
   pointer-events: none;
-  background-image: radial-gradient(circle at 75% 30%, rgba(217, 185, 120, 0.08) 0%, transparent 40%),
-                    radial-gradient(circle at 25% 70%, rgba(111, 175, 194, 0.08) 0%, transparent 40%);
+  background-image: radial-gradient(circle at 50% 50%, rgba(217, 185, 120, 0.05) 0%, transparent 60%);
 }
 
 .constellation-gravity-svg {
@@ -712,7 +712,7 @@
 
 .constellation-orbit-ring {
   fill: none;
-  stroke: rgba(217, 185, 120, 0.16);
+  stroke: rgba(217, 185, 120, 0.18);
   stroke-dasharray: 4 4;
 }
 
@@ -741,7 +741,7 @@
   stroke-dasharray: 3 3;
 }
 
-/* 中央精神星核 (Central Spiritual Core Star) */
+/* 中央精神星核 (Central Spiritual Core Star - 彻底去矩形外框，发光恒星) */
 .constellation-core-star.constellation-center-orb {
   position: absolute;
   left: 50%;
@@ -792,32 +792,29 @@
 }
 
 .core-label-box {
-  margin-top: 5px;
+  margin-top: 4px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: transparent;
+  border: none;
 }
 
 .core-star-badge {
-  font-size: 10px;
-  color: #d9b978;
-  background: rgba(217, 185, 120, 0.15);
-  border: 1px solid rgba(217, 185, 120, 0.4);
-  padding: 1px 6px;
-  border-radius: 6px;
-  letter-spacing: 0.5px;
-  white-space: nowrap;
+  display: none !important;
 }
 
 .core-star-name {
-  font-size: 12px;
+  font-size: 13px;
   font-family: var(--font-family-serif);
   font-weight: 600;
   color: #fbf8ee;
   margin-top: 2px;
   letter-spacing: 0.5px;
   white-space: nowrap;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
+  background: transparent;
+  border: none;
 }
 
 /* 空间拓扑作品星 (Spatial Star Nodes) */
@@ -889,19 +886,21 @@
   display: none;
 }
 
-/* 浮动微名片气泡 (Star Callout Bubble) */
+/* 浮动微名片气泡 (Star Callout Bubble - 面积 <= 20% 舞台，高透水墨质感) */
 .star-callout-bubble {
   position: absolute;
   left: 50%;
-  bottom: 12px;
+  bottom: 8px;
   transform: translateX(-50%);
-  width: 88%;
-  max-width: 320px;
-  background: rgba(16, 27, 47, 0.94);
-  border: 1px solid rgba(217, 185, 120, 0.5);
+  width: 78%;
+  max-width: 270px;
+  background: rgba(16, 27, 47, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(217, 185, 120, 0.45);
   border-radius: var(--radius-md);
-  padding: 8px 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7), 0 0 15px rgba(217, 185, 120, 0.25);
+  padding: 6px 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.65), 0 0 12px rgba(217, 185, 120, 0.2);
   z-index: 10;
   display: flex;
   flex-direction: column;
