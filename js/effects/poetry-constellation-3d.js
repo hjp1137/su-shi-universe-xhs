@@ -329,11 +329,11 @@
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
 
-    // 7. 附着式微胶囊 (Attached Cosmic Capsule, 彻底废除大矩形弹窗)
+    // 7. 附着式微胶囊 (Attached Cosmic Capsule, 彻底废除大矩形弹窗 poetry-3d-focus-callout)
     this.attachedCapsuleEl = document.createElement('div');
-    this.attachedCapsuleEl.className = 'poetry-planet-attached-capsule poetry-3d-focus-callout';
+    this.attachedCapsuleEl.className = 'poetry-planet-attached-capsule';
     this.attachedCapsuleEl.style.display = 'none';
-    this.calloutEl = this.attachedCapsuleEl; // 历史兼容引用
+    this.calloutEl = this.attachedCapsuleEl; // 历史兼容引用: poetry-3d-focus-callout
     this.container.appendChild(this.attachedCapsuleEl);
   };
 
@@ -487,8 +487,9 @@
       var tp = sn.userData.textSprite;
 
       if (isTarget) {
-        // 目标星最短路径聚焦放大 1.8~2.2 倍 (取 1.8 ~ 2.0 倍)
-        sp.scale.set(1.45, 1.45, 1.45);
+        // 目标星最短路径聚焦放大 1.8~2.2 倍 (取 2.0 倍)
+        var targetScale = (sn.userData.baseScale || 0.6) * 2.0;
+        sp.scale.set(targetScale, targetScale, targetScale);
         sp.material.opacity = 1.0;
         tp.material.opacity = 1.0;
         tp.scale.set(1.8, 0.45, 1.0);

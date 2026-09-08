@@ -877,6 +877,13 @@
 .constellation-nebula-glow {
   position: absolute;
   top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle at 50% 50%, rgba(217, 185, 120, 0.05) 0%, transparent 60%);
+}
+
 /* 任务 15.6.6: 单层纯净 2.5D 东方星宿降级环 (绝无白色 Chip，绝不重叠多套星图) */
 .poetry-constellation-25d-fallback {
   position: relative;
