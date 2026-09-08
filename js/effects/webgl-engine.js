@@ -180,6 +180,29 @@
     }
   };
 
+  function disposeHierarchy(obj) {
+    if (!obj) return;
+    if (obj.children && obj.children.length > 0) {
+      for (var i = obj.children.length - 1; i >= 0; i--) {
+        disposeHierarchy(obj.children[i]);
+      }
+    }
+    if (obj.geometry && typeof obj.geometry.dispose === 'function') {
+      obj.geometry.dispose();
+    }
+    if (obj.material) {
+      if (Array.isArray(obj.material)) {
+        for (var j = 0; j < obj.material.length; j++) {
+          if (obj.material[j] && typeof obj.material[j].dispose === 'function') {
+            obj.material[j].dispose();
+          }
+        }
+      } else if (typeof obj.material.dispose === 'function') {
+        obj.material.dispose();
+      }
+    }
+  }
+
   WebGLEngine.prototype._unmountCurrentScene = function () {
     if (this.currentSceneInstance) {
       try {
@@ -192,21 +215,12 @@
       this.currentSceneInstance = null;
     }
 
-    // 清理场景中残留的 Mesh/Points
+    // 深度递归清理场景中所有残余 Object3D/Group/Mesh/Points
     if (this.scene) {
       while (this.scene.children.length > 0) {
         var obj = this.scene.children[0];
         this.scene.remove(obj);
-        if (obj.geometry) obj.geometry.dispose();
-        if (obj.material) {
-          if (Array.isArray(obj.material)) {
-            for (var i = 0; i < obj.material.length; i++) {
-              obj.material[i].dispose();
-            }
-          } else {
-            obj.material.dispose();
-          }
-        }
+        disposeHierarchy(obj);
       }
     }
   };
@@ -300,6 +314,11 @@
 
     document.removeEventListener('visibilitychange', this._onVisibilityChange, false);
     window.removeEventListener('resize', this._onResize, false);
+
+    if (this.scene) {
+      disposeHierarchy(this.scene);
+      this.scene = null;
+    }
 
     if (this.canvas) {
       this.canvas.removeEventListener('webglcontextlost', this._onContextLost, false);
