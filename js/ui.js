@@ -244,6 +244,308 @@
     }, duration);
   }
 
+  // 13. 东方宇宙底部导航坞 (Cosmic Dock: 首页 / 人生星河 / 今日东坡)
+  function createCosmicDock(activeKey, onSelect) {
+    var dock = document.createElement('div');
+    dock.className = 'cosmic-dock-inner';
+
+    var items = [
+      {
+        key: 'home',
+        label: '首页',
+        sub: '苏轼宇宙',
+        // 舟楫/启程 SVG 图标
+        svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 18c3-1 6-1 9 0 3-1 6-1 9 0M4 14l2-8 6 3 6-3 2 8M12 9v5"/></svg>'
+      },
+      {
+        key: 'universe',
+        label: '人生星河',
+        sub: '九大站点',
+        // 星球与星轨 SVG 图标
+        svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="6"/><ellipse cx="12" cy="12" rx="10" ry="3.5" transform="rotate(-25 12 12)"/></svg>'
+      },
+      {
+        key: 'daily',
+        label: '今日东坡',
+        sub: '一日一签',
+        // 明月/小札 SVG 图标
+        svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.5 5.5 0 0 1-7.54-7.54A8.98 8.98 0 0 0 12 3z"/></svg>'
+      }
+    ];
+
+    for (var i = 0; i < items.length; i++) {
+      (function (it) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'cosmic-dock-item' + (activeKey === it.key ? ' is-active' : '');
+        btn.setAttribute('data-nav-key', it.key);
+        btn.setAttribute('aria-label', it.label + ' - ' + it.sub);
+
+        var iconWrap = document.createElement('span');
+        iconWrap.className = 'dock-item-icon';
+        iconWrap.innerHTML = it.svg;
+
+        var textCol = document.createElement('span');
+        textCol.className = 'dock-item-label';
+        textCol.textContent = it.label;
+
+        btn.appendChild(iconWrap);
+        btn.appendChild(textCol);
+
+        btn.addEventListener('click', function () {
+          if (typeof onSelect === 'function') {
+            onSelect(it.key);
+          }
+        });
+
+        dock.appendChild(btn);
+      })(items[i]);
+    }
+
+    return dock;
+  }
+
+  // 14. 站点微行星入口 (Planet Portal)
+  function createPlanetPortal(opts) {
+    opts = opts || {};
+    var portal = document.createElement('div');
+    portal.className = 'cosmic-planet-portal' + (opts.extraClass ? ' ' + opts.extraClass : '');
+    portal.setAttribute('role', 'button');
+    portal.setAttribute('tabindex', '0');
+
+    var sphere = document.createElement('div');
+    sphere.className = 'planet-portal-sphere';
+
+    if (opts.image) {
+      var img = document.createElement('img');
+      img.className = 'planet-portal-img';
+      img.src = opts.image;
+      img.alt = opts.title || '';
+      sphere.appendChild(img);
+    }
+
+    var halo = document.createElement('div');
+    halo.className = 'planet-portal-halo';
+    sphere.appendChild(halo);
+    portal.appendChild(sphere);
+
+    var infoBox = document.createElement('div');
+    infoBox.className = 'planet-portal-info';
+
+    if (opts.tag) {
+      var tagEl = document.createElement('span');
+      tagEl.className = 'planet-portal-tag';
+      tagEl.textContent = opts.tag;
+      infoBox.appendChild(tagEl);
+    }
+
+    var titleEl = document.createElement('div');
+    titleEl.className = 'planet-portal-title';
+    titleEl.textContent = opts.title || '人生站点';
+    infoBox.appendChild(titleEl);
+
+    if (opts.subtitle) {
+      var subEl = document.createElement('div');
+      subEl.className = 'planet-portal-sub';
+      subEl.textContent = opts.subtitle;
+      infoBox.appendChild(subEl);
+    }
+
+    portal.appendChild(infoBox);
+
+    var arrow = document.createElement('span');
+    arrow.className = 'planet-portal-arrow';
+    arrow.textContent = '进入 →';
+    portal.appendChild(arrow);
+
+    var triggerHandler = opts.onAction || opts.action || opts.onClick;
+    if (typeof triggerHandler === 'function') {
+      portal.addEventListener('click', triggerHandler);
+    }
+
+    return portal;
+  }
+
+  // 15. 诗词星群组件 (Constellation Cluster)
+  function createConstellationGroup(works, onSelect) {
+    works = works || [];
+    var cluster = document.createElement('div');
+    cluster.className = 'constellation-cluster';
+
+    var header = document.createElement('div');
+    header.className = 'constellation-header';
+    var hTitle = document.createElement('div');
+    hTitle.className = 'constellation-title';
+    hTitle.textContent = '本站诗词星群';
+    var hSub = document.createElement('span');
+    hSub.className = 'constellation-sub';
+    hSub.textContent = '点击星点入画 · 共 ' + works.length + ' 篇';
+    header.appendChild(hTitle);
+    header.appendChild(hSub);
+    cluster.appendChild(header);
+
+    var grid = document.createElement('div');
+    grid.className = 'constellation-grid';
+
+    for (var i = 0; i < works.length; i++) {
+      (function (w, idx) {
+        var node = document.createElement('div');
+        node.className = 'constellation-star-node';
+        node.setAttribute('role', 'button');
+        node.setAttribute('tabindex', '0');
+        node.setAttribute('aria-label', w.title || '诗词');
+
+        var starVisual = document.createElement('div');
+        starVisual.className = 'star-node-visual';
+
+        var starImg = document.createElement('img');
+        starImg.className = 'star-node-img';
+        // 优先使用作品配图，无则回退站点图或星光
+        starImg.src = (SuShi.ArtAssets && SuShi.ArtAssets.getPoemScene(w.id)) ||
+                      (SuShi.ArtAssets && SuShi.ArtAssets.cosmos && SuShi.ArtAssets.cosmos.planetSecondary) ||
+                      './assets/images/cosmos/planet-entry-secondary.webp';
+        starImg.alt = w.title || '';
+        starVisual.appendChild(starImg);
+
+        var glowRing = document.createElement('span');
+        glowRing.className = 'star-node-glow';
+        starVisual.appendChild(glowRing);
+
+        var starText = document.createElement('div');
+        starText.className = 'star-node-text';
+        var starTitle = document.createElement('div');
+        starTitle.className = 'star-node-title';
+        starTitle.textContent = '《' + w.title + '》';
+        var starGenre = document.createElement('div');
+        starGenre.className = 'star-node-genre';
+        starGenre.textContent = (w.genre || '名篇') + (w.time_label ? ' · ' + w.time_label : '');
+        starText.appendChild(starTitle);
+        starText.appendChild(starGenre);
+
+        node.appendChild(starVisual);
+        node.appendChild(starText);
+
+        node.addEventListener('click', function () {
+          if (typeof onSelect === 'function') {
+            onSelect(w);
+          }
+        });
+
+        grid.appendChild(node);
+      })(works[i], i);
+    }
+
+    cluster.appendChild(grid);
+    return cluster;
+  }
+
+  // 16. 跨宇宙星轨航道链接 (Orbit Path Link)
+  function createOrbitPathLink(opts) {
+    opts = opts || {};
+    var link = document.createElement('div');
+    link.className = 'cosmic-orbit-link' + (opts.extraClass ? ' ' + opts.extraClass : '');
+    link.setAttribute('role', 'button');
+    link.setAttribute('tabindex', '0');
+
+    var orbitIcon = document.createElement('span');
+    orbitIcon.className = 'orbit-link-icon';
+    orbitIcon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 5l7 7-7 7"/></svg>';
+
+    var textBox = document.createElement('div');
+    textBox.className = 'orbit-link-text';
+    var t = document.createElement('div');
+    t.className = 'orbit-link-title';
+    t.textContent = opts.title || '漫游苏轼人生宇宙';
+    var s = document.createElement('div');
+    s.className = 'orbit-link-sub';
+    s.textContent = opts.subtitle || '沿九大站点探寻生命轨迹';
+    textBox.appendChild(t);
+    textBox.appendChild(s);
+
+    link.appendChild(textBox);
+    link.appendChild(orbitIcon);
+
+    var linkAction = opts.onAction || opts.action || opts.onClick;
+    if (typeof linkAction === 'function') {
+      link.addEventListener('click', linkAction);
+    }
+    return link;
+  }
+
+  // 17. 非左上角轻量“← 上一程”导航按钮
+  function createBackPathButton(label, actionHandler) {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'back-path-btn';
+    btn.setAttribute('aria-label', label || '返回上一程');
+
+    var arrow = document.createElement('span');
+    arrow.className = 'back-path-arrow';
+    arrow.innerHTML = '&#8592;';
+
+    var txt = document.createElement('span');
+    txt.className = 'back-path-text';
+    txt.textContent = label || '上一程';
+
+    btn.appendChild(arrow);
+    btn.appendChild(txt);
+
+    if (typeof actionHandler === 'function') {
+      btn.addEventListener('click', actionHandler);
+    }
+    return btn;
+  }
+
+  // 18. 紧凑月相分段切换器 (Moon Phase Segmenter)
+  function createMoonPhaseSegment(items, activeType, onSelect) {
+    items = items || [];
+    var seg = document.createElement('div');
+    seg.className = 'share-type-segment';
+    seg.setAttribute('role', 'tablist');
+
+    var buttons = [];
+
+    for (var i = 0; i < items.length; i++) {
+      (function (item) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'share-segment-item' + (item.type === activeType ? ' active' : '');
+        btn.setAttribute('role', 'tab');
+        btn.setAttribute('aria-selected', item.type === activeType ? 'true' : 'false');
+        btn.setAttribute('data-type', item.type);
+
+        if (item.icon) {
+          var ico = document.createElement('span');
+          ico.className = 'share-segment-icon';
+          ico.textContent = item.icon;
+          btn.appendChild(ico);
+        }
+
+        var lbl = document.createElement('span');
+        lbl.className = 'share-segment-label';
+        lbl.textContent = item.label;
+        btn.appendChild(lbl);
+
+        btn.addEventListener('click', function () {
+          for (var j = 0; j < buttons.length; j++) {
+            buttons[j].classList.remove('active');
+            buttons[j].setAttribute('aria-selected', 'false');
+          }
+          btn.classList.add('active');
+          btn.setAttribute('aria-selected', 'true');
+          if (typeof onSelect === 'function') {
+            onSelect(item.type);
+          }
+        });
+
+        buttons.push(btn);
+        seg.appendChild(btn);
+      })(items[i]);
+    }
+
+    return seg;
+  }
+
   // 挂载到 SuShiUniverse.UI
   UI.createBackButton = createBackButton;
   UI.createSectionHeader = createSectionHeader;
@@ -257,6 +559,12 @@
   UI.createEmptyState = createEmptyState;
   UI.createErrorState = createErrorState;
   UI.showToast = showToast;
+  UI.createCosmicDock = createCosmicDock;
+  UI.createPlanetPortal = createPlanetPortal;
+  UI.createConstellationGroup = createConstellationGroup;
+  UI.createOrbitPathLink = createOrbitPathLink;
+  UI.createBackPathButton = createBackPathButton;
+  UI.createMoonPhaseSegment = createMoonPhaseSegment;
 
   SuShi.UI = UI;
 })();

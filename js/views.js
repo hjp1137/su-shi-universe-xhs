@@ -566,6 +566,11 @@
       wrap.className = 'view-wrapper result-narrative-container';
       wrap.setAttribute('data-station-id', station.id || 'station_huangzhou');
 
+      // 顶部首屏轻量上一程
+      wrap.appendChild(UI.createBackPathButton('← 上一程', function () {
+        Router.back();
+      }));
+
       // --- 第 1 层：你到了哪里？ (结果揭晓卡) ---
       var heroCard = document.createElement('div');
       heroCard.className = 'ink-card ink-card-station result-hero-card';
@@ -735,20 +740,34 @@
       var btnShare = UI.createPrimaryButton('生成我的东坡人生卡', function () {
         Router.navigate('share-card', { station_id: stationId, mood_id: moodId, type: 'result' });
       });
-      var btnStation = UI.createSecondaryButton('看看苏轼的这一站', function () {
-        Router.navigate('station', { station_id: stationId });
+      actBox.appendChild(btnShare);
+
+      // 跨页面导航入口（A类）宇宙化升级：站点微行星 Portal + 漫游星河轨道入口
+      var stationPortal = UI.createPlanetPortal({
+        image: sceneImg,
+        tag: '你的共鸣人生站',
+        title: station.name,
+        subtitle: '深入了解东坡在' + (station.short_name || '此站') + '的真实故事与诗文星群',
+        onClick: function () {
+          Router.navigate('station', { station_id: stationId });
+        }
       });
+      actBox.appendChild(stationPortal);
+
+      var orbitLink = UI.createOrbitPathLink({
+        title: '漫游苏轼人生星河',
+        subtitle: '在星轨中纵览苏轼全部生命站点与历史时空 →',
+        onClick: function () {
+          Router.navigate('universe', { highlight_station_id: stationId });
+        }
+      });
+      actBox.appendChild(orbitLink);
+
       var btnRetest = UI.createSecondaryButton('重新测一次', function () {
         Router.navigate('quiz');
       });
-      var btnHome = UI.createSecondaryButton('返回苏轼宇宙首页', function () {
-        Router.navigate('home');
-      });
-
-      actBox.appendChild(btnShare);
-      actBox.appendChild(btnStation);
       actBox.appendChild(btnRetest);
-      actBox.appendChild(btnHome);
+
       wrap.appendChild(actBox);
 
       return wrap;
@@ -1110,6 +1129,11 @@
       var wrap = document.createElement('div');
       wrap.className = 'view-wrapper station-detail-container';
 
+      // 顶部首屏轻量上一程
+      wrap.appendChild(UI.createBackPathButton('← 上一程', function () {
+        Router.back();
+      }));
+
       if (!station) {
         wrap.appendChild(UI.createEmptyState('这一页暂时被江雾遮住了', '未找到该站点记录，不妨回到宇宙生命线重新探索。', '返回生命线', function () {
           Router.navigate('universe');
@@ -1235,43 +1259,22 @@
         }
       }
 
-      // 如果本站还有其他收录作品，展示作品导航流
+      // 本站收录诗文：全面升级为东方诗词宇宙星群 (Constellation Cluster)
       var stationWorkIds = station.work_ids || [];
-      if (stationWorkIds.length > 1) {
-        var otherWorksCard = document.createElement('div');
-        otherWorksCard.className = 'ink-card';
-        var owBadge = document.createElement('div');
-        owBadge.className = 'result-card-badge';
-        owBadge.textContent = '本站收录诗文 (' + stationWorkIds.length + '篇)';
-        otherWorksCard.appendChild(owBadge);
-
-        var owList = document.createElement('div');
-        owList.style.display = 'flex';
-        owList.style.flexWrap = 'wrap';
-        owList.style.marginTop = '8px';
-
+      if (stationWorkIds.length > 0) {
+        var workList = [];
         for (var wIdx = 0; wIdx < stationWorkIds.length; wIdx++) {
           var otherWork = Data.getWorkById(stationWorkIds[wIdx]);
           if (otherWork) {
-            var wChip = document.createElement('div');
-            wChip.className = 'work-station-badge';
-            wChip.style.marginRight = '8px';
-            wChip.style.marginBottom = '8px';
-            if (otherWork.spatial_note) {
-              wChip.textContent = '《' + otherWork.title + '》 (' + otherWork.spatial_note + ')';
-            } else {
-              wChip.textContent = '《' + otherWork.title + '》';
-            }
-            (function (owId, currentStationId) {
-              wChip.addEventListener('click', function () {
-                Router.navigate('work', { work_id: owId, from_station_id: currentStationId });
-              });
-            })(otherWork.id, station.id);
-            owList.appendChild(wChip);
+            workList.push(otherWork);
           }
         }
-        otherWorksCard.appendChild(owList);
-        wrap.appendChild(otherWorksCard);
+        if (workList.length > 0) {
+          var cluster = UI.createConstellationGroup(workList, function (targetWork) {
+            Router.navigate('work', { work_id: targetWork.id, from_station_id: station.id });
+          });
+          wrap.appendChild(cluster);
+        }
       }
 
       // 东坡生活视角
@@ -1319,16 +1322,22 @@
       var btnCard = UI.createPrimaryButton('生成本站东坡人生卡', function () {
         Router.navigate('share-card', { station_id: station.id, type: 'station' });
       });
-      var btnUniv = UI.createSecondaryButton('返回人生宇宙漫游', function () {
-        Router.navigate('universe', { highlight_station_id: station.id });
+      actions.appendChild(btnCard);
+
+      var orbitLink = UI.createOrbitPathLink({
+        title: '返回人生星河漫游',
+        subtitle: '在星轨中纵览苏轼十二生命节点与星图 →',
+        onClick: function () {
+          Router.navigate('universe', { highlight_station_id: station.id });
+        }
       });
+      actions.appendChild(orbitLink);
+
       var btnQuiz = UI.createSecondaryButton('测测我的人生正在哪一站', function () {
         Router.navigate('quiz');
       });
-
-      actions.appendChild(btnCard);
-      actions.appendChild(btnUniv);
       actions.appendChild(btnQuiz);
+
       wrap.appendChild(actions);
 
       return wrap;
@@ -1359,6 +1368,11 @@
 
       var wrap = document.createElement('div');
       wrap.className = 'view-wrapper work-detail-container';
+
+      // 顶部首屏轻量上一程
+      wrap.appendChild(UI.createBackPathButton('← 上一程', function () {
+        Router.back();
+      }));
 
       if (!work) {
         wrap.appendChild(UI.createEmptyState('这一页暂时被江雾遮住了', '未检索到该作品文本，请返回宇宙生命线。', '返回生命线', function () {
@@ -1406,7 +1420,7 @@
       titleRow.appendChild(genreEl);
       headerHero.appendChild(titleRow);
 
-      // 元数据芯片：时间、地点、站点
+      // 元数据芯片：时间、地点
       var metaChips = document.createElement('div');
       metaChips.className = 'work-meta-chips';
 
@@ -1424,23 +1438,22 @@
         metaChips.appendChild(placeChip);
       }
 
-      if (stationObj) {
-        var stBadge = document.createElement('span');
-        stBadge.className = 'work-station-badge';
-        var stationLabel = '所属站点：' + stationObj.name;
-        if (work.spatial_note) {
-          stationLabel += ' (' + work.spatial_note + ')';
-        }
-        stBadge.textContent = stationLabel + ' →';
-        (function (sid) {
-          stBadge.addEventListener('click', function () {
-            Router.navigate('station', { station_id: sid });
-          });
-        })(stationObj.id);
-        metaChips.appendChild(stBadge);
-      }
-
       headerHero.appendChild(metaChips);
+
+      // 所属站点升级为东方诗词宇宙小星球 Portal
+      if (stationObj) {
+        var stScene = (SuShi.ArtAssets && SuShi.ArtAssets.getStationScene(stationObj.id)) || '';
+        var planetPortal = UI.createPlanetPortal({
+          image: stScene,
+          tag: '所属人生站点',
+          title: stationObj.name,
+          subtitle: work.spatial_note ? ('本篇作于：' + work.spatial_note) : '点击回溯本站历史现场与诗文星群',
+          onClick: function () {
+            Router.navigate('station', { station_id: stationObj.id });
+          }
+        });
+        headerHero.appendChild(planetPortal);
+      }
 
       if (work.lead_guide) {
         var guideEl = document.createElement('div');
@@ -1637,15 +1650,20 @@
         actBox.appendChild(btnHome);
       }
 
-      var btnUniv = UI.createSecondaryButton('漫游苏轼人生生命线', function () {
-        Router.navigate('universe', stationObj ? { highlight_station_id: stationObj.id } : {});
+      var orbitLink = UI.createOrbitPathLink({
+        title: '漫游苏轼人生生命线',
+        subtitle: '在星轨中纵览苏轼十二生命节点与星图 →',
+        onClick: function () {
+          Router.navigate('universe', stationObj ? { highlight_station_id: stationObj.id } : {});
+        }
       });
+      actBox.appendChild(orbitLink);
+
       var btnQuiz = UI.createSecondaryButton('测测我的人生正在哪一站', function () {
         Router.navigate('quiz');
       });
-
-      actBox.appendChild(btnUniv);
       actBox.appendChild(btnQuiz);
+
       wrap.appendChild(actBox);
 
       return wrap;
@@ -1839,28 +1857,35 @@
       actBox.appendChild(btnSign);
 
       if (dailyBundle.station) {
-        var btnStation = UI.createSecondaryButton('前往本诗所在站点（' + dailyBundle.station.short_name + '）', function () {
-          Router.navigate('station', { station_id: dailyBundle.station.id });
+        var stScene = (SuShi.ArtAssets && SuShi.ArtAssets.getStationScene(dailyBundle.station.id)) || '';
+        var planetPortal = UI.createPlanetPortal({
+          image: stScene,
+          tag: '本诗归属站点',
+          title: dailyBundle.station.name,
+          subtitle: '深入探索东坡在' + dailyBundle.station.short_name + '的现场故事与诗文星群',
+          onClick: function () {
+            Router.navigate('station', { station_id: dailyBundle.station.id });
+          }
         });
-        actBox.appendChild(btnStation);
+        actBox.appendChild(planetPortal);
       }
 
-      var btnUniv = UI.createSecondaryButton('漫游苏轼人生宇宙', function () {
-        Router.navigate('universe', dailyBundle.station ? { highlight_station_id: dailyBundle.station.id } : {});
+      var orbitLink = UI.createOrbitPathLink({
+        title: '漫游苏轼人生星河',
+        subtitle: '在星轨中纵览苏轼十二个生命站点与历史时空 →',
+        onClick: function () {
+          Router.navigate('universe', dailyBundle.station ? { highlight_station_id: dailyBundle.station.id } : {});
+        }
       });
-      var btnHome = UI.createSecondaryButton('返回首页', function () {
-        Router.navigate('home');
-      });
+      actBox.appendChild(orbitLink);
 
-      actBox.appendChild(btnUniv);
-      actBox.appendChild(btnHome);
       wrap.appendChild(actBox);
 
       return wrap;
     }
   });
 
-  // 8. 分享卡预览视图 Share-Card (Canvas 2D 动态生成与三类卡片切换)
+  // 8. 分享卡全屏所见即所得视图 Share-Card (Canvas 2D 真实图片绘制与月相分段切换)
   Router.register('share-card', {
     render: function (params) {
       params = params || {};
@@ -1868,6 +1893,7 @@
       var Quiz = SuShiUniverse.Quiz;
       var Daily = SuShiUniverse.Daily;
       var Store = SuShiUniverse.Store;
+      var Bridge = SuShiUniverse.Bridge;
 
       // 确定初始卡片类型
       var currentType = 'station';
@@ -1885,86 +1911,56 @@
       var currentMoodId = params.mood_id || (lastResult && lastResult.mood_id) || 'mood_huangzhou_restart';
       var currentDateStr = params.date_str || (Daily && typeof Daily.getTodayDateString === 'function' ? Daily.getTodayDateString() : '2026-09-07');
       var currentDataUrl = '';
+      var currentVm = null;
 
       var wrap = document.createElement('div');
-      wrap.className = 'view-wrapper share-card-container';
+      wrap.className = 'view-wrapper share-card-container share-card-fullscreen';
 
-      wrap.appendChild(UI.createSectionHeader('东坡人生分享卡', '纯本地 Canvas 2D 高清绘制 · 随行诗意安顿日常'));
-
-      // --- Tab 切换条 ---
-      var tabNav = document.createElement('div');
-      tabNav.className = 'share-tabs-nav';
-
-      var tabsConfig = [
-        { type: 'station', label: '人生站点卡' },
-        { type: 'daily', label: '今日东坡签' },
-        { type: 'node', label: '人生节点卡' }
-      ];
-
-      var tabButtons = {};
-
-      tabsConfig.forEach(function (tab) {
-        var btn = document.createElement('button');
-        btn.className = 'share-tab-btn' + (tab.type === currentType ? ' active' : '');
-        btn.textContent = tab.label;
-        btn.setAttribute('type', 'button');
-        btn.setAttribute('role', 'tab');
-        btn.setAttribute('aria-selected', tab.type === currentType ? 'true' : 'false');
-
-        btn.addEventListener('click', function () {
-          if (currentType === tab.type) return;
-          currentType = tab.type;
-
-          // 更新 Tab 样式
-          tabsConfig.forEach(function (t) {
-            if (tabButtons[t.type]) {
-              if (t.type === currentType) {
-                tabButtons[t.type].classList.add('active');
-                tabButtons[t.type].setAttribute('aria-selected', 'true');
-              } else {
-                tabButtons[t.type].classList.remove('active');
-                tabButtons[t.type].setAttribute('aria-selected', 'false');
-              }
-            }
-          });
-
-          renderCardImage();
-        });
-
-        tabButtons[tab.type] = btn;
-        tabNav.appendChild(btn);
+      // 1. 顶部非左上角轻量“← 上一程”
+      var topNav = document.createElement('div');
+      topNav.className = 'share-card-top-nav';
+      var btnBack = UI.createBackPathButton('← 上一程', function () {
+        Router.back();
       });
+      topNav.appendChild(btnBack);
+      wrap.appendChild(topNav);
 
-      wrap.appendChild(tabNav);
-
-      // --- 卡片预览展示区 ---
+      // 2. 所见即所得海报展示区 (3:4 高清直出，用户所见即保存/发布图)
       var displayBox = document.createElement('div');
       displayBox.className = 'share-card-display';
 
-      var imgWrap = document.createElement('div');
-      imgWrap.className = 'share-card-img-wrap';
+      var posterWrap = document.createElement('div');
+      posterWrap.className = 'share-card-poster-wrap';
 
       var loadingEl = document.createElement('div');
       loadingEl.className = 'share-card-loading';
       loadingEl.textContent = '正在水墨泼染卡片…';
-      imgWrap.appendChild(loadingEl);
+      posterWrap.appendChild(loadingEl);
 
       var imgEl = document.createElement('img');
       imgEl.className = 'share-card-img';
       imgEl.alt = '东坡人生分享卡';
       imgEl.style.display = 'none';
-      imgWrap.appendChild(imgEl);
+      posterWrap.appendChild(imgEl);
 
-      displayBox.appendChild(imgWrap);
-
-      var hintEl = document.createElement('p');
-      hintEl.className = 'share-card-hint';
-      hintEl.textContent = '长按图片可直接保存到相册，或使用下方操作按钮';
-      displayBox.appendChild(hintEl);
-
+      displayBox.appendChild(posterWrap);
       wrap.appendChild(displayBox);
 
-      // --- 核心绘制与刷新函数 ---
+      // 3. 紧凑月相分段切换器
+      var segmentConfig = [
+        { type: 'station', label: '人生站点卡', icon: '●' },
+        { type: 'daily', label: '今日东坡签', icon: '◐' },
+        { type: 'node', label: '人生节点卡', icon: '○' }
+      ];
+
+      var segmenter = UI.createMoonPhaseSegment(segmentConfig, currentType, function (selectedType) {
+        if (currentType === selectedType) return;
+        currentType = selectedType;
+        renderCardImage();
+      });
+      wrap.appendChild(segmenter);
+
+      // 核心绘制与刷新函数
       function renderCardImage() {
         loadingEl.style.display = 'flex';
         imgEl.style.display = 'none';
@@ -2001,16 +1997,14 @@
         }
       }
 
-      var currentVm = null;
-
       // 初次挂载自动渲染
       renderCardImage();
 
-      // --- 底部操作按钮群 (传播闭环双主链) ---
+      // 4. 底部操作按钮群 (传播闭环双主链)
       var actBox = document.createElement('div');
       actBox.className = 'share-card-actions';
 
-      // 1. 一键发布到小红书 (核心主按钮)
+      // 4.1 一键发布到小红书 (核心主按钮)
       var btnPublish = UI.createPrimaryButton('一键发布到小红书', function () {
         if (!currentDataUrl) {
           if (UI && typeof UI.showToast === 'function') {
@@ -2019,10 +2013,9 @@
           return;
         }
 
-        var Bridge = SuShiUniverse.Bridge;
         if (!Bridge || typeof Bridge.postNote !== 'function') {
           if (UI && typeof UI.showToast === 'function') {
-            UI.showToast('发布能力暂未就绪');
+            UI.showToast('请在小红书真机环境使用发布功能');
           }
           return;
         }
@@ -2067,7 +2060,7 @@
             }
           } else {
             if (UI && typeof UI.showToast === 'function') {
-              UI.showToast('已成功调起小红书发布！');
+              UI.showToast(Bridge.isAvailable() ? '已成功调起小红书发布！' : '请在小红书真机环境使用发布功能');
             }
           }
         }).catch(function (err) {
@@ -2078,30 +2071,28 @@
             }
           } else {
             if (UI && typeof UI.showToast === 'function') {
-              UI.showToast('调起发布异常，请长按图片手动发布');
+              UI.showToast('调起发布失败，请在小红书真机重试');
             }
           }
         }).then(function () {
-          // 无论成功或失败，必定恢复按钮状态
           btnPublish.disabled = false;
           btnPublish.textContent = '一键发布到小红书';
         });
       });
       actBox.appendChild(btnPublish);
 
-      // 2. 保存卡片至相册 (次主按钮)
+      // 4.2 保存卡片至相册 (次主按钮)
       var btnSave = UI.createSecondaryButton('保存卡片至相册', function () {
         if (!currentDataUrl) {
           if (UI && typeof UI.showToast === 'function') {
-            UI.showToast('卡片正在生成，请稍候…');
+            UI.showToast('卡片正在水墨泼染，请稍候…');
           }
           return;
         }
 
-        var Bridge = SuShiUniverse.Bridge;
         if (!Bridge || typeof Bridge.saveImage !== 'function') {
           if (UI && typeof UI.showToast === 'function') {
-            UI.showToast('长按图片即可直接保存至手机相册');
+            UI.showToast('请在小红书真机环境使用保存功能');
           }
           return;
         }
@@ -2119,7 +2110,7 @@
             }
           } else {
             if (UI && typeof UI.showToast === 'function') {
-              UI.showToast('已成功保存至手机相册！');
+              UI.showToast(Bridge.isAvailable() ? '已成功保存至手机相册！' : '请在小红书真机环境使用保存功能');
             }
           }
         }).catch(function (err) {
@@ -2135,7 +2126,7 @@
             }
           } else {
             if (UI && typeof UI.showToast === 'function') {
-              UI.showToast('保存失败，您可长按图片直接存储');
+              UI.showToast('保存失败，请在小红书真机重试');
             }
           }
         }).then(function () {
@@ -2145,21 +2136,20 @@
       });
       actBox.appendChild(btnSave);
 
-      // 3. 辅助跳转按钮组
-      var btnUniv = UI.createSecondaryButton('漫游苏轼人生宇宙', function () {
-        Router.navigate('universe', { highlight_station_id: currentStationId });
+      // 4.3 宇宙轨道链接
+      var orbitLink = UI.createOrbitPathLink({
+        title: '漫游苏轼人生宇宙',
+        subtitle: '在星轨中纵览九大站点与历史星图 →',
+        onClick: function () {
+          Router.navigate('universe', { highlight_station_id: currentStationId });
+        }
       });
-      actBox.appendChild(btnUniv);
+      actBox.appendChild(orbitLink);
 
       var btnQuiz = UI.createSecondaryButton('测测我的人生状态', function () {
         Router.navigate('quiz');
       });
       actBox.appendChild(btnQuiz);
-
-      var btnHome = UI.createSecondaryButton('返回首页', function () {
-        Router.navigate('home');
-      });
-      actBox.appendChild(btnHome);
 
       wrap.appendChild(actBox);
 

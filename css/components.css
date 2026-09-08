@@ -375,3 +375,386 @@
   100% { transform: rotate(360deg); }
 }
 
+/* ==========================================================================
+   任务 15.5 原生导航避让、Cosmic Dock 与全站宇宙入口组件样式
+   基线：Chrome 61 / ES2017 / 零裸漏 gap / 零 clamp / 零 :has
+   ========================================================================== */
+
+/* 13. 东方宇宙底部导航坞 (Cosmic Dock) */
+.cosmic-dock {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 900;
+  pointer-events: none;
+  background: transparent;
+  padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+}
+
+.cosmic-dock-inner {
+  pointer-events: auto;
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: rgba(14, 23, 44, 0.90);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid rgba(111, 175, 194, 0.3);
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.65), 0 0 16px rgba(111, 175, 194, 0.15);
+  padding: 6px 12px;
+}
+
+.cosmic-dock-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+  color: var(--color-text-secondary);
+  transition: all var(--motion-fast);
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.cosmic-dock-item:active {
+  transform: scale(0.94);
+}
+
+.dock-item-icon {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 3px;
+  opacity: 0.75;
+  transition: transform var(--motion-fast), opacity var(--motion-fast), color var(--motion-fast);
+}
+
+.dock-item-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.dock-item-label {
+  font-size: 11px;
+  letter-spacing: 0.8px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.cosmic-dock-item.is-active {
+  color: var(--color-warm);
+}
+
+.cosmic-dock-item.is-active .dock-item-icon {
+  opacity: 1;
+  color: var(--color-warm);
+  transform: scale(1.1);
+  filter: drop-shadow(0 2px 8px rgba(226, 168, 80, 0.5));
+}
+
+.cosmic-dock-item.is-active .dock-item-label {
+  font-weight: 600;
+  text-shadow: 0 1px 6px rgba(226, 168, 80, 0.4);
+}
+
+/* 核心内容容器为底部 Cosmic Dock 预留安全避让间距 */
+.app-main {
+  padding-bottom: calc(64px + var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)));
+}
+
+/* 14. 非左上角轻量“← 上一程”导航按钮 */
+.back-path-btn {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(16, 27, 47, 0.65);
+  border: 1px solid rgba(111, 175, 194, 0.35);
+  border-radius: var(--radius-pill);
+  padding: 4px 14px;
+  color: var(--color-river);
+  font-size: var(--font-size-tag);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background var(--motion-fast), border-color var(--motion-fast), transform var(--motion-fast);
+  margin-bottom: var(--space-3);
+  align-self: flex-start;
+}
+
+.back-path-btn:active {
+  transform: scale(0.96);
+  background: rgba(16, 27, 47, 0.85);
+  border-color: var(--color-river);
+}
+
+.back-path-arrow {
+  font-size: 15px;
+  margin-right: 6px;
+  line-height: 1;
+}
+
+.back-path-text {
+  letter-spacing: 1px;
+  font-weight: 500;
+}
+
+/* 15. 站点微行星入口 (Planet Portal) */
+.cosmic-planet-portal {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(90deg, rgba(20, 32, 54, 0.85) 0%, rgba(14, 23, 40, 0.65) 100%);
+  border: 1px solid rgba(111, 175, 194, 0.35);
+  border-radius: var(--radius-lg);
+  padding: 10px 14px;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: border-color var(--motion-fast), transform var(--motion-fast), box-shadow var(--motion-fast);
+  margin: var(--space-2) 0;
+}
+
+.cosmic-planet-portal:active {
+  transform: scale(0.985);
+  border-color: var(--color-warm);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+}
+
+.planet-portal-sphere {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5), 0 0 12px rgba(111, 175, 194, 0.3);
+  border: 1px solid rgba(111, 175, 194, 0.5);
+  background: radial-gradient(circle at 35% 35%, #2a3d5e 0%, #0c1527 100%);
+}
+
+.planet-portal-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.planet-portal-halo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.25);
+}
+
+.planet-portal-info {
+  flex: 1;
+  min-width: 0;
+  margin-left: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.planet-portal-tag {
+  font-size: 10px;
+  color: var(--color-river);
+  background: rgba(111, 175, 194, 0.15);
+  border-radius: var(--radius-pill);
+  padding: 1px 6px;
+  align-self: flex-start;
+  margin-bottom: 2px;
+}
+
+.planet-portal-title {
+  font-size: var(--font-size-subhead);
+  font-weight: 600;
+  color: var(--color-warm);
+  letter-spacing: 0.8px;
+}
+
+.planet-portal-sub {
+  font-size: var(--font-size-tag);
+  color: var(--color-text-secondary);
+  margin-top: 2px;
+}
+
+.planet-portal-arrow {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: var(--color-warm);
+  margin-left: 8px;
+  opacity: 0.85;
+}
+
+/* 16. 本站诗词星群组件 (Constellation Cluster) */
+.constellation-cluster {
+  display: flex;
+  flex-direction: column;
+  background: rgba(16, 26, 44, 0.7);
+  border: 1px solid rgba(111, 175, 194, 0.25);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  margin: var(--space-3) 0;
+}
+
+.constellation-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.constellation-title {
+  font-size: var(--font-size-subhead);
+  font-weight: 600;
+  color: var(--color-warm);
+  letter-spacing: 1px;
+}
+
+.constellation-sub {
+  font-size: var(--font-size-tag);
+  color: var(--color-river);
+}
+
+.constellation-grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.constellation-grid > * + * {
+  margin-top: var(--space-2);
+}
+
+.constellation-star-node {
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  background: rgba(25, 38, 62, 0.5);
+  border: 1px solid rgba(111, 175, 194, 0.2);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: all var(--motion-fast);
+}
+
+.constellation-star-node:active {
+  transform: scale(0.98);
+  border-color: var(--color-river);
+  background: rgba(35, 52, 82, 0.65);
+}
+
+.star-node-visual {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  margin-right: 12px;
+  border: 1px solid rgba(111, 175, 194, 0.4);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.star-node-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.star-node-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.2);
+  pointer-events: none;
+}
+
+.star-node-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.star-node-title {
+  font-size: var(--font-size-body);
+  font-weight: 600;
+  color: var(--color-moon);
+  letter-spacing: 0.5px;
+}
+
+.star-node-genre {
+  font-size: var(--font-size-tag);
+  color: var(--color-text-secondary);
+  margin-top: 2px;
+}
+
+/* 17. 跨宇宙星轨航道链接 (Orbit Path Link) */
+.cosmic-orbit-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(90deg, rgba(28, 44, 72, 0.6) 0%, rgba(18, 28, 48, 0.8) 100%);
+  border: 1px dashed rgba(217, 185, 120, 0.35);
+  border-radius: var(--radius-lg);
+  padding: 12px 16px;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: all var(--motion-fast);
+  margin: var(--space-2) 0;
+}
+
+.cosmic-orbit-link:active {
+  transform: scale(0.985);
+  border-color: var(--color-warm);
+  background: rgba(35, 54, 88, 0.7);
+}
+
+.orbit-link-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.orbit-link-title {
+  font-size: var(--font-size-body);
+  font-weight: 600;
+  color: var(--color-warm);
+  letter-spacing: 1px;
+}
+
+.orbit-link-sub {
+  font-size: var(--font-size-tag);
+  color: var(--color-river);
+  margin-top: 2px;
+}
+
+.orbit-link-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--color-warm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.orbit-link-icon svg {
+  width: 100%;
+  height: 100%;
+}
+

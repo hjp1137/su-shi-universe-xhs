@@ -98,6 +98,87 @@
   }
 
   /**
+   * 纯本地图片安全加载器 (纯本地离线 Image 对象，无 fetch，无网络)
+   */
+  function loadLocalImage(src, callback) {
+    if (!src || typeof Image === 'undefined') {
+      if (typeof callback === 'function') callback(null);
+      return;
+    }
+    var img = new Image();
+    var hasCalled = false;
+    img.onload = function () {
+      if (!hasCalled) {
+        hasCalled = true;
+        callback(img);
+      }
+    };
+    img.onerror = function () {
+      if (!hasCalled) {
+        hasCalled = true;
+        callback(null);
+      }
+    };
+    img.src = src;
+    if (img.complete && img.naturalWidth > 0) {
+      if (!hasCalled) {
+        hasCalled = true;
+        callback(img);
+      }
+    }
+  }
+
+  function loadLocalImages(map, callback) {
+    var keys = Object.keys(map || {});
+    if (keys.length === 0) {
+      callback({});
+      return;
+    }
+    var results = {};
+    var count = 0;
+    keys.forEach(function (k) {
+      loadLocalImage(map[k], function (img) {
+        results[k] = img;
+        count++;
+        if (count === keys.length) {
+          callback(results);
+        }
+      });
+    });
+  }
+
+  /**
+   * 在 Canvas 局部区域以 cover 模式绘制图片，并支持底部水墨渐变羽化
+   */
+  function drawImageCover(ctx, img, dx, dy, dWidth, dHeight, fadeBottomHeight) {
+    if (!img || !img.naturalWidth) return;
+    var nw = img.naturalWidth;
+    var nh = img.naturalHeight;
+    var scale = Math.max(dWidth / nw, dHeight / nh);
+    var sw = dWidth / scale;
+    var sh = dHeight / scale;
+    var sx = (nw - sw) * 0.5;
+    var sy = Math.max(0, (nh - sh) * 0.25);
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(dx, dy, dWidth, dHeight);
+    ctx.clip();
+    ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dWidth, dHeight);
+
+    // 底部水墨渐变羽化至深靛蓝夜色 (#101b2f)
+    if (fadeBottomHeight > 0) {
+      var fadeGrad = ctx.createLinearGradient(dx, dy + dHeight - fadeBottomHeight, dx, dy + dHeight);
+      fadeGrad.addColorStop(0, 'rgba(16, 27, 47, 0)');
+      fadeGrad.addColorStop(0.5, 'rgba(16, 27, 47, 0.65)');
+      fadeGrad.addColorStop(1, '#101b2f');
+      ctx.fillStyle = fadeGrad;
+      ctx.fillRect(dx, dy + dHeight - fadeBottomHeight, dWidth, fadeBottomHeight);
+    }
+    ctx.restore();
+  }
+
+  /**
    * 绘制程序化深靛蓝渐变水墨背景与典雅双层金线边框
    */
   function drawBackground(ctx, width, height) {
@@ -237,16 +318,22 @@
    */
   function renderStationResultCard(ctx, vm, width, height) {
     drawBackground(ctx, width, height);
+
+    // 1. 上部融入真实人生场景素材 (占上部约 40%，配合底部水墨羽化)
+    if (assets && assets.scene) {
+      drawImageCover(ctx, assets.scene, 0, 0, width, 390, 150);
+    }
+
     drawCardHeader(ctx, width, '人生状态测试结果卡', '人生');
 
-    // 1. 站点大标题
+    // 2. 站点大标题 (悬浮于海报下方，金辉晨曦高亮)
     var stationTitle = vm.station_name || '黄州｜重新生活';
     ctx.fillStyle = '#fbf8ee';
     ctx.font = 'bold 36px ' + FONT_SERIF;
     ctx.textAlign = 'center';
-    ctx.fillText(stationTitle, width * 0.5, 145);
+    ctx.fillText(stationTitle, width * 0.5, 148);
 
-    // 2. 关键词胶囊群 (3个)
+    // 3. 关键词胶囊群 (3个)
     var keywords = vm.keywords || ['重新生活', '徐行', '人间烟火'];
     var kwY = 205;
     var kwSpacing = 110;
@@ -254,14 +341,12 @@
 
     for (var k = 0; k < keywords.length; k++) {
       var kx = kwStartX + k * kwSpacing;
-      // 胶囊背景
-      ctx.fillStyle = 'rgba(217, 185, 120, 0.14)';
-      ctx.strokeStyle = 'rgba(217, 185, 120, 0.32)';
+      ctx.fillStyle = 'rgba(217, 185, 120, 0.22)';
+      ctx.strokeStyle = 'rgba(217, 185, 120, 0.45)';
       ctx.lineWidth = 1;
       var kwText = keywords[k];
       var kwW = ctx.measureText(kwText).width + 24;
       ctx.beginPath();
-      // 简易圆角矩形
       var rx = kx - kwW * 0.5;
       var ry = kwY;
       var rw = kwW;
@@ -270,45 +355,45 @@
       ctx.fill();
       ctx.stroke();
 
-      ctx.fillStyle = '#d9b978';
+      ctx.fillStyle = '#f5eedc';
       ctx.font = '13px ' + FONT_SANS;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(kwText, kx, kwY + rh * 0.5);
     }
 
-    // 3. 诗句书法展示区
-    var quoteBoxY = 270;
+    // 4. 诗句书法展示区 (高反差宣纸卡片质感)
+    var quoteBoxY = 265;
     var quoteBoxH = 210;
     var qMargin = 70;
-    ctx.fillStyle = 'rgba(43, 63, 90, 0.28)';
-    ctx.strokeStyle = 'rgba(120, 160, 195, 0.22)';
+    ctx.fillStyle = 'rgba(245, 238, 220, 0.94)'; // 宣纸质感浅米白
+    ctx.strokeStyle = 'rgba(212, 175, 55, 0.45)';
     ctx.lineWidth = 1;
     ctx.fillRect(qMargin, quoteBoxY, width - qMargin * 2, quoteBoxH);
     ctx.strokeRect(qMargin, quoteBoxY, width - qMargin * 2, quoteBoxH);
 
     // 双引号标
-    ctx.fillStyle = 'rgba(120, 160, 195, 0.35)';
-    ctx.font = 'bold 36px Georgia, serif';
+    ctx.fillStyle = 'rgba(163, 56, 40, 0.45)';
+    ctx.font = 'bold 32px Georgia, serif';
     ctx.textAlign = 'center';
     ctx.fillText('“', width * 0.5, quoteBoxY + 16);
 
-    // 核心名句大字
+    // 核心名句大字 (深墨色高反差)
     var quoteText = vm.quote_text || '莫听穿林打叶声，何妨吟啸且徐行。';
-    ctx.fillStyle = '#fbf8ee';
+    ctx.fillStyle = '#1a1613';
     ctx.font = 'bold 26px ' + FONT_SERIF;
-    var qTextH = drawWrappedText(ctx, quoteText, width * 0.5, quoteBoxY + 56, width - qMargin * 2 - 40, 42, 3, 'center');
+    var qTextH = drawWrappedText(ctx, quoteText, width * 0.5, quoteBoxY + 54, width - qMargin * 2 - 40, 42, 3, 'center');
 
     // 作品出处
     var workTitle = vm.work_title ? ('《' + vm.work_title + '》') : '《定风波》';
-    ctx.fillStyle = '#78a0c3';
+    ctx.fillStyle = '#7a3b2e';
     ctx.font = '15px ' + FONT_SERIF;
     ctx.textAlign = 'center';
-    ctx.fillText(workTitle, width * 0.5, quoteBoxY + 56 + qTextH + 16);
+    ctx.fillText(workTitle, width * 0.5, quoteBoxY + 54 + qTextH + 16);
 
-    // 4. 东坡式理解 (当代生活启发)
-    var dongpoViewY = quoteBoxY + quoteBoxH + 40;
-    ctx.fillStyle = '#82b6a2';
+    // 5. 东坡式理解 (当代生活启发)
+    var dongpoViewY = quoteBoxY + quoteBoxH + 36;
+    ctx.fillStyle = '#d9b978';
     ctx.font = 'bold 16px ' + FONT_SANS;
     ctx.textAlign = 'left';
     ctx.fillText('东坡式理解', 80, dongpoViewY);
@@ -329,41 +414,55 @@
   /**
    * 绘制类型 2：今日东坡签 (daily_sign)
    */
-  function renderDailySignCard(ctx, vm, width, height) {
+  function renderDailySignCard(ctx, vm, width, height, assets) {
     drawBackground(ctx, width, height);
+
+    // 1. 上部融入真实诗词/站点场景大图
+    if (assets && assets.scene) {
+      drawImageCover(ctx, assets.scene, 0, 0, width, 350, 140);
+    }
+
+    // 2. 右上角绘制明月徽印 (若可用)
+    if (assets && assets.moon) {
+      ctx.save();
+      ctx.globalAlpha = 0.85;
+      ctx.drawImage(assets.moon, width - 138, 58, 36, 36);
+      ctx.restore();
+    }
+
     drawCardHeader(ctx, width, '今日东坡 · 诗笺小札', '诗签');
 
     // 日期标题印记
-    var dateDisplay = vm.date_display || '2026年9月7日 · 秋 · 今日小札';
-    ctx.fillStyle = '#d9b978';
+    var dateDisplay = vm.date_display || '2026年9月8日 · 秋 · 今日小札';
+    ctx.fillStyle = '#f5eedc';
     ctx.font = '18px ' + FONT_SANS;
     ctx.textAlign = 'center';
     ctx.fillText(dateDisplay, width * 0.5, 140);
 
-    // 诗词名句书法区
-    var quoteBoxY = 195;
+    // 诗词名句书法区 (高反差宣纸卡)
+    var quoteBoxY = 190;
     var quoteBoxH = 220;
     var qMargin = 70;
-    ctx.fillStyle = 'rgba(43, 63, 90, 0.28)';
-    ctx.strokeStyle = 'rgba(217, 185, 120, 0.3)';
+    ctx.fillStyle = 'rgba(245, 238, 220, 0.94)';
+    ctx.strokeStyle = 'rgba(217, 185, 120, 0.5)';
     ctx.lineWidth = 1;
     ctx.fillRect(qMargin, quoteBoxY, width - qMargin * 2, quoteBoxH);
     ctx.strokeRect(qMargin, quoteBoxY, width - qMargin * 2, quoteBoxH);
 
     var quoteText = vm.quote_text || '莫听穿林打叶声，何妨吟啸且徐行。';
-    ctx.fillStyle = '#fbf8ee';
+    ctx.fillStyle = '#1a1613';
     ctx.font = 'bold 28px ' + FONT_SERIF;
     var qTextH = drawWrappedText(ctx, quoteText, width * 0.5, quoteBoxY + 36, width - qMargin * 2 - 40, 44, 3, 'center');
 
     var sourceText = (vm.source_text || '《定风波》') + (vm.station_name ? (' · ' + vm.station_name.split('｜')[0]) : '');
-    ctx.fillStyle = '#78a0c3';
+    ctx.fillStyle = '#7a3b2e';
     ctx.font = '15px ' + FONT_SERIF;
     ctx.textAlign = 'center';
     ctx.fillText(sourceText, width * 0.5, quoteBoxY + 36 + qTextH + 20);
 
     // 放到今天
     var viewY = quoteBoxY + quoteBoxH + 45;
-    ctx.fillStyle = '#82b6a2';
+    ctx.fillStyle = '#d9b978';
     ctx.font = 'bold 16px ' + FONT_SANS;
     ctx.textAlign = 'left';
     ctx.fillText('放到今天', 80, viewY);
@@ -375,7 +474,7 @@
 
     // 今天只做一件小事
     var actY = viewY + 150;
-    ctx.fillStyle = '#d9b978';
+    ctx.fillStyle = '#82b6a2';
     ctx.font = 'bold 16px ' + FONT_SANS;
     ctx.textAlign = 'left';
     ctx.fillText('今天只做一件小事', 80, actY);
@@ -396,8 +495,22 @@
   /**
    * 绘制类型 3：人生节点卡 (station_node)
    */
-  function renderStationNodeCard(ctx, vm, width, height) {
+  function renderStationNodeCard(ctx, vm, width, height, assets) {
     drawBackground(ctx, width, height);
+
+    // 1. 上部融入站点场景大图
+    if (assets && assets.scene) {
+      drawImageCover(ctx, assets.scene, 0, 0, width, 380, 150);
+    }
+
+    // 2. 叠加金色星轨光环装饰
+    if (assets && assets.orbit) {
+      ctx.save();
+      ctx.globalAlpha = 0.55;
+      ctx.drawImage(assets.orbit, width * 0.5 - 120, 70, 240, 240);
+      ctx.restore();
+    }
+
     drawCardHeader(ctx, width, '苏轼人生宇宙 · 行迹卡', '行迹');
 
     // 站点名称
@@ -405,32 +518,32 @@
     ctx.fillStyle = '#fbf8ee';
     ctx.font = 'bold 36px ' + FONT_SERIF;
     ctx.textAlign = 'center';
-    ctx.fillText(stationTitle, width * 0.5, 140);
+    ctx.fillText(stationTitle, width * 0.5, 142);
 
     // 历史起止时间与地点
     var timePlace = (vm.station_time_label ? (vm.station_time_label + ' · ') : '') + (vm.station_place || '湖北黄冈');
     ctx.fillStyle = '#d9b978';
     ctx.font = '16px ' + FONT_SANS;
     ctx.textAlign = 'center';
-    ctx.fillText(timePlace, width * 0.5, 190);
+    ctx.fillText(timePlace, width * 0.5, 192);
 
     // 核心诗句展示
     var quoteBoxY = 240;
     var quoteBoxH = 190;
     var qMargin = 70;
-    ctx.fillStyle = 'rgba(43, 63, 90, 0.28)';
-    ctx.strokeStyle = 'rgba(120, 160, 195, 0.25)';
+    ctx.fillStyle = 'rgba(245, 238, 220, 0.92)';
+    ctx.strokeStyle = 'rgba(217, 185, 120, 0.45)';
     ctx.lineWidth = 1;
     ctx.fillRect(qMargin, quoteBoxY, width - qMargin * 2, quoteBoxH);
     ctx.strokeRect(qMargin, quoteBoxY, width - qMargin * 2, quoteBoxH);
 
     var quoteText = vm.quote_text || '莫听穿林打叶声，何妨吟啸且徐行。';
-    ctx.fillStyle = '#fbf8ee';
+    ctx.fillStyle = '#1a1613';
     ctx.font = 'bold 26px ' + FONT_SERIF;
     var qTextH = drawWrappedText(ctx, quoteText, width * 0.5, quoteBoxY + 36, width - qMargin * 2 - 40, 42, 3, 'center');
 
     var workTitle = vm.work_title ? ('《' + vm.work_title + '》') : '《定风波》';
-    ctx.fillStyle = '#78a0c3';
+    ctx.fillStyle = '#7a3b2e';
     ctx.font = '15px ' + FONT_SERIF;
     ctx.textAlign = 'center';
     ctx.fillText(workTitle, width * 0.5, quoteBoxY + 36 + qTextH + 16);
@@ -463,7 +576,7 @@
   }
 
   /**
-   * 纯 Canvas 2D 动态生成分享卡入口
+   * 纯 Canvas 2D 动态生成分享卡入口 (支持本地图片安全预加载与回退)
    * @param {string} cardType 'station' | 'daily' | 'node'
    * @param {Object} viewModel
    * @param {function(string)} callback
@@ -478,45 +591,70 @@
       return;
     }
 
-    // 创建离线临时 Canvas
-    var canvas = doc.createElement('canvas');
-    var dpr = Math.min((typeof window !== 'undefined' && window.devicePixelRatio) || 1, 2);
+    var ArtAssets = root.SuShiUniverse ? root.SuShiUniverse.ArtAssets : null;
+    var Data = root.SuShiUniverse ? root.SuShiUniverse.Data : null;
 
-    canvas.width = CANVAS_WIDTH * dpr;
-    canvas.height = CANVAS_HEIGHT * dpr;
-
-    var ctx = canvas.getContext('2d');
-    if (!ctx) {
-      if (typeof callback === 'function') callback('');
-      return;
-    }
-
-    ctx.scale(dpr, dpr);
-
-    // 分支分发绘制
+    // 准备需要预加载的本地素材表 (零网络请求，纯包内资源)
+    var imgMap = {};
     if (cardType === 'daily' || cardType === 'daily_sign') {
-      renderDailySignCard(ctx, viewModel, CANVAS_WIDTH, CANVAS_HEIGHT);
+      var pSrc = (viewModel.work_id && ArtAssets && ArtAssets.getPoemScene(viewModel.work_id)) ||
+                 (viewModel.station_id && ArtAssets && ArtAssets.getStationScene(viewModel.station_id)) ||
+                 './assets/images/scenes/station-huangzhou.webp';
+      imgMap.scene = pSrc;
+      imgMap.moon = (ArtAssets && ArtAssets.decor && ArtAssets.decor.badgeMoon) || './assets/images/decor/badge-moon.webp';
     } else if (cardType === 'node' || cardType === 'station_node') {
-      renderStationNodeCard(ctx, viewModel, CANVAS_WIDTH, CANVAS_HEIGHT);
+      var nScene = (viewModel.station_id && ArtAssets && ArtAssets.getStationScene(viewModel.station_id)) ||
+                   './assets/images/scenes/station-huangzhou.webp';
+      imgMap.scene = nScene;
+      imgMap.orbit = (ArtAssets && ArtAssets.cosmos && ArtAssets.cosmos.orbit) || './assets/images/cosmos/orbit-ring-glow.webp';
     } else {
-      renderStationResultCard(ctx, viewModel, CANVAS_WIDTH, CANVAS_HEIGHT);
+      var sScene = (viewModel.station_id && ArtAssets && ArtAssets.getStationScene(viewModel.station_id)) ||
+                   (Data && Data.getStationById && Data.getStationById(viewModel.station_id) && Data.getStationById(viewModel.station_id).scene_image) ||
+                   './assets/images/scenes/station-huangzhou.webp';
+      imgMap.scene = sScene;
     }
 
-    var dataUrl = '';
-    try {
-      dataUrl = canvas.toDataURL('image/png');
-    } catch (e) {
-      dataUrl = '';
-    }
+    loadLocalImages(imgMap, function (assets) {
+      // 创建离线临时 Canvas
+      var canvas = doc.createElement('canvas');
+      var dpr = Math.min((typeof window !== 'undefined' && window.devicePixelRatio) || 1, 2);
 
-    // 及时释放离线 Canvas 引用以防内存泄漏
-    canvas.width = 1;
-    canvas.height = 1;
-    canvas = null;
+      canvas.width = CANVAS_WIDTH * dpr;
+      canvas.height = CANVAS_HEIGHT * dpr;
 
-    if (typeof callback === 'function') {
-      callback(dataUrl);
-    }
+      var ctx = canvas.getContext('2d');
+      if (!ctx) {
+        if (typeof callback === 'function') callback('');
+        return;
+      }
+
+      ctx.scale(dpr, dpr);
+
+      // 分支分发绘制 (融入已加载好的真实素材)
+      if (cardType === 'daily' || cardType === 'daily_sign') {
+        renderDailySignCard(ctx, viewModel, CANVAS_WIDTH, CANVAS_HEIGHT, assets);
+      } else if (cardType === 'node' || cardType === 'station_node') {
+        renderStationNodeCard(ctx, viewModel, CANVAS_WIDTH, CANVAS_HEIGHT, assets);
+      } else {
+        renderStationResultCard(ctx, viewModel, CANVAS_WIDTH, CANVAS_HEIGHT, assets);
+      }
+
+      var dataUrl = '';
+      try {
+        dataUrl = canvas.toDataURL('image/png');
+      } catch (e) {
+        dataUrl = '';
+      }
+
+      // 及时释放离线 Canvas 引用以防内存泄漏
+      canvas.width = 1;
+      canvas.height = 1;
+      canvas = null;
+
+      if (typeof callback === 'function') {
+        callback(dataUrl);
+      }
+    });
   };
 
   root.SuShiUniverse.CardCanvas = CardCanvas;

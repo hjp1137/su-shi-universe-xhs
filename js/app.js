@@ -25,6 +25,42 @@
 
   var navTitleEl = null;
   var navLeftEl = null;
+  var cosmicDockEl = null;
+
+  // 东方宇宙底部导航坞 (Cosmic Dock) 状态管理矩阵
+  function updateCosmicDock(viewName) {
+    if (!cosmicDockEl) {
+      cosmicDockEl = document.getElementById('cosmic-dock');
+    }
+    if (!cosmicDockEl) return;
+
+    // quiz (防答题中断误切) 与 share-card (全屏沉浸海报模式) 隐藏 Cosmic Dock
+    if (viewName === 'quiz' || viewName === 'share-card' || viewName === 'error-demo') {
+      cosmicDockEl.style.display = 'none';
+      return;
+    }
+
+    cosmicDockEl.style.display = 'block';
+
+    // 确定当前一级高亮项
+    var activeKey = 'home';
+    if (viewName === 'universe' || viewName === 'station' || viewName === 'work' || viewName === 'result') {
+      activeKey = 'universe';
+    } else if (viewName === 'daily') {
+      activeKey = 'daily';
+    }
+
+    while (cosmicDockEl.firstChild) {
+      cosmicDockEl.removeChild(cosmicDockEl.firstChild);
+    }
+
+    if (UI && typeof UI.createCosmicDock === 'function') {
+      var dockNode = UI.createCosmicDock(activeKey, function (targetKey) {
+        Router.navigate(targetKey);
+      });
+      cosmicDockEl.appendChild(dockNode);
+    }
+  }
 
   function handleViewChange(info) {
     if (!navTitleEl || !navLeftEl) {
@@ -38,21 +74,17 @@
       navTitleEl.textContent = titleText;
     }
 
-    // 2. 动态管理返回按钮
+    // 2. 原生避让规范：左上角原生区域纯净清空，不得放置项目返回键以防与小红书容器冲突
     if (navLeftEl) {
       while (navLeftEl.firstChild) {
         navLeftEl.removeChild(navLeftEl.firstChild);
       }
-
-      if (info.canBack && info.name !== 'home') {
-        var backBtn = UI.createBackButton(function () {
-          Router.back();
-        });
-        navLeftEl.appendChild(backBtn);
-      }
     }
 
-    // 3. WebGL 东方水墨宇宙特效协同 (完全解耦，不阻断主流程)
+    // 3. 协同东方宇宙底部导航坞 (Cosmic Dock)
+    updateCosmicDock(info.name);
+
+    // 4. WebGL 东方水墨宇宙特效协同 (完全解耦，不阻断主流程)
     if (SuShi.Effects && typeof SuShi.Effects.mount === 'function') {
       try {
         if (info.name === 'home') {

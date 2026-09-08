@@ -1782,43 +1782,27 @@
   margin: 0 4px;
 }
 
-/* 7. 分享卡预览 Share-Card 样式 */
+/* 7. 分享卡全屏所见即所得 Share-Card 专属海报模式 */
 .share-card-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-bottom: var(--space-8);
-}
-
-.share-tabs-nav {
-  display: flex;
   width: 100%;
-  background: rgba(16, 27, 47, 0.6);
-  border: 1px solid var(--color-divider);
-  border-radius: var(--radius-md);
-  padding: 4px;
-  margin-bottom: var(--space-4);
   box-sizing: border-box;
 }
 
-.share-tab-btn {
-  flex: 1;
-  padding: var(--space-2) 0;
-  text-align: center;
-  font-size: var(--font-size-tag);
-  color: var(--color-text-secondary);
-  background: transparent;
-  border: none;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: all var(--transition-fast);
+.share-card-container.share-card-fullscreen {
+  padding: var(--space-2) var(--space-3) var(--space-6);
+  min-height: calc(100vh - var(--header-height, 44px));
 }
 
-.share-tab-btn.active {
-  background: rgba(217, 185, 120, 0.18);
-  color: var(--color-warm);
-  font-weight: 600;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+.share-card-top-nav {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: var(--space-2);
 }
 
 .share-card-display {
@@ -1826,24 +1810,25 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-2);
 }
 
-.share-card-img-wrap {
+.share-card-img-wrap,
+.share-card-poster-wrap {
   position: relative;
   width: 100%;
-  max-width: 320px;
-  min-height: 400px; /* Chrome 61 基线回退，防未支持 aspect-ratio 时高度塌陷 */
+  max-width: 358px;
+  min-height: 477px; /* Chrome 61 基线回退，防未支持 aspect-ratio 时高度塌陷 (3:4) */
   aspect-ratio: 3 / 4;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.65), 0 0 24px rgba(229, 178, 99, 0.22);
-  border: 2px solid rgba(229, 178, 99, 0.35);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.75), 0 0 28px rgba(217, 185, 120, 0.28);
+  border: 1.5px solid rgba(217, 185, 120, 0.45);
   background: radial-gradient(circle at 50% 10%, rgba(229, 178, 99, 0.1) 0%, #0d1526 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px;
+  padding: 0;
 }
 
 .share-card-img {
@@ -1882,12 +1867,44 @@
   font-size: var(--font-size-caption);
 }
 
-.share-card-hint {
-  margin-top: var(--space-3);
+/* 紧凑月相分段器 */
+.share-type-segment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(16, 27, 47, 0.85);
+  border: 1px solid rgba(217, 185, 120, 0.3);
+  border-radius: 20px;
+  padding: 3px;
+  margin: var(--space-2) 0 var(--space-3);
+  box-sizing: border-box;
+}
+
+.share-segment-item {
+  display: flex;
+  align-items: center;
+  padding: 6px 14px;
   font-size: var(--font-size-tag);
-  color: var(--color-text-muted);
-  text-align: center;
+  color: var(--color-text-secondary);
+  background: transparent;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: all var(--motion-fast);
   letter-spacing: 0.5px;
+}
+
+.share-segment-item.active {
+  background: linear-gradient(135deg, rgba(217, 185, 120, 0.25) 0%, rgba(217, 185, 120, 0.1) 100%);
+  color: var(--color-warm);
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.share-segment-icon {
+  margin-right: 4px;
+  font-size: 11px;
 }
 
 .share-card-actions {
