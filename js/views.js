@@ -1746,7 +1746,7 @@
         verseStage.appendChild(vImg);
       }
       var verseContent = document.createElement('div');
-      verseContent.className = 'station-verse-scene-content';
+      verseContent.className = 'station-verse-scene-content station-safe-zone-content ' + (isDarkTone ? 'tone-dark-bg' : 'tone-light-bg');
       var qText = primeQuoteObj ? primeQuoteObj.text : (station.theme || '人生到处知何似，应似飞鸿踏雪泥。');
       var vQuote = document.createElement('blockquote');
       vQuote.className = 'station-verse-quote-text';

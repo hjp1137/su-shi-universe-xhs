@@ -722,6 +722,77 @@
   animation: calloutFadeIn 0.3s ease forwards;
 }
 
+/* 任务 15.6.5 3D 作品星附着式微胶囊 (Attached Cosmic Capsule) */
+.poetry-planet-attached-capsule {
+  position: absolute;
+  transform: translate(-50%, 0);
+  z-index: 20;
+  pointer-events: auto;
+  animation: capsuleFloatIn 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes capsuleFloatIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -6px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+.attached-capsule-orbit {
+  display: flex;
+  align-items: center;
+  background: rgba(12, 19, 32, 0.88);
+  border: 1px solid rgba(217, 185, 120, 0.5);
+  border-radius: 20px;
+  padding: 4px 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.65), 0 0 12px rgba(217, 185, 120, 0.25);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  white-space: nowrap;
+}
+
+.attached-capsule-orbit > * + * {
+  margin-left: 6px;
+}
+
+.attached-capsule-title {
+  font-family: var(--font-serif, serif);
+  font-size: 12px;
+  color: #fff;
+  font-weight: 600;
+}
+
+.attached-capsule-quote {
+  font-size: 11px;
+  color: var(--color-warm, #d9b978);
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.attached-capsule-btn {
+  background: linear-gradient(135deg, rgba(217, 185, 120, 0.4) 0%, rgba(217, 185, 120, 0.18) 100%);
+  border: 1px solid rgba(217, 185, 120, 0.65);
+  border-radius: 12px;
+  color: #fbf8ee;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: all 0.2s ease;
+}
+
+.attached-capsule-btn:active {
+  transform: scale(0.92);
+  background: rgba(217, 185, 120, 0.6);
+}
+
 .poetry-3d-focus-callout > * + * {
   margin-top: 6px;
 }

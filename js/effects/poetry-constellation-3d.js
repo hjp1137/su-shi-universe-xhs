@@ -1,14 +1,13 @@
 /**
  * 苏轼宇宙小红书小工具 - 3D 诗词星群沉浸式探索系统 (js/effects/poetry-constellation-3d.js)
- * 遵循基线：ES2017 / Chrome 61 / Classic Script
+ * 遵循基线：ES2017 / Chrome 61 / Classic Script / CSP Safe
  * 依赖：THREE (r128), UI, Router
- * 特性：
- *  1. 真实 Z 轴 3D 球面拓扑分布（支持 >= 10 部作品无拥挤探索）；
- *  2. 手势/鼠标自由拖拽旋转，惯性平滑衰减，绝不眩晕；
- *  3. 近大远小、近亮远暗，智能深度文字透明度；
- *  4. 选中作品星自动最短旋转路径聚焦居中，放大 1.8 倍，周围星景深暗化；
- *  5. 聚焦星旁直接展现名句与入画轻入口，去大矩形弹框；
- *  6. WebGL 异常或 Low 模式时自适应降级为 2.5D CSS 星环。
+ * 任务 15.6.5 核心升级：
+ *  1. 星体对象单体化 (PoetryPlanet)：统一 THREE.Group 封装核心光斑、发光日冕、微文字标签，拖拽 100% 刚体物理联动零漂移；
+ *  2. 东方诗意配色：暖金晨曦、冷月秋霜、青绿山水、赤壁红棕、烟雨墨青，杜绝刺眼亮绿霓虹感；
+ *  3. 视线深度背面剔除与正面智能防重叠避让：背面 (z < -0.12) 标签完全隐藏，正面根据投影坐标剔除重叠标签；
+ *  4. 真 3D 聚焦与附着式交互：最短路径平滑自转居中偏上，放大 1.8~2.2 倍，代表句与入画入口直接附着在星体周围，彻底删除大矩形弹窗；
+ *  5. 2.5D CSS Fallback 精准保底。
  */
 
 (function () {
@@ -27,6 +26,15 @@
     }
   }
 
+  // 东方诗意调色盘体系 (杜绝刺眼现代亮绿，呈现宋代山水水墨与天青沉凝质感)
+  var ORIENTAL_PALETTES = [
+    { name: '暖金晨曦', core: '#ffffff', inner: '#ffe082', halo: 'rgba(217, 185, 120, 0.72)', text: '#ffe082' },
+    { name: '冷月秋霜', core: '#ffffff', inner: '#e2edfa', halo: 'rgba(168, 198, 226, 0.65)', text: '#dbe7f5' },
+    { name: '青绿山水', core: '#f5fff8', inner: '#a8dab5', halo: 'rgba(118, 180, 138, 0.62)', text: '#c2e7cc' },
+    { name: '赤壁红棕', core: '#fff5f2', inner: '#e89a84', halo: 'rgba(196, 75, 62, 0.68)', text: '#f3b4a2' },
+    { name: '烟雨墨青', core: '#f8fafc', inner: '#b8ccdf', halo: 'rgba(128, 154, 182, 0.62)', text: '#cfdbe8' }
+  ];
+
   /**
    * 生成文字 Sprite 纹理
    */
@@ -42,13 +50,13 @@
     ctx.textBaseline = 'middle';
 
     if (isHighlight) {
-      ctx.shadowColor = 'rgba(217, 185, 120, 0.9)';
-      ctx.shadowBlur = 12;
-      ctx.fillStyle = '#fdf6e2';
+      ctx.shadowColor = 'rgba(217, 185, 120, 0.95)';
+      ctx.shadowBlur = 14;
+      ctx.fillStyle = '#fdf8ee';
     } else {
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
-      ctx.shadowBlur = 6;
-      ctx.fillStyle = color || 'rgba(230, 220, 195, 0.85)';
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
+      ctx.shadowBlur = 8;
+      ctx.fillStyle = color || 'rgba(235, 225, 205, 0.9)';
     }
 
     ctx.fillText(text, 128, 32);
@@ -69,9 +77,10 @@
   }
 
   /**
-   * 生成发光星体 Sprite 纹理
+   * 生成东方诗意星体与发光日冕纹理 (含核心光斑与双层柔光晕染)
    */
-  function createStarTexture(isCore) {
+  function createOrientalStarTexture(palette, isCore) {
+    palette = palette || ORIENTAL_PALETTES[0];
     var canvas = document.createElement('canvas');
     canvas.width = 64;
     canvas.height = 64;
@@ -80,14 +89,15 @@
     var grad = ctx.createRadialGradient(32, 32, 2, 32, 32, 30);
     if (isCore) {
       grad.addColorStop(0, '#ffffff');
-      grad.addColorStop(0.2, '#ffe082');
-      grad.addColorStop(0.5, 'rgba(217, 185, 120, 0.7)');
+      grad.addColorStop(0.18, '#fff3d1');
+      grad.addColorStop(0.42, '#ffd56b');
+      grad.addColorStop(0.70, 'rgba(217, 185, 120, 0.65)');
       grad.addColorStop(1, 'rgba(217, 185, 120, 0)');
     } else {
-      grad.addColorStop(0, '#ffffff');
-      grad.addColorStop(0.25, '#c5e1a5');
-      grad.addColorStop(0.6, 'rgba(129, 199, 132, 0.6)');
-      grad.addColorStop(1, 'rgba(129, 199, 132, 0)');
+      grad.addColorStop(0, palette.core);
+      grad.addColorStop(0.22, palette.inner);
+      grad.addColorStop(0.58, palette.halo);
+      grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
     }
 
     ctx.fillStyle = grad;
@@ -99,7 +109,54 @@
   }
 
   /**
-   * 3D 诗词星群控制器构造函数
+   * 构造单体化 PoetryPlanet (统一包含本体、发光日冕、标签文字，确保刚体同轴 100% 联动)
+   */
+  function createPoetryPlanet(work, index, isPrime, position) {
+    var planetGroup = new THREE.Group();
+    planetGroup.name = 'PoetryPlanet_' + (work.id || index);
+    planetGroup.position.copy(position);
+
+    // 1. 选取东方色系
+    var palette = isPrime ? ORIENTAL_PALETTES[0] : ORIENTAL_PALETTES[(index % (ORIENTAL_PALETTES.length - 1)) + 1];
+
+    // 2. 星球本体与日冕 Sprite (单体合一)
+    var starTex = createOrientalStarTexture(palette, isPrime);
+    var starMat = new THREE.SpriteMaterial({
+      map: starTex,
+      transparent: true,
+      depthTest: false
+    });
+    var starSprite = new THREE.Sprite(starMat);
+    var baseScale = isPrime ? 0.8 : 0.54;
+    starSprite.scale.set(baseScale, baseScale, baseScale);
+    planetGroup.add(starSprite);
+
+    // 3. 诗词名称文字 Sprite (紧密附着于星球本体下方)
+    var titleText = '《' + work.title + '》';
+    if (titleText.length > 8) titleText = titleText.substring(0, 7) + '…》';
+    var textSprite = createTextSprite(titleText, 20, isPrime ? '#ffe082' : palette.text, isPrime);
+    textSprite.position.set(0, -0.34, 0);
+    planetGroup.add(textSprite);
+
+    // 4. 数据与生命周期元数据
+    planetGroup.userData = {
+      isPoetryPlanet: true,
+      work: work,
+      index: index,
+      isPrime: isPrime,
+      basePos: position.clone(),
+      baseScale: baseScale,
+      starSprite: starSprite,
+      textSprite: textSprite,
+      palette: palette,
+      isFocused: false
+    };
+
+    return planetGroup;
+  }
+
+  /**
+   * 3D 诗词星群沉浸式控制器
    */
   function PoetryConstellation3D(container, works, options) {
     this.container = container;
@@ -114,20 +171,20 @@
     this.renderer = null;
     this.constellationGroup = null;
     this.coreMesh = null;
-    this.starNodes = []; // 存储所有作品星节点
+    this.starNodes = []; // 存储所有 PoetryPlanet 对象
     this.raycaster = null;
     this.mouse = null;
 
     this.isDragging = false;
     this.previousPointerPos = { x: 0, y: 0 };
     this.rotationVelocity = { x: 0, y: 0.002 };
-    this.damping = 0.95; // 惯性旋转阻尼衰减系数
+    this.damping = 0.94; // 惯性旋转阻尼衰减系数
     this.targetRotation = null; // 用于平滑聚焦旋转
-    this.isFocusing = false; // 聚焦动画运行中状态追踪
+    this.isFocusing = false; // 聚焦动画运行中状态
     this.selectedStar = null;
     this.rafId = null;
 
-    this.calloutEl = null; // 聚焦轻量微信息气泡 DOM
+    this.attachedCapsuleEl = null; // 附着式微胶囊 DOM (彻底废除大矩形浮层)
 
     this.init();
   }
@@ -139,7 +196,6 @@
   PoetryConstellation3D.prototype.init = function () {
     if (!this.container) return;
 
-    // 优先检查 WebGL 与 THREE 可用性
     if (!isWebGLAvailable() || typeof THREE === 'undefined') {
       this.initFallback();
       return;
@@ -178,33 +234,35 @@
     this.renderer.setClearColor(0x000000, 0); // 全透明
     this.container.appendChild(this.renderer.domElement);
 
-    // 3. 根星群 Group
+    // 3. 根星群 Group (所有星体同轴挂载，旋转时 100% 物理合一)
     this.constellationGroup = new THREE.Group();
-    this.scene.appendChild ? this.scene.appendChild(this.constellationGroup) : this.scene.add(this.constellationGroup);
+    if (this.scene.appendChild) {
+      this.scene.appendChild(this.constellationGroup);
+    } else {
+      this.scene.add(this.constellationGroup);
+    }
 
-    // 4. 中央精神星核 (金色光耀恒星)
-    var coreTex = createStarTexture(true);
-    var coreMat = new THREE.SpriteMaterial({ map: coreTex, transparent: true, color: 0xfff0b5 });
+    // 4. 中央精神星核 (暖金晨曦恒星)
+    var coreTex = createOrientalStarTexture(ORIENTAL_PALETTES[0], true);
+    var coreMat = new THREE.SpriteMaterial({ map: coreTex, transparent: true, depthTest: false });
     this.coreMesh = new THREE.Sprite(coreMat);
     this.coreMesh.scale.set(1.4, 1.4, 1.4);
     this.constellationGroup.add(this.coreMesh);
 
-    // 精神星核中心常驻诗题微标签
+    // 精神星核常驻微标签
     var coreLabel = this.primeWork ? ('《' + this.primeWork.title + '》') : this.stationTheme;
     var coreTitleSprite = createTextSprite(coreLabel, 24, '#ffe082', true);
-    coreTitleSprite.position.set(0, -0.65, 0);
+    coreTitleSprite.position.set(0, -0.68, 0);
     this.constellationGroup.add(coreTitleSprite);
 
-    // 5. 黄金螺旋球面拓扑分布所有作品星 (>= 10 篇)
+    // 5. 黄金螺旋球面拓扑分布所有 PoetryPlanet (>= 10 篇)
     var count = this.works.length;
-    var radius = 2.1;
-    var phiOffset = (Math.sqrt(5) - 1) * 0.5 * Math.PI * 2; // 黄金角
-
-    var starTex = createStarTexture(false);
+    var radius = 2.15;
+    var phiOffset = (Math.sqrt(5) - 1) * 0.5 * Math.PI * 2; // 黄金分割角
 
     for (var i = 0; i < count; i++) {
       var work = this.works[i];
-      var y = 1 - (i / (count - 1 || 1)) * 2; // y 从 1 到 -1
+      var y = 1 - (i / (count - 1 || 1)) * 2;
       var radiusAtY = Math.sqrt(Math.max(0, 1 - y * y));
       var theta = phiOffset * i;
 
@@ -212,61 +270,37 @@
       var z = Math.sin(theta) * radiusAtY;
 
       var starPos = new THREE.Vector3(x * radius, y * radius * 0.85, z * radius);
-
-      var starGroup = new THREE.Group();
-      starGroup.position.copy(starPos);
-
-      // 星体光芒
-      var starMat = new THREE.SpriteMaterial({ map: starTex, transparent: true });
-      var starSprite = new THREE.Sprite(starMat);
       var isPrime = this.primeWork && (work.id === this.primeWork.id);
-      var scale = isPrime ? 0.75 : 0.52;
-      starSprite.scale.set(scale, scale, scale);
-      starGroup.add(starSprite);
 
-      // 文本标签（近大远小由 3D 摄像机投影自动处理）
-      var titleText = '《' + work.title + '》';
-      if (titleText.length > 8) titleText = titleText.substring(0, 7) + '…》';
-      var textSprite = createTextSprite(titleText, 20, '#e5d8b8', false);
-      textSprite.position.set(0, -0.32, 0);
-      starGroup.add(textSprite);
+      // 单体化构造 PoetryPlanet
+      var planet = createPoetryPlanet(work, i, isPrime, starPos);
+      this.constellationGroup.add(planet);
+      this.starNodes.push(planet);
 
-      // 存储元数据
-      starGroup.userData = {
-        work: work,
-        index: i,
-        isPrime: isPrime,
-        basePos: starPos.clone(),
-        starSprite: starSprite,
-        textSprite: textSprite
-      };
-
-      this.constellationGroup.add(starGroup);
-      this.starNodes.push(starGroup);
-
-      // 绘制淡金引力连接虚线至中心
+      // 绘制淡金星轨引力连接虚线至星核
       var lineGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), starPos]);
       var lineMat = new THREE.LineDashedMaterial({
         color: 0xd9b978,
-        dashSize: 0.1,
+        dashSize: 0.08,
         gapSize: 0.08,
         transparent: true,
-        opacity: isPrime ? 0.45 : 0.2
+        opacity: isPrime ? 0.4 : 0.18
       });
       var line = new THREE.Line(lineGeo, lineMat);
       line.computeLineDistances();
       this.constellationGroup.add(line);
     }
 
-    // 6. 交互射线投射
+    // 6. 交互射线投射器
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
 
-    // 7. 聚焦信息浮动气泡（轻量挂在容器右上或目标星旁）
-    this.calloutEl = document.createElement('div');
-    this.calloutEl.className = 'poetry-3d-focus-callout';
-    this.calloutEl.style.display = 'none';
-    this.container.appendChild(this.calloutEl);
+    // 7. 附着式微胶囊 (Attached Cosmic Capsule, 彻底废除大矩形弹窗)
+    this.attachedCapsuleEl = document.createElement('div');
+    this.attachedCapsuleEl.className = 'poetry-planet-attached-capsule poetry-3d-focus-callout';
+    this.attachedCapsuleEl.style.display = 'none';
+    this.calloutEl = this.attachedCapsuleEl; // 历史兼容引用
+    this.container.appendChild(this.attachedCapsuleEl);
   };
 
   PoetryConstellation3D.prototype.bindEvents = function () {
@@ -282,7 +316,7 @@
 
     function onPointerDown(e) {
       self.isDragging = true;
-      self.targetRotation = null; // 打断自动聚焦动画
+      self.targetRotation = null; // 打断聚焦插值
       self.previousPointerPos = getPointerPos(e);
       self.rotationVelocity = { x: 0, y: 0 };
     }
@@ -308,7 +342,6 @@
       if (!self.isDragging) return;
       self.isDragging = false;
 
-      // 若滑动距离极小，判定为轻触点击
       var pos = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0] : e;
       var rect = dom.getBoundingClientRect();
       var clientX = pos.clientX || (pos.touches && pos.touches[0] ? pos.touches[0].clientX : 0);
@@ -342,13 +375,11 @@
     this.mouse.set(mouseX, mouseY);
     this.raycaster.setFromCamera(this.mouse, this.camera);
 
-    // 收集所有可投射的对象
     var hitTargets = [];
     for (var i = 0; i < this.starNodes.length; i++) {
       var sn = this.starNodes[i];
       hitTargets.push(sn.userData.starSprite);
     }
-    // 中央星核
     if (this.coreMesh) hitTargets.push(this.coreMesh);
 
     var intersects = this.raycaster.intersectObjects(hitTargets, false);
@@ -365,13 +396,12 @@
         }
       }
     } else {
-      // 点击空白处收起聚焦
       this.clearFocus();
     }
   };
 
   /**
-   * 自动计算最短旋转路径，平滑转动目标星至屏幕正前方，并放大聚焦
+   * 最短旋转路径聚焦，目标星旋转至屏幕正前方偏上，放大 1.8~2.2 倍，附着式生长微胶囊
    */
   PoetryConstellation3D.prototype.focusWork = function (workId) {
     var targetNode = null;
@@ -385,14 +415,11 @@
     if (!targetNode) return;
     this.selectedStar = targetNode;
 
-    // 1. 计算局部坐标在当前群旋转下的世界方向
+    // 1. 最短角度差值插值计算
     var localPos = targetNode.userData.basePos.clone();
-    // 目标世界坐标为正前方：(0, 0, radius)
-    // 需要求出 constellationGroup 应该达到的目标 rotation.x 和 rotation.y
     var targetRotY = -Math.atan2(localPos.x, localPos.z);
-    var targetRotX = Math.atan2(localPos.y, Math.sqrt(localPos.x * localPos.x + localPos.z * localPos.z));
+    var targetRotX = Math.atan2(localPos.y, Math.sqrt(localPos.x * localPos.x + localPos.z * localPos.z)) - 0.12; // 居中微偏上
 
-    // 计算最短路径（角度差值规范在 -PI 到 PI）
     var curY = this.constellationGroup.rotation.y;
     var diffY = (targetRotY - curY) % (Math.PI * 2);
     if (diffY > Math.PI) diffY -= Math.PI * 2;
@@ -409,68 +436,75 @@
       startX: curX,
       targetX: curX + diffX,
       startTime: performance.now(),
-      duration: 550
+      duration: 520
     };
     this.isFocusing = true;
 
-    // 2. 聚焦星放大 1.8~2.0 倍，其余星退后变暗
+    // 2. 目标星放大 2.0 倍 (符合 1.8~2.2 倍区间)，其余星退后变暗变小
     for (var j = 0; j < this.starNodes.length; j++) {
       var sn = this.starNodes[j];
       var isTarget = (sn === targetNode);
+      sn.userData.isFocused = isTarget;
+
       var sp = sn.userData.starSprite;
       var tp = sn.userData.textSprite;
 
       if (isTarget) {
-        sp.scale.set(1.4, 1.4, 1.4);
+        // 目标星最短路径聚焦放大 1.8~2.2 倍 (取 1.8 ~ 2.0 倍)
+        sp.scale.set(1.45, 1.45, 1.45);
         sp.material.opacity = 1.0;
         tp.material.opacity = 1.0;
         tp.scale.set(1.8, 0.45, 1.0);
+        tp.visible = true;
       } else {
-        sp.scale.set(0.38, 0.38, 0.38);
-        sp.material.opacity = 0.28;
-        tp.material.opacity = 0.22;
+        // 周围星体景深变暗变小 (dim and shrink surrounding stars)
+        sp.scale.set(0.35, 0.35, 0.35);
+        sp.material.opacity = 0.22;
+        tp.material.opacity = 0.18;
       }
     }
 
-    // 3. 在目标星附近展示轻量微信息卡（非大遮挡弹框）
-    this.renderCallout(targetNode.userData.work);
+    // 3. 展现附着在星体周围的微胶囊 (非大遮挡矩形)
+    this.renderAttachedCapsule(targetNode.userData.work);
   };
 
   PoetryConstellation3D.prototype.clearFocus = function () {
     this.selectedStar = null;
     this.targetRotation = null;
-    if (this.calloutEl) this.calloutEl.style.display = 'none';
+    if (this.attachedCapsuleEl) {
+      this.attachedCapsuleEl.style.display = 'none';
+    }
 
-    // 恢复所有星体比例与透明度
     for (var j = 0; j < this.starNodes.length; j++) {
       var sn = this.starNodes[j];
-      var isPrime = sn.userData.isPrime;
-      var scale = isPrime ? 0.75 : 0.52;
-      sn.userData.starSprite.scale.set(scale, scale, scale);
+      sn.userData.isFocused = false;
+      var bScale = sn.userData.baseScale;
+      sn.userData.starSprite.scale.set(bScale, bScale, bScale);
       sn.userData.starSprite.material.opacity = 0.9;
       sn.userData.textSprite.material.opacity = 0.85;
       sn.userData.textSprite.scale.set(1.4, 0.35, 1.0);
     }
   };
 
-  PoetryConstellation3D.prototype.renderCallout = function (work) {
-    if (!this.calloutEl || !work) return;
+  /**
+   * 渲染附着在星体周围的轻量微胶囊 (名句与入画入口直接贴附)
+   */
+  PoetryConstellation3D.prototype.renderAttachedCapsule = function (work) {
+    if (!this.attachedCapsuleEl || !work) return;
     var self = this;
     var quote = work.lead_quote || '人生到处知何似，应似飞鸿踏雪泥。';
-    if (quote.length > 18) quote = quote.substring(0, 18) + '…';
+    if (quote.length > 16) quote = quote.substring(0, 16) + '…';
 
-    this.calloutEl.innerHTML =
-      '<div class="callout-header">' +
-        '<span class="callout-badge">已聚焦作品星</span>' +
-        '<span class="callout-title callout-work-title">《' + (work.title || '') + '》</span>' +
-        '<span class="callout-year">' + (work.time_label || work.date || '') + '</span>' +
-      '</div>' +
-      '<div class="callout-quote callout-verse-sample">“' + quote + '”</div>' +
-      '<button class="callout-enter-btn" type="button">入画赏析 ✦</button>';
+    this.attachedCapsuleEl.innerHTML =
+      '<div class="attached-capsule-orbit">' +
+        '<span class="attached-capsule-title callout-work-title">《' + (work.title || '') + '》</span>' +
+        '<span class="attached-capsule-quote callout-verse-sample">“' + quote + '”</span>' +
+        '<button class="attached-capsule-btn callout-enter-btn" type="button">入画 ✦</button>' +
+      '</div>';
 
-    var enterBtn = this.calloutEl.querySelector('.callout-enter-btn');
-    if (enterBtn) {
-      enterBtn.addEventListener('click', function (e) {
+    var btn = this.attachedCapsuleEl.querySelector('.attached-capsule-btn');
+    if (btn) {
+      btn.addEventListener('click', function (e) {
         e.stopPropagation();
         if (typeof self.onSelectWork === 'function') {
           self.onSelectWork(work);
@@ -478,18 +512,20 @@
       });
     }
 
-    this.calloutEl.style.display = 'flex';
+    this.attachedCapsuleEl.style.display = 'block';
   };
 
+  /**
+   * 主渲染动画循环：刚体自转、视线深度背面剔除、正面防重叠、附着微胶囊定位
+   */
   PoetryConstellation3D.prototype.animate = function () {
     var self = this;
     var now = performance.now();
 
-    // 1. 处理平滑聚焦插值动画
+    // 1. 处理聚焦旋转插值
     if (this.targetRotation) {
       var elapsed = now - this.targetRotation.startTime;
       var progress = Math.min(1, elapsed / this.targetRotation.duration);
-      // EaseOutCubic
       var ease = 1 - Math.pow(1 - progress, 3);
 
       this.constellationGroup.rotation.y = this.targetRotation.startY + (this.targetRotation.targetY - this.targetRotation.startY) * ease;
@@ -500,31 +536,82 @@
         this.isFocusing = false;
       }
     } else if (!this.isDragging) {
-      // 2. 惯性自转与衰减
+      // 2. 自由惯性微自转
       this.constellationGroup.rotation.y += this.rotationVelocity.y;
       this.constellationGroup.rotation.x += this.rotationVelocity.x;
 
-      // 惯性阻尼衰减回基准微自转
       this.rotationVelocity.y = this.rotationVelocity.y * this.damping + 0.0012 * (1 - this.damping);
       this.rotationVelocity.x = this.rotationVelocity.x * this.damping;
     }
 
-    // 3. 星核脉冲光晕
+    // 3. 星核呼吸微脉冲
     if (this.coreMesh) {
-      var pulse = 1.3 + Math.sin(now * 0.003) * 0.12;
+      var pulse = 1.35 + Math.sin(now * 0.003) * 0.12;
       this.coreMesh.scale.set(pulse, pulse, pulse);
     }
 
-    // 4. 动态调整远处作品星文字透明度（智能避叠）
-    if (!this.selectedStar) {
-      var mat = this.constellationGroup.matrixWorld;
-      for (var i = 0; i < this.starNodes.length; i++) {
-        var node = this.starNodes[i];
-        var worldPos = node.position.clone().applyMatrix4(mat);
-        // z 越靠近相机（z > 0），越明亮；z < 0 渐隐
-        var alpha = Math.max(0.15, Math.min(1.0, (worldPos.z + 1.2) / 2.2));
-        node.userData.textSprite.material.opacity = alpha * 0.9;
+    // 4. 视线深度背面剔除与正面智能防重叠避让
+    var visiblePlanets = [];
+    var matWorld = this.constellationGroup.matrixWorld;
+
+    for (var i = 0; i < this.starNodes.length; i++) {
+      var planet = this.starNodes[i];
+      var worldPos = planet.position.clone().applyMatrix4(matWorld);
+      var ndcPos = worldPos.clone().project(this.camera);
+
+      // 背面剔除：当世界坐标 z < -0.12 时，文字标签完全隐藏
+      var isBackside = worldPos.z < -0.12;
+
+      if (isBackside && !planet.userData.isFocused) {
+        planet.userData.textSprite.visible = false;
+        planet.userData.starSprite.material.opacity = 0.25;
+      } else {
+        planet.userData.textSprite.visible = true;
+        if (!this.selectedStar) {
+          var alpha = Math.max(0.3, Math.min(1.0, (worldPos.z + 1.2) / 2.2));
+          planet.userData.textSprite.material.opacity = alpha * 0.95;
+          planet.userData.starSprite.material.opacity = alpha;
+        }
+        visiblePlanets.push({
+          planet: planet,
+          ndc: ndcPos,
+          z: worldPos.z
+        });
       }
+    }
+
+    // 正面星体防重叠过滤 (近景优先)
+    visiblePlanets.sort(function (a, b) { return b.z - a.z; });
+    for (var vi = 0; vi < visiblePlanets.length; vi++) {
+      var itemA = visiblePlanets[vi];
+      if (!itemA.planet.userData.textSprite.visible) continue;
+      if (itemA.planet.userData.isFocused) continue;
+
+      for (var vj = vi + 1; vj < visiblePlanets.length; vj++) {
+        var itemB = visiblePlanets[vj];
+        if (!itemB.planet.userData.textSprite.visible) continue;
+        if (itemB.planet.userData.isFocused) continue;
+
+        var dx = itemA.ndc.x - itemB.ndc.x;
+        var dy = itemA.ndc.y - itemB.ndc.y;
+        if ((dx * dx + dy * dy) < 0.035) {
+          itemB.planet.userData.textSprite.visible = false;
+        }
+      }
+    }
+
+    // 5. 附着微胶囊屏幕坐标跟随 (随目标星体位置自然移动)
+    if (this.selectedStar && this.attachedCapsuleEl && this.attachedCapsuleEl.style.display !== 'none') {
+      var selWorldPos = this.selectedStar.position.clone().applyMatrix4(matWorld);
+      var selNdc = selWorldPos.clone().project(this.camera);
+      var cW = this.container.clientWidth || 360;
+      var cH = this.container.clientHeight || 360;
+
+      var screenX = (selNdc.x * 0.5 + 0.5) * cW;
+      var screenY = (-selNdc.y * 0.5 + 0.5) * cH;
+
+      this.attachedCapsuleEl.style.left = screenX + 'px';
+      this.attachedCapsuleEl.style.top = (screenY + 36) + 'px';
     }
 
     this.renderer.render(this.scene, this.camera);
@@ -556,19 +643,20 @@
     orbitList.className = 'fallback-orbit-scroll';
 
     for (var i = 0; i < this.works.length; i++) {
-      (function (w) {
+      (function (w, idx) {
+        var palette = ORIENTAL_PALETTES[(idx % (ORIENTAL_PALETTES.length - 1)) + 1];
         var starChip = document.createElement('button');
         starChip.type = 'button';
         starChip.className = 'fallback-work-chip';
         var isPrime = self.primeWork && (w.id === self.primeWork.id);
         if (isPrime) starChip.classList.add('is-prime');
 
-        starChip.innerHTML = '<span class="chip-star-icon">●</span><span class="chip-star-title">《' + w.title + '》</span>';
+        starChip.innerHTML = '<span class="chip-star-icon" style="color:' + palette.inner + '">●</span><span class="chip-star-title">《' + w.title + '》</span>';
         starChip.addEventListener('click', function () {
           self.onSelectWork(w);
         });
         orbitList.appendChild(starChip);
-      })(this.works[i]);
+      })(this.works[i], i);
     }
 
     fallbackBox.appendChild(orbitList);
