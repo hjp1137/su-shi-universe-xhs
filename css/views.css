@@ -36,6 +36,7 @@
   position: relative;
   overflow: hidden;
   border-radius: var(--radius-lg);
+  min-height: 520px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -61,9 +62,9 @@
   height: 100%;
   object-fit: cover;
   object-position: center 25%;
-  opacity: 0.38;
-  filter: saturate(0.85);
-  transform: scale(1.03);
+  opacity: 0.88;
+  filter: saturate(1.05) contrast(1.02);
+  transform: scale(1.02);
 }
 
 .home-hero-mask {
@@ -72,7 +73,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(180deg, rgba(14, 24, 48, 0.4) 0%, rgba(14, 24, 48, 0.82) 65%, rgba(14, 24, 48, 0.98) 100%);
+  background: linear-gradient(180deg, rgba(14, 24, 48, 0.42) 0%, rgba(14, 24, 48, 0.2) 35%, rgba(14, 24, 48, 0.55) 70%, rgba(14, 24, 48, 0.98) 100%);
 }
 
 .home-first-screen > *:not(.home-hero-bg-wrap) {
@@ -251,64 +252,119 @@
   padding-left: var(--space-1);
 }
 
-.home-nav-list {
+.home-nav-list,
+.home-cosmic-entries {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-start;
+  width: 100%;
+  margin: var(--space-4) 0 var(--space-6);
+}
+
+.home-nav-list > * + *,
+.home-cosmic-entries > * + * {
+  margin-top: 0;
+  margin-left: var(--space-2);
+}
+
+.home-nav-card,
+.cosmic-entry-item {
+  position: relative;
+  background: transparent;
+  border: none;
+  box-shadow: none;
   display: flex;
   flex-direction: column;
-}
-
-.home-nav-list > * + * {
-  margin-top: var(--space-3);
-}
-
-.home-nav-card {
-  position: relative;
-  overflow: hidden;
-  border-left-width: 4px;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  padding: 0;
+  flex: 1;
+  max-width: 110px;
   touch-action: manipulation;
-  transition: transform var(--motion-fast), box-shadow var(--motion-fast);
+  transition: transform var(--motion-normal) cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.home-nav-card:active {
-  transform: scale(0.985);
+.home-nav-card:hover,
+.home-nav-card:active,
+.cosmic-entry-item:hover,
+.cosmic-entry-item:active {
+  transform: translateY(-4px) scale(1.03);
 }
 
 .home-nav-card-inner {
   display: flex;
+  flex-direction: column;
   align-items: center;
   width: 100%;
 }
 
-.nav-card-visual {
+.nav-card-visual,
+.cosmic-planet-wrap {
   position: relative;
-  width: 58px;
-  height: 58px;
-  flex-shrink: 0;
-  margin-right: var(--space-4);
+  width: 80px;
+  height: 80px;
+  margin: 0 auto var(--space-2);
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 50%;
 }
 
-.nav-card-planet-img {
-  width: 52px;
-  height: 52px;
+.nav-quiz .nav-card-visual,
+.nav-quiz .cosmic-planet-wrap {
+  width: 92px;
+  height: 92px;
+}
+
+.nav-universe .nav-card-visual,
+.nav-universe .cosmic-planet-wrap {
+  width: 82px;
+  height: 82px;
+}
+
+.nav-daily .nav-card-visual,
+.nav-daily .cosmic-planet-wrap {
+  width: 78px;
+  height: 78px;
+}
+
+.nav-card-planet-img,
+.cosmic-planet-img {
+  width: 100%;
+  height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 4px 14px rgba(92, 178, 199, 0.35));
-  transition: transform var(--motion-fast);
+  border-radius: 50%;
+  filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.65));
+  transition: transform var(--motion-normal);
+  animation: cosmicPlanetFloat 4.5s ease-in-out infinite;
 }
 
-.home-nav-card:active .nav-card-planet-img {
-  transform: scale(0.92);
+.nav-universe .nav-card-planet-img,
+.nav-universe .cosmic-planet-img {
+  animation-delay: -1.5s;
 }
 
-.nav-card-orbit-ring {
+.nav-daily .nav-card-planet-img,
+.nav-daily .cosmic-planet-img {
+  animation-delay: -3s;
+}
+
+.home-nav-card:active .nav-card-planet-img,
+.cosmic-entry-item:active .cosmic-planet-img {
+  transform: scale(0.94);
+}
+
+.nav-card-orbit-ring,
+.cosmic-orbit-ring {
   position: absolute;
-  top: -5px;
-  left: -5px;
-  width: 68px;
-  height: 68px;
+  top: -8px;
+  left: -8px;
+  width: calc(100% + 16px);
+  height: calc(100% + 16px);
   pointer-events: none;
-  opacity: 0.85;
+  opacity: 0.9;
   animation: ringSpin 24s linear infinite;
 }
 
@@ -321,63 +377,66 @@
   }
 }
 
-.nav-card-text-col {
-  flex: 1;
-  min-width: 0;
-}
-
-.home-nav-card.nav-quiz {
-  border-left-color: var(--color-river);
-}
-
-.home-nav-card.nav-universe {
-  border-left-color: var(--color-jade);
-}
-
-.home-nav-card.nav-daily {
-  border-left-color: var(--color-warm);
+.nav-card-text-col,
+.cosmic-entry-label-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
 }
 
 .nav-card-header {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
   margin-bottom: var(--space-1);
 }
 
-.nav-card-title {
-  font-size: var(--font-size-h3);
+.nav-card-title,
+.cosmic-entry-title {
+  font-size: 15px;
   font-weight: 600;
-  color: var(--color-moon);
-  letter-spacing: 0.5px;
+  color: var(--color-warm);
+  letter-spacing: 0.8px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
 }
 
-.nav-card-tag {
-  font-size: var(--font-size-tag);
-  padding: 2px 8px;
+.nav-card-tag,
+.cosmic-entry-tag {
+  display: inline-block;
+  font-size: 10px;
+  padding: 1px 6px;
   border-radius: var(--radius-pill);
-  background: rgba(255, 255, 255, 0.08);
+  margin-top: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-.nav-quiz .nav-card-tag {
+.nav-quiz .nav-card-tag,
+.nav-quiz .cosmic-entry-tag {
   color: var(--color-river);
   background: var(--color-river-dim);
 }
 
-.nav-universe .nav-card-tag {
+.nav-universe .nav-card-tag,
+.nav-universe .cosmic-entry-tag {
   color: var(--color-jade);
   background: rgba(130, 182, 162, 0.18);
 }
 
-.nav-daily .nav-card-tag {
+.nav-daily .nav-card-tag,
+.nav-daily .cosmic-entry-tag {
   color: var(--color-warm);
   background: var(--color-warm-dim);
 }
 
-.nav-card-desc {
-  font-size: var(--font-size-caption);
+.nav-card-desc,
+.cosmic-entry-desc {
+  font-size: 11px;
   color: var(--color-text-secondary);
   line-height: var(--line-height-normal);
+  margin-top: 2px;
+  white-space: nowrap;
 }
 
 .home-daily-quote {
@@ -682,12 +741,22 @@
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
 }
 
+.result-hero-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 340px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 160px var(--space-4) var(--space-6);
+}
+
 .result-scene-cover-box {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 180px;
+  height: 340px;
   overflow: hidden;
   pointer-events: none;
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
@@ -697,9 +766,9 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 25%;
-  opacity: 0.38;
-  filter: saturate(0.85);
+  object-position: center 30%;
+  opacity: 0.92;
+  filter: saturate(1.05) contrast(1.02);
 }
 
 .result-scene-cover-mask {
@@ -708,7 +777,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(180deg, rgba(14, 24, 48, 0.25) 0%, rgba(14, 24, 48, 0.82) 70%, rgba(14, 24, 48, 0.98) 100%);
+  background: linear-gradient(180deg, rgba(14, 24, 48, 0.25) 0%, rgba(14, 24, 48, 0.35) 45%, rgba(14, 24, 48, 0.85) 85%, rgba(14, 24, 48, 0.98) 100%);
 }
 
 .result-hero-content {
@@ -1148,13 +1217,22 @@
   background: linear-gradient(135deg, rgba(122, 130, 150, 0.12) 0%, rgba(15, 23, 40, 0.88) 100%);
 }
 
-/* 站点详情 Station 样式 */
+.station-hero-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 140px var(--space-4) var(--space-5);
+}
+
 .station-hero-cover-box {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 180px;
+  height: 280px;
   overflow: hidden;
   pointer-events: none;
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
@@ -1165,8 +1243,8 @@
   height: 100%;
   object-fit: cover;
   object-position: center 25%;
-  opacity: 0.38;
-  filter: saturate(0.85);
+  opacity: 0.90;
+  filter: saturate(1.05) contrast(1.02);
 }
 
 .station-hero-cover-mask {
@@ -1175,7 +1253,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(180deg, rgba(14, 24, 48, 0.25) 0%, rgba(14, 24, 48, 0.82) 70%, rgba(14, 24, 48, 0.98) 100%);
+  background: linear-gradient(180deg, rgba(14, 24, 48, 0.22) 0%, rgba(14, 24, 48, 0.35) 45%, rgba(14, 24, 48, 0.85) 85%, rgba(14, 24, 48, 0.98) 100%);
 }
 
 .station-detail-container {
@@ -1228,7 +1306,11 @@
 
 .work-header-hero {
   position: relative;
-  padding: var(--space-5) var(--space-4);
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 130px var(--space-4) var(--space-5);
   background: linear-gradient(180deg, rgba(30, 42, 60, 0.75) 0%, rgba(18, 26, 38, 0.85) 100%);
   border: 1px solid rgba(217, 185, 120, 0.3);
   border-radius: var(--radius-lg);
@@ -1241,7 +1323,7 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 160px;
+  height: 280px;
   overflow: hidden;
   pointer-events: none;
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
@@ -1252,8 +1334,8 @@
   height: 100%;
   object-fit: cover;
   object-position: center 30%;
-  opacity: 0.35;
-  filter: saturate(0.85);
+  opacity: 0.90;
+  filter: saturate(1.05) contrast(1.02);
 }
 
 .work-scene-cover-mask {
@@ -1262,7 +1344,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(180deg, rgba(16, 25, 42, 0.2) 0%, rgba(16, 25, 42, 0.78) 65%, rgba(16, 25, 42, 0.95) 100%);
+  background: linear-gradient(180deg, rgba(16, 25, 42, 0.22) 0%, rgba(16, 25, 42, 0.35) 45%, rgba(16, 25, 42, 0.85) 85%, rgba(16, 25, 42, 0.98) 100%);
 }
 
 .work-header-hero > *:not(.work-scene-cover-box) {
@@ -1819,4 +1901,609 @@
 .share-card-actions > * + * {
   margin-top: var(--space-3);
 }
+
+/* ==========================================================================
+   任务 15.4 效果图对标与核心页面视觉架构重构配套样式
+   基线保障：Chrome 61 / ES2017 / 零外链网络依赖 / 零裸漏 gap / 零 clamp / 零 :has
+   ========================================================================== */
+
+/* 1. 首页三大宇宙星体入口 (去矩形卡片化、真实球体与呼吸光晕) */
+.home-cosmic-entries {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  margin: var(--space-6) 0 var(--space-4);
+  padding: var(--space-4) 0;
+  position: relative;
+  z-index: 2;
+}
+
+.cosmic-entry-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  transition: transform var(--motion-normal) cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.cosmic-entry-item:hover,
+.cosmic-entry-item:active {
+  transform: translateY(-4px) scale(1.04);
+}
+
+.cosmic-entry-item.entry-planet-main .cosmic-planet-sphere {
+  width: 92px;
+  height: 92px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55), 0 0 24px rgba(226, 168, 80, 0.45);
+  border: 2px solid rgba(226, 168, 80, 0.6);
+}
+
+.cosmic-entry-item.entry-planet-orbit .cosmic-planet-sphere {
+  width: 80px;
+  height: 80px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 20px rgba(111, 175, 194, 0.4);
+  border: 1.5px solid rgba(111, 175, 194, 0.5);
+}
+
+.cosmic-entry-item.entry-planet-nebula .cosmic-planet-sphere {
+  width: 78px;
+  height: 78px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 20px rgba(168, 142, 219, 0.35);
+  border: 1.5px solid rgba(168, 142, 219, 0.5);
+}
+
+.cosmic-planet-sphere {
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+  background: radial-gradient(circle at 35% 35%, #2a3d5e 0%, #0c1527 100%);
+  animation: cosmicPlanetFloat 4.5s ease-in-out infinite;
+}
+
+.cosmic-entry-item.entry-planet-orbit .cosmic-planet-sphere {
+  animation-delay: -1.5s;
+}
+
+.cosmic-entry-item.entry-planet-nebula .cosmic-planet-sphere {
+  animation-delay: -3s;
+}
+
+@keyframes cosmicPlanetFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.cosmic-planet-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 50%;
+  transition: transform var(--motion-normal);
+}
+
+.cosmic-entry-item:hover .cosmic-planet-img {
+  transform: scale(1.08);
+}
+
+.cosmic-planet-glow {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border-radius: 50%;
+  pointer-events: none;
+  box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.2);
+}
+
+.cosmic-entry-text {
+  margin-top: var(--space-2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cosmic-entry-title {
+  font-size: var(--font-size-body);
+  font-weight: 600;
+  color: var(--color-warm);
+  letter-spacing: 1px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.cosmic-entry-desc {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  margin-top: 2px;
+  letter-spacing: 0.5px;
+  opacity: 0.88;
+}
+
+/* 2. 宣纸质感诗签卡 (高反差视觉中心，打破全暗单调) */
+.result-quote-paper-slip,
+.work-quote-slip,
+.daily-poetry-slip {
+  position: relative;
+  background: linear-gradient(135deg, #fdfaf3 0%, #f5eedc 50%, #eae0c7 100%);
+  color: #1a1613;
+  border-radius: var(--radius-lg);
+  padding: var(--space-5) var(--space-5);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(212, 175, 55, 0.35), inset 0 0 24px rgba(180, 140, 90, 0.08);
+  overflow: hidden;
+  margin-bottom: var(--space-4);
+}
+
+.result-quote-paper-slip::before,
+.work-quote-slip::before,
+.daily-poetry-slip::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: radial-gradient(#000 1px, transparent 1px);
+  background-size: 8px 8px;
+}
+
+.result-quote-paper-slip .result-quote-text,
+.work-quote-slip .work-quote-text,
+.daily-poetry-slip .daily-quote-text {
+  font-family: var(--font-family-serif);
+  font-size: 19px;
+  line-height: 1.7;
+  color: #1a1613;
+  font-weight: 600;
+  letter-spacing: 1px;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.result-quote-paper-slip .work-quote-mark,
+.work-quote-slip .work-quote-mark,
+.daily-poetry-slip .work-quote-mark {
+  color: rgba(180, 80, 60, 0.35);
+  font-size: 24px;
+}
+
+.result-quote-paper-slip .result-card-badge,
+.work-quote-slip .work-narrative-badge {
+  color: #a33828;
+  border-color: rgba(163, 56, 40, 0.35);
+  background-color: rgba(163, 56, 40, 0.08);
+  font-weight: 600;
+}
+
+.result-quote-paper-slip .result-card-title,
+.work-quote-slip .work-narrative-title {
+  color: #2b221a;
+}
+
+.result-quote-paper-slip .result-card-body,
+.work-quote-slip .work-narrative-body {
+  color: #4a3d32;
+}
+
+.result-quote-paper-slip .result-quote-context {
+  color: #705e4d;
+  font-size: var(--font-size-tag);
+  margin-top: var(--space-2);
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.result-quote-paper-slip .result-quote-seal,
+.work-quote-slip .work-quote-seal,
+.daily-poetry-slip .daily-seal-stamp {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  padding: 4px 2px;
+  border: 1.5px solid #a8382b;
+  border-radius: 4px;
+  color: #a8382b;
+  font-family: var(--font-family-serif);
+  font-size: 10px;
+  line-height: 1.15;
+  text-align: center;
+  white-space: pre;
+  box-shadow: inset 0 0 6px rgba(168, 56, 43, 0.15);
+  user-select: none;
+  opacity: 0.85;
+}
+
+/* 3. 东坡人生宇宙星河大地图 (去竖向死板时间线卡片，S曲线星球漫游) */
+.universe-cosmos-map {
+  position: relative;
+  width: 100%;
+  padding: var(--space-6) 0 var(--space-8);
+}
+
+.universe-cosmos-header {
+  text-align: center;
+  margin-bottom: var(--space-6);
+  position: relative;
+  z-index: 2;
+}
+
+.universe-cosmos-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-warm);
+  letter-spacing: 2px;
+  margin: var(--space-2) 0;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+.universe-cosmos-subtitle {
+  font-size: var(--font-size-tag);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.universe-planet-cluster {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* S 曲线错落布局 (替代裸漏 flex gap) */
+.universe-planet-cluster > * + * {
+  margin-top: var(--space-6);
+}
+
+.universe-planet-node {
+  display: flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  transition: transform var(--motion-normal) cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 8px 12px;
+}
+
+.universe-planet-node:active {
+  transform: scale(0.98);
+}
+
+/* S 形航道节点偏移位置 */
+.universe-planet-node.pos-left-1 {
+  justify-content: flex-start;
+  padding-left: 20px;
+}
+
+.universe-planet-node.pos-right-1 {
+  justify-content: flex-end;
+  padding-right: 20px;
+}
+
+.universe-planet-node.pos-center {
+  justify-content: center;
+}
+
+.universe-planet-node.pos-left-2 {
+  justify-content: flex-start;
+  padding-left: 45px;
+}
+
+.universe-planet-node.pos-right-2 {
+  justify-content: flex-end;
+  padding-right: 45px;
+}
+
+.universe-river-path-box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0.45;
+  z-index: 0;
+}
+
+.universe-river-path-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.planet-node-sphere-wrap,
+.planet-sphere-body {
+  position: relative;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 18px rgba(111, 175, 194, 0.35);
+  border: 1.5px solid rgba(111, 175, 194, 0.5);
+  background: radial-gradient(circle at 35% 35%, #1d2d48 0%, #0a1120 100%);
+  transition: transform var(--motion-normal), border-color var(--motion-normal), box-shadow var(--motion-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.universe-planet-node:hover .planet-sphere-body,
+.universe-planet-node.is-active .planet-sphere-body,
+.universe-planet-node.is-highlighted .planet-sphere-body {
+  transform: scale(1.08);
+  border-color: var(--color-warm);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 28px rgba(226, 168, 80, 0.55);
+}
+
+/* 黄州关键站点：晨曦金辉大星球 */
+.universe-planet-node.rhythm-huangzhou .planet-sphere-body,
+.universe-planet-node[data-station-id="station_huangzhou"] .planet-sphere-body {
+  width: 108px;
+  height: 108px;
+  border: 2px solid rgba(226, 168, 80, 0.8);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), 0 0 32px rgba(226, 168, 80, 0.65);
+}
+
+/* 乌台关键站点：墨色风暴阴影 */
+.universe-planet-node.rhythm-wutai .planet-sphere-body,
+.universe-planet-node[data-station-id="station_wutai"] .planet-sphere-body {
+  border: 2px solid rgba(100, 110, 130, 0.65);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.8), 0 0 20px rgba(20, 30, 45, 0.8);
+}
+
+.planet-node-img,
+.planet-scene-img,
+.universe-planet-node .universe-station-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 50%;
+  opacity: 0.92;
+}
+
+.planet-halo-ring {
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  width: calc(100% + 16px);
+  height: calc(100% + 16px);
+  pointer-events: none;
+  opacity: 0.85;
+  animation: ringSpin 26s linear infinite;
+}
+
+.planet-order-tag {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 18px;
+  height: 18px;
+  background: rgba(14, 24, 48, 0.85);
+  border: 1px solid rgba(217, 185, 120, 0.6);
+  border-radius: 50%;
+  color: var(--color-warm);
+  font-size: 10px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+
+.planet-node-label-box,
+.planet-caption-box {
+  margin-left: var(--space-4);
+  display: flex;
+  flex-direction: column;
+}
+
+.universe-planet-node.pos-right-1 .planet-caption-box,
+.universe-planet-node.pos-right-2 .planet-caption-box {
+  margin-left: 0;
+  margin-right: var(--space-4);
+  text-align: right;
+  order: -1;
+}
+
+.planet-node-year,
+.planet-caption-time {
+  font-size: var(--font-size-tag);
+  color: var(--color-text-muted);
+  letter-spacing: 1px;
+}
+
+.planet-node-name,
+.planet-caption-name {
+  font-size: var(--font-size-subhead);
+  font-weight: 600;
+  color: var(--color-warm);
+  letter-spacing: 1px;
+  margin-top: 2px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+}
+
+.planet-node-theme {
+  font-size: var(--font-size-caption);
+  color: var(--color-river);
+  margin-top: 2px;
+}
+
+.planet-current-tag {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 10px;
+  color: var(--color-warm);
+  background: rgba(226, 168, 80, 0.2);
+  border: 1px solid rgba(226, 168, 80, 0.4);
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+}
+
+/* 4. 星球详情轻量抽屉 (Quick Sheet) */
+.universe-sheet-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 280ms ease;
+}
+
+.universe-sheet-mask.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.universe-quick-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(180deg, #152238 0%, #0d1526 100%);
+  border-top: 1.5px solid rgba(226, 168, 80, 0.4);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: var(--space-5) var(--space-5) calc(var(--space-6) + 20px);
+  box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.85), 0 0 30px rgba(226, 168, 80, 0.2);
+  z-index: 1000;
+  transform: translateY(100%);
+  transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.universe-quick-sheet.is-open {
+  transform: translateY(0);
+}
+
+.universe-sheet-handle {
+  width: 40px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 2px;
+  margin: 0 auto var(--space-4);
+}
+
+.universe-sheet-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  border-radius: 50%;
+  color: var(--color-text-secondary);
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.universe-sheet-header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--space-3);
+}
+
+.universe-sheet-badge {
+  font-size: var(--font-size-tag);
+  color: var(--color-river);
+  margin-bottom: 2px;
+}
+
+.universe-sheet-name,
+.universe-sheet-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-warm);
+}
+
+.universe-sheet-time {
+  font-size: var(--font-size-tag);
+  color: var(--color-text-muted);
+}
+
+.universe-sheet-story {
+  font-size: var(--font-size-body);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin-bottom: var(--space-4);
+}
+
+.universe-sheet-quote {
+  font-family: var(--font-family-serif);
+  font-size: var(--font-size-body);
+  color: var(--color-river);
+  padding: var(--space-3) var(--space-4);
+  background: rgba(111, 175, 194, 0.08);
+  border-left: 3px solid var(--color-river);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin-bottom: var(--space-5);
+}
+
+.universe-sheet-actions {
+  display: flex;
+  width: 100%;
+}
+
+.universe-sheet-btn {
+  width: 100%;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #d9b978 0%, #b89758 100%);
+  color: #1a150e;
+  font-weight: 600;
+  font-size: var(--font-size-body);
+  border: none;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(217, 185, 120, 0.35);
+  transition: transform var(--motion-fast);
+}
+
+.universe-sheet-btn:active {
+  transform: scale(0.97);
+}
+
+/* 5. 今日东坡 3:4 独立宣纸签样式优化 */
+.daily-poetry-slip {
+  max-width: 340px;
+  margin-left: auto;
+  margin-right: auto;
+  min-height: 380px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.daily-poetry-slip .daily-quote-text {
+  font-size: 22px;
+  line-height: 1.8;
+  margin: var(--space-6) 0;
+  color: #1a1613;
+}
+
 
