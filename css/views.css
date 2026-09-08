@@ -4231,3 +4231,173 @@
     height: 40px;
   }
 }
+
+/* ==========================================================================
+   任务 15.6.8: P0-A 测试结果页极简图文彻底分层与 Text Safe Zone
+   ========================================================================== */
+.result-minimal-stage .result-hero-card.result-standalone-scene {
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+  padding: 0;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(217, 185, 120, 0.28);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  background: transparent;
+  margin-bottom: var(--space-4);
+}
+
+.result-minimal-stage .result-scene-cover-box {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+}
+
+.result-minimal-stage .result-scene-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  display: block;
+}
+
+.result-minimal-stage .result-scene-tiny-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: rgba(12, 19, 34, 0.78);
+  border: 1px solid rgba(217, 185, 120, 0.45);
+  color: #e5cf98;
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  backdrop-filter: blur(4px);
+  letter-spacing: 0.5px;
+  z-index: 2;
+}
+
+.result-info-stage.result-info-card {
+  background: #10192b;
+  border: 1px solid rgba(217, 185, 120, 0.25);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5) var(--space-4);
+  margin-bottom: var(--space-4);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+  position: relative;
+}
+
+.result-info-stage .result-intro-label {
+  color: #d9b978;
+  font-size: 13px;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.result-info-stage .result-station-name {
+  font-family: "Songti SC", "SimSun", serif;
+  font-size: 26px;
+  color: #fbf8ee;
+  margin: 0 0 6px 0;
+  line-height: 1.3;
+}
+
+.result-info-stage .result-station-meta {
+  color: rgba(244, 240, 230, 0.65);
+  font-size: 13px;
+  margin-bottom: var(--space-4);
+}
+
+.result-info-stage .result-explanation-body {
+  font-size: 15px;
+  color: #e6e0d2;
+  line-height: 1.6;
+  margin-bottom: var(--space-3);
+  padding: var(--space-3);
+  background: rgba(25, 38, 62, 0.5);
+  border-left: 3px solid #d9b978;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.result-info-stage .result-quote-lead {
+  font-family: "Songti SC", "SimSun", serif;
+  font-size: 15px;
+  color: #f0e6cf;
+  font-style: italic;
+  margin-top: var(--space-2);
+  line-height: 1.5;
+}
+
+.result-actions.result-dual-cta {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--space-3);
+}
+
+.result-actions.result-dual-cta .result-btn-enter {
+  width: 100%;
+  margin-bottom: var(--space-3);
+}
+
+.result-actions.result-dual-cta .result-btn-share {
+  width: 100%;
+}
+
+/* ==========================================================================
+   任务 15.6.8: P0-C 今日东坡职责拆分与阅读页轻量样式
+   ========================================================================== */
+.daily-reader-view .daily-history-details {
+  background: rgba(18, 28, 48, 0.7);
+  border: 1px solid rgba(217, 185, 120, 0.2);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-4);
+  cursor: pointer;
+}
+
+.daily-reader-view .daily-history-summary {
+  font-size: 14px;
+  color: #d9b978;
+  font-weight: 500;
+  outline: none;
+  user-select: none;
+}
+
+.daily-reader-view .daily-history-body {
+  margin-top: var(--space-3);
+  font-size: 14px;
+  line-height: 1.6;
+  color: #e2ded5;
+}
+
+/* ==========================================================================
+   任务 15.6.8: 站点生活实录场景大图样式
+   ========================================================================== */
+.station-life-scene-box {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-3);
+  border: 1px solid rgba(217, 185, 120, 0.25);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.station-life-scene-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.station-life-scene-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(14, 24, 48, 0.08) 0%, rgba(14, 24, 48, 0.55) 100%);
+}

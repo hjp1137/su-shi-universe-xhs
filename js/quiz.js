@@ -15,6 +15,139 @@
 
   var Quiz = {};
 
+  // 任务 15.6.8: 九大人生站点与八维心理/行为特征标准化基准常量
+  var ALL_MOOD_IDS = [
+    'mood_anxious', 'mood_overthinking', 'mood_work_stuck', 'mood_lost',
+    'mood_misunderstood', 'mood_tired', 'mood_lonely', 'mood_ordinary'
+  ];
+
+  var ALL_STATION_IDS = [
+    'station_meishan', 'station_jingshi', 'station_mizhou',
+    'station_wutai', 'station_huangzhou', 'station_hangzhou',
+    'station_huizhou', 'station_danzhou', 'station_changzhou'
+  ];
+
+  // 题库各维度基准期望权重 (基于 28 题 112 选项真实期望统计，用于消除固有频次偏置)
+  var BASE_MOOD_WEIGHTS = {
+    'mood_anxious': 2.50,
+    'mood_overthinking': 1.81,
+    'mood_work_stuck': 3.69,
+    'mood_lost': 2.19,
+    'mood_misunderstood': 1.88,
+    'mood_tired': 4.00,
+    'mood_lonely': 2.69,
+    'mood_ordinary': 11.94
+  };
+
+  // 九大站点标准特征原型矩阵 (基于苏轼九大站点真实精神特质与心境映照)
+  var STATION_ARCHETYPES = {
+    'station_meishan': {
+      'mood_lost': 2.0, 'mood_anxious': 1.3, 'mood_work_stuck': 1.1, 'mood_overthinking': 0.9,
+      'mood_ordinary': 0.9, 'mood_tired': 0.8, 'mood_lonely': 0.7, 'mood_misunderstood': 0.7
+    },
+    'station_jingshi': {
+      'mood_overthinking': 1.8, 'mood_work_stuck': 1.5, 'mood_anxious': 1.2, 'mood_misunderstood': 1.1,
+      'mood_lost': 0.8, 'mood_tired': 0.8, 'mood_ordinary': 0.8, 'mood_lonely': 0.6
+    },
+    'station_mizhou': {
+      'mood_work_stuck': 1.7, 'mood_anxious': 1.4, 'mood_lonely': 1.3, 'mood_tired': 1.0,
+      'mood_overthinking': 0.9, 'mood_misunderstood': 0.8, 'mood_lost': 0.8, 'mood_ordinary': 0.8
+    },
+    'station_wutai': {
+      'mood_misunderstood': 2.0, 'mood_lonely': 1.5, 'mood_overthinking': 1.2, 'mood_anxious': 1.1,
+      'mood_tired': 0.9, 'mood_lost': 0.8, 'mood_work_stuck': 0.7, 'mood_ordinary': 0.6
+    },
+    'station_huangzhou': {
+      'mood_tired': 1.6, 'mood_work_stuck': 1.3, 'mood_ordinary': 1.3, 'mood_misunderstood': 1.1,
+      'mood_lonely': 1.0, 'mood_lost': 0.9, 'mood_overthinking': 0.8, 'mood_anxious': 0.7
+    },
+    'station_hangzhou': {
+      'mood_ordinary': 1.7, 'mood_anxious': 1.3, 'mood_tired': 1.2, 'mood_work_stuck': 1.1,
+      'mood_lost': 0.9, 'mood_overthinking': 0.8, 'mood_lonely': 0.7, 'mood_misunderstood': 0.7
+    },
+    'station_huizhou': {
+      'mood_lost': 1.6, 'mood_ordinary': 1.5, 'mood_tired': 1.2, 'mood_misunderstood': 1.0,
+      'mood_lonely': 0.9, 'mood_work_stuck': 0.8, 'mood_overthinking': 0.7, 'mood_anxious': 0.6
+    },
+    'station_danzhou': {
+      'mood_lonely': 1.9, 'mood_lost': 1.4, 'mood_work_stuck': 1.1, 'mood_tired': 1.0,
+      'mood_misunderstood': 0.9, 'mood_ordinary': 0.8, 'mood_overthinking': 0.7, 'mood_anxious': 0.6
+    },
+    'station_changzhou': {
+      'mood_tired': 1.7, 'mood_ordinary': 1.4, 'mood_overthinking': 1.1, 'mood_lonely': 1.1,
+      'mood_lost': 0.9, 'mood_work_stuck': 0.7, 'mood_misunderstood': 0.6, 'mood_anxious': 0.5
+    }
+  };
+
+  function normalizeVector(dict, keys) {
+    var sum = 0;
+    var i;
+    for (i = 0; i < keys.length; i++) {
+      sum += (dict[keys[i]] || 0);
+    }
+    var res = {};
+    for (i = 0; i < keys.length; i++) {
+      res[keys[i]] = sum > 0 ? ((dict[keys[i]] || 0) / sum) : (1.0 / keys.length);
+    }
+    return res;
+  }
+
+  var NORM_STATION_PROFILES = {};
+  for (var stp = 0; stp < ALL_STATION_IDS.length; stp++) {
+    var spId = ALL_STATION_IDS[stp];
+    NORM_STATION_PROFILES[spId] = normalizeVector(STATION_ARCHETYPES[spId] || {}, ALL_MOOD_IDS);
+  }
+
+  /**
+   * 任务 15.6.8: 九站标准化特征匹配算法 (纯函数确定性计算)
+   * 1. 根据 BASE_MOOD_WEIGHTS 消除题库各维度固有频次不均
+   * 2. 计算用户标准化特征向量与九站标准 Profile 的加权余弦相似度
+   * 3. 返回最匹配的人生站点 ID
+   */
+  function matchStationByScores(accumulatedScores) {
+    if (!accumulatedScores || typeof accumulatedScores !== 'object') {
+      return 'station_huangzhou';
+    }
+    var totalScore = 0;
+    var stdVector = {};
+    for (var m = 0; m < ALL_MOOD_IDS.length; m++) {
+      var mid = ALL_MOOD_IDS[m];
+      var raw = accumulatedScores[mid] || 0;
+      totalScore += raw;
+      stdVector[mid] = raw / (BASE_MOOD_WEIGHTS[mid] || 1.0);
+    }
+    if (totalScore <= 0) {
+      return 'station_huangzhou';
+    }
+    var normUser = normalizeVector(stdVector, ALL_MOOD_IDS);
+    var bestStation = null;
+    var bestScore = -Infinity;
+
+    for (var s = 0; s < ALL_STATION_IDS.length; s++) {
+      var stId = ALL_STATION_IDS[s];
+      var prof = NORM_STATION_PROFILES[stId];
+      var dot = 0;
+      var magU = 0;
+      var magP = 0;
+      for (var k = 0; k < ALL_MOOD_IDS.length; k++) {
+        var moodKey = ALL_MOOD_IDS[k];
+        var uVal = normUser[moodKey];
+        var pVal = prof[moodKey];
+        dot += uVal * pVal;
+        magU += uVal * uVal;
+        magP += pVal * pVal;
+      }
+      magU = Math.sqrt(magU);
+      magP = Math.sqrt(magP);
+      var sim = (magU > 0 && magP > 0) ? (dot / (magU * magP)) : 0;
+      if (sim > bestScore) {
+        bestScore = sim;
+        bestStation = stId;
+      }
+    }
+    return bestStation || 'station_huangzhou';
+  }
+
   /**
    * 纯函数评分算法：计算作答结果
    * @param {Object} answersMap - 作答字典，如 { quiz_q01: "opt_1a", ... }
@@ -129,7 +262,8 @@
     }
 
     var winnerMood = moodMap[winnerMid] || {};
-    var stationId = winnerMood.primary_station_id || 'station_huangzhou';
+    // 任务 15.6.8: 升级为九站特征相似度标准化算法
+    var stationId = (typeof matchStationByScores === 'function') ? matchStationByScores(scores) : (winnerMood.primary_station_id || 'station_huangzhou');
 
     return {
       is_complete: answeredCount >= totalQuestions,
@@ -928,6 +1062,9 @@
       moodMap[m.id] = m;
       moodIds.push(m.id);
     }
+    if (moodIds.length === 0) {
+      moodIds = ALL_MOOD_IDS.slice(0);
+    }
 
     var scores = {};
     for (var j = 0; j < moodIds.length; j++) {
@@ -960,7 +1097,8 @@
     }
 
     var winnerMood = moodMap[winnerMid] || {};
-    var stationId = winnerMood.primary_station_id || 'station_huangzhou';
+    // 任务 15.6.8: 彻底废除 8 mood -> 5 站硬编码，使用标准化九站特征相似度算法判定
+    var stationId = matchStationByScores(scores);
 
     return {
       result_id: 'res_' + winnerMid + '_' + stationId,
@@ -1206,6 +1344,9 @@
   Quiz.createPseudoRandom = createPseudoRandom;
   Quiz.generateExperimentScenes = generateExperimentScenes;
   Quiz.calculateExperimentResult = calculateExperimentResult;
+  Quiz.matchStationByScores = matchStationByScores;
+  Quiz.BASE_MOOD_WEIGHTS = BASE_MOOD_WEIGHTS;
+  Quiz.STATION_ARCHETYPES = STATION_ARCHETYPES;
 
   root.SuShiUniverse.Quiz = Quiz;
   if (typeof module !== 'undefined' && module.exports) {
