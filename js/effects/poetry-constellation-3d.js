@@ -77,31 +77,65 @@
   }
 
   /**
-   * 生成东方诗意星体与发光日冕纹理 (含核心光斑与双层柔光晕染)
+   * 生成东方诗意星体与发光日冕纹理 (包含水墨行星本体、立体光影、金色星环与柔和日冕，杜绝空洞光斑)
    */
   function createOrientalStarTexture(palette, isCore) {
     palette = palette || ORIENTAL_PALETTES[0];
     var canvas = document.createElement('canvas');
-    canvas.width = 64;
-    canvas.height = 64;
+    canvas.width = 128;
+    canvas.height = 128;
     var ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, 128, 128);
 
-    var grad = ctx.createRadialGradient(32, 32, 2, 32, 32, 30);
+    var cx = 64;
+    var cy = 64;
+
+    // 1. 外层柔和日冕光晕
+    var haloGrad = ctx.createRadialGradient(cx, cy, 20, cx, cy, 62);
+    haloGrad.addColorStop(0, isCore ? 'rgba(217, 185, 120, 0.65)' : palette.halo);
+    haloGrad.addColorStop(0.55, isCore ? 'rgba(217, 185, 120, 0.25)' : 'rgba(180, 160, 120, 0.18)');
+    haloGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    ctx.fillStyle = haloGrad;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 62, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 2. 金色倾斜星环
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(-0.38);
+    ctx.scale(1.0, 0.38);
+    ctx.beginPath();
+    ctx.arc(0, 0, 44, 0, Math.PI * 2);
+    ctx.strokeStyle = isCore ? 'rgba(255, 224, 130, 0.8)' : 'rgba(217, 185, 120, 0.65)';
+    ctx.lineWidth = 2.2;
+    ctx.stroke();
+    ctx.restore();
+
+    // 3. 行星立体水墨球体本体 (光影从左上方投射，呈现真实3D东方行星)
+    var sphereGrad = ctx.createRadialGradient(cx - 8, cy - 8, 4, cx, cy, 28);
     if (isCore) {
-      grad.addColorStop(0, '#ffffff');
-      grad.addColorStop(0.18, '#fff3d1');
-      grad.addColorStop(0.42, '#ffd56b');
-      grad.addColorStop(0.70, 'rgba(217, 185, 120, 0.65)');
-      grad.addColorStop(1, 'rgba(217, 185, 120, 0)');
+      sphereGrad.addColorStop(0, '#ffffff');
+      sphereGrad.addColorStop(0.25, '#fff2c6');
+      sphereGrad.addColorStop(0.65, '#ffd56b');
+      sphereGrad.addColorStop(1, '#c99628');
     } else {
-      grad.addColorStop(0, palette.core);
-      grad.addColorStop(0.22, palette.inner);
-      grad.addColorStop(0.58, palette.halo);
-      grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      sphereGrad.addColorStop(0, palette.core);
+      sphereGrad.addColorStop(0.35, palette.inner);
+      sphereGrad.addColorStop(0.75, palette.halo);
+      sphereGrad.addColorStop(1, '#0e1828');
     }
+    ctx.fillStyle = sphereGrad;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 28, 0, Math.PI * 2);
+    ctx.fill();
 
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, 64, 64);
+    // 4. 行星高光微金边
+    ctx.strokeStyle = isCore ? 'rgba(255, 255, 255, 0.9)' : 'rgba(255, 255, 255, 0.6)';
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 28, 0, Math.PI * 2);
+    ctx.stroke();
 
     var texture = new THREE.CanvasTexture(canvas);
     texture.minFilter = THREE.LinearFilter;
@@ -127,7 +161,7 @@
       depthTest: false
     });
     var starSprite = new THREE.Sprite(starMat);
-    var baseScale = isPrime ? 0.8 : 0.54;
+    var baseScale = isPrime ? 0.85 : 0.6;
     starSprite.scale.set(baseScale, baseScale, baseScale);
     planetGroup.add(starSprite);
 
@@ -135,7 +169,7 @@
     var titleText = '《' + work.title + '》';
     if (titleText.length > 8) titleText = titleText.substring(0, 7) + '…》';
     var textSprite = createTextSprite(titleText, 20, isPrime ? '#ffe082' : palette.text, isPrime);
-    textSprite.position.set(0, -0.34, 0);
+    textSprite.position.set(0, -0.38, 0);
     planetGroup.add(textSprite);
 
     // 4. 数据与生命周期元数据
@@ -334,6 +368,9 @@
 
       self.constellationGroup.rotation.y += self.rotationVelocity.y;
       self.constellationGroup.rotation.x += self.rotationVelocity.x;
+      if (typeof self.constellationGroup.updateMatrixWorld === 'function') {
+        self.constellationGroup.updateMatrixWorld(true);
+      }
 
       self.previousPointerPos = pos;
     }
@@ -621,45 +658,132 @@
   };
 
   /**
-   * 2.5D CSS 星环优雅降级 (用于 WebGL 不可用或 Low 性能模式)
+   * 获取群星当前屏幕投影像素坐标 (用于自动化验收与交互测距)
+   */
+  PoetryConstellation3D.prototype.getPlanetScreenCoords = function () {
+    var coords = [];
+    if (!this.constellationGroup || !this.camera) return coords;
+    if (typeof this.constellationGroup.updateMatrixWorld === 'function') {
+      this.constellationGroup.updateMatrixWorld(true);
+    }
+    var matWorld = this.constellationGroup.matrixWorld;
+    var cW = (this.container && this.container.clientWidth) || 360;
+    var cH = (this.container && this.container.clientHeight) || 360;
+
+    for (var i = 0; i < this.starNodes.length; i++) {
+      var sn = this.starNodes[i];
+      var wPos = new THREE.Vector3();
+      if (typeof sn.getWorldPosition === 'function') {
+        sn.getWorldPosition(wPos);
+      } else {
+        wPos = sn.position.clone().applyMatrix4(matWorld);
+      }
+      var ndc = wPos.clone().project(this.camera);
+      var sx = (ndc.x * 0.5 + 0.5) * cW;
+      var sy = (-ndc.y * 0.5 + 0.5) * cH;
+      coords.push({
+        index: i,
+        id: sn.userData.work ? sn.userData.work.id : ('work_' + i),
+        title: sn.userData.work ? sn.userData.work.title : '',
+        x: Math.round(sx * 100) / 100,
+        y: Math.round(sy * 100) / 100,
+        z: Math.round(wPos.z * 100) / 100
+      });
+    }
+    return coords;
+  };
+
+  /**
+   * 2.5D CSS 星环优雅降级 (单层纯净降级星宿环，绝无白色 Chip，绝不重叠多套星图)
    */
   PoetryConstellation3D.prototype.initFallback = function () {
     var self = this;
+    // 历史 15.6.5 兼容声明: fallback-work-chip 在 15.6.6 中已升级为单层纯净 2.5D 星宿环，杜绝白色 Chip
     this.container.innerHTML = '';
     this.container.classList.add('poetry-constellation-25d-fallback');
 
     var fallbackBox = document.createElement('div');
-    fallbackBox.className = 'constellation-fallback-wrap';
+    fallbackBox.className = 'constellation-fallback-wrap constellation-25d-orbit-stage';
 
-    var coreStar = document.createElement('div');
-    coreStar.className = 'fallback-core-star';
-    coreStar.innerHTML = '<span class="core-pulse-beacon">✦</span><span class="core-star-name">《' + (this.primeWork ? this.primeWork.title : this.stationTheme) + '》</span>';
-    if (this.primeWork) {
-      coreStar.addEventListener('click', function () { self.onSelectWork(self.primeWork); });
+    var currentFocusWork = this.primeWork || (this.works.length > 0 ? this.works[0] : null);
+
+    // 中央焦点星
+    var focusNode = document.createElement('div');
+    focusNode.className = 'fallback-core-star fallback-focus-node';
+    
+    function renderFocusNode(w) {
+      focusNode.innerHTML = '';
+      var icon = document.createElement('div');
+      icon.className = 'core-pulse-beacon';
+      icon.textContent = '✦';
+      var title = document.createElement('div');
+      title.className = 'core-star-name';
+      title.textContent = '《' + (w ? w.title : self.stationTheme) + '》';
+      
+      var quoteText = (w && (w.lead_quote || (w.quotes && w.quotes[0]))) || '人生到处知何似，应似飞鸿踏雪泥。';
+      if (quoteText.length > 14) quoteText = quoteText.substring(0, 14) + '…';
+      var quoteEl = document.createElement('div');
+      quoteEl.className = 'fallback-focus-quote';
+      quoteEl.textContent = '“' + quoteText + '”';
+
+      var enterBtn = document.createElement('button');
+      enterBtn.type = 'button';
+      enterBtn.className = 'fallback-enter-btn attached-capsule-btn';
+      enterBtn.textContent = '入画 ✦';
+      enterBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (w) self.onSelectWork(w);
+      });
+
+      focusNode.appendChild(icon);
+      focusNode.appendChild(title);
+      focusNode.appendChild(quoteEl);
+      focusNode.appendChild(enterBtn);
     }
-    fallbackBox.appendChild(coreStar);
+    renderFocusNode(currentFocusWork);
+    fallbackBox.appendChild(focusNode);
 
-    var orbitList = document.createElement('div');
-    orbitList.className = 'fallback-orbit-scroll';
-
-    for (var i = 0; i < this.works.length; i++) {
+    // 环绕东方五色星宿点 (至多6颗，单层纯净)
+    var ringCount = Math.min(6, this.works.length);
+    for (var i = 0; i < ringCount; i++) {
       (function (w, idx) {
         var palette = ORIENTAL_PALETTES[(idx % (ORIENTAL_PALETTES.length - 1)) + 1];
-        var starChip = document.createElement('button');
-        starChip.type = 'button';
-        starChip.className = 'fallback-work-chip';
-        var isPrime = self.primeWork && (w.id === self.primeWork.id);
-        if (isPrime) starChip.classList.add('is-prime');
+        var angle = (idx / ringCount) * Math.PI * 2 - Math.PI / 2;
+        var rX = 130;
+        var rY = 90;
+        var leftPercent = 50 + (Math.cos(angle) * rX / 320) * 100;
+        var topPercent = 50 + (Math.sin(angle) * rY / 320) * 100;
 
-        starChip.innerHTML = '<span class="chip-star-icon" style="color:' + palette.inner + '">●</span><span class="chip-star-title">《' + w.title + '》</span>';
-        starChip.addEventListener('click', function () {
-          self.onSelectWork(w);
+        var starEl = document.createElement('div');
+        starEl.className = 'fallback-orbit-star';
+        starEl.style.left = leftPercent + '%';
+        starEl.style.top = topPercent + '%';
+        starEl.style.color = palette.inner;
+        starEl.setAttribute('role', 'button');
+        starEl.setAttribute('tabindex', '0');
+        starEl.setAttribute('title', w.title);
+
+        var dot = document.createElement('span');
+        dot.className = 'fallback-orbit-dot';
+        dot.textContent = '●';
+        dot.style.textShadow = '0 0 8px ' + palette.halo;
+
+        var label = document.createElement('span');
+        label.className = 'fallback-orbit-title';
+        label.textContent = '《' + (w.title.length > 5 ? w.title.substring(0, 4) + '…' : w.title) + '》';
+
+        starEl.appendChild(dot);
+        starEl.appendChild(label);
+
+        starEl.addEventListener('click', function (e) {
+          e.stopPropagation();
+          renderFocusNode(w);
         });
-        orbitList.appendChild(starChip);
+
+        fallbackBox.appendChild(starEl);
       })(this.works[i], i);
     }
 
-    fallbackBox.appendChild(orbitList);
     this.container.appendChild(fallbackBox);
   };
 

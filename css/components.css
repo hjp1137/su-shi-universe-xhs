@@ -722,12 +722,14 @@
   animation: calloutFadeIn 0.3s ease forwards;
 }
 
-/* 任务 15.6.5 3D 作品星附着式微胶囊 (Attached Cosmic Capsule) */
+/* 任务 15.6.6 3D 作品星附着式微胶囊 (严格限制在舞台40%宽度与90px高度内，杜绝大面板) */
 .poetry-planet-attached-capsule {
   position: absolute;
   transform: translate(-50%, 0);
   z-index: 20;
   pointer-events: auto;
+  max-width: 40%;
+  max-height: 90px;
   animation: capsuleFloatIn 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
@@ -744,19 +746,16 @@
 
 .attached-capsule-orbit {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  background: rgba(12, 19, 32, 0.88);
+  background: rgba(12, 19, 32, 0.92);
   border: 1px solid rgba(217, 185, 120, 0.5);
-  border-radius: 20px;
-  padding: 4px 10px;
+  border-radius: 12px;
+  padding: 4px 8px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.65), 0 0 12px rgba(217, 185, 120, 0.25);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
-  white-space: nowrap;
-}
-
-.attached-capsule-orbit > * + * {
-  margin-left: 6px;
+  text-align: center;
 }
 
 .attached-capsule-title {
@@ -764,23 +763,27 @@
   font-size: 12px;
   color: #fff;
   font-weight: 600;
+  margin-bottom: 2px;
+  white-space: nowrap;
 }
 
 .attached-capsule-quote {
-  font-size: 11px;
+  font-size: 10.5px;
   color: var(--color-warm, #d9b978);
-  max-width: 140px;
+  max-width: 124px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  line-height: 1.3;
+  margin-bottom: 4px;
 }
 
 .attached-capsule-btn {
   background: linear-gradient(135deg, rgba(217, 185, 120, 0.4) 0%, rgba(217, 185, 120, 0.18) 100%);
   border: 1px solid rgba(217, 185, 120, 0.65);
-  border-radius: 12px;
+  border-radius: 10px;
   color: #fbf8ee;
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 600;
   padding: 2px 8px;
   cursor: pointer;
@@ -791,6 +794,20 @@
 .attached-capsule-btn:active {
   transform: scale(0.92);
   background: rgba(217, 185, 120, 0.6);
+}
+
+.constellation-3d-hint {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  color: rgba(217, 185, 120, 0.7);
+  pointer-events: none;
+  white-space: nowrap;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+  z-index: 5;
 }
 
 .poetry-3d-focus-callout > * + * {
@@ -860,11 +877,100 @@
 .constellation-nebula-glow {
   position: absolute;
   top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  pointer-events: none;
-  background-image: radial-gradient(circle at 50% 50%, rgba(217, 185, 120, 0.05) 0%, transparent 60%);
+/* 任务 15.6.6: 单层纯净 2.5D 东方星宿降级环 (绝无白色 Chip，绝不重叠多套星图) */
+.poetry-constellation-25d-fallback {
+  position: relative;
+  width: 100%;
+  height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, rgba(16, 27, 47, 0.6) 0%, transparent 70%);
+}
+
+.constellation-fallback-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fallback-focus-node {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: rgba(14, 23, 38, 0.92);
+  border: 1px solid rgba(217, 185, 120, 0.5);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7), 0 0 16px rgba(217, 185, 120, 0.25);
+  max-width: 180px;
+}
+
+.fallback-focus-node .core-pulse-beacon {
+  font-size: 20px;
+  color: #ffe082;
+  text-shadow: 0 0 10px rgba(217, 185, 120, 0.8);
+  margin-bottom: 4px;
+  animation: corePulse 2s infinite ease-in-out;
+}
+
+.fallback-focus-node .core-star-name {
+  font-family: var(--font-serif, serif);
+  font-size: 13px;
+  color: #fff;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.fallback-focus-quote {
+  font-size: 11px;
+  color: var(--color-warm, #d9b978);
+  line-height: 1.35;
+  margin-bottom: 6px;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fallback-enter-btn {
+  font-size: 10.5px;
+  padding: 2px 8px;
+}
+
+.fallback-orbit-star {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  z-index: 5;
+  transition: transform 0.2s ease;
+}
+
+.fallback-orbit-star:hover,
+.fallback-orbit-star:active {
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+.fallback-orbit-dot {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.fallback-orbit-title {
+  font-size: 10px;
+  color: #e5d8b8;
+  white-space: nowrap;
+  margin-top: 2px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
 }
 
 .constellation-gravity-svg {

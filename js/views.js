@@ -1673,14 +1673,14 @@
 
       // --- Scene 1 ~ 5：沉浸式连续人生长卷 (Continuous Epic Scroll) ---
       var scrollContainer = document.createElement('div');
-      scrollContainer.className = 'station-epic-scroll';
+      scrollContainer.className = 'station-epic-scroll station-lens-' + (station.id || 'general');
 
       // Scene 1｜历史现场 (纵向时间轨迹轴推进，无整块大底卡，文字沿轨迹分段2~4行呈现)
       var chap1 = document.createElement('div');
       chap1.className = 'station-scroll-section station-chapter-box station-chapter-1 station-section-history station-chapter-timeline scene-1-history';
       var fBadge = document.createElement('div');
       fBadge.className = 'station-chapter-badge';
-      fBadge.textContent = '第一卷 · 历史现场 · 东坡为什么来到这里';
+      fBadge.textContent = '✦ 时空现场 · 东坡因何至此';
       var fTitle = document.createElement('h3');
       fTitle.className = 'station-chapter-title';
       fTitle.textContent = (station.place || '') + ' · 当时发生了什么';
@@ -1733,7 +1733,7 @@
       chapVerse.className = 'station-scroll-section station-section-verse-scene scene-2-quote';
       var vBadge = document.createElement('div');
       vBadge.className = 'station-chapter-badge';
-      vBadge.textContent = '第二卷 · 代表名句 · 意境大场景';
+      vBadge.textContent = '✦ 绝唱名句 · 意境长卷';
       chapVerse.appendChild(vBadge);
 
       var verseStage = document.createElement('div');
@@ -1765,7 +1765,7 @@
       chap2.className = 'station-scroll-section station-chapter-box station-chapter-2 station-section-life station-chapter-orbit scene-3-life';
       var sBadge = document.createElement('div');
       sBadge.className = 'station-chapter-badge';
-      sBadge.textContent = '第三卷 · 生活实录 · 他在这里怎样度过';
+      sBadge.textContent = '✦ 生活实录 · 日常践行与生命重构';
       var sTitle = document.createElement('h3');
       sTitle.className = 'station-chapter-title';
       sTitle.textContent = '日常践行与生命重构';
@@ -1803,7 +1803,7 @@
       chap3.className = 'station-scroll-section station-chapter-box station-chapter-3 station-section-constellation station-chapter-constellation scene-4-constellation';
       var wBadge = document.createElement('div');
       wBadge.className = 'station-chapter-badge';
-      wBadge.textContent = '第四卷 · 诗词星群 · 这一站的精神星宿';
+      wBadge.textContent = '✦ 精神星宿 · 诗词宇宙引力场';
       chap3.appendChild(wBadge);
 
       var constellationBox = document.createElement('div');
@@ -1839,7 +1839,7 @@
       chap4.className = 'station-scroll-section station-chapter-box station-chapter-4 station-section-modern station-chapter-parchment scene-5-resonance';
       var mBadge = document.createElement('div');
       mBadge.className = 'station-chapter-badge';
-      mBadge.textContent = '第五卷 · 现代共鸣 · 如果你也在这一站';
+      mBadge.textContent = '✦ 现代共鸣 · 东坡式理解与今日微步';
       var mTitle = document.createElement('h3');
       mTitle.className = 'station-chapter-title';
       mTitle.textContent = '东坡式理解与微小行动';
@@ -2275,6 +2275,22 @@
       signImg.style.display = 'none';
       posterWrap.appendChild(signImg);
 
+      (function () {
+        function fitDailySign() {
+          var vw = window.innerWidth || (document.documentElement && document.documentElement.clientWidth) || 390;
+          var vh = window.innerHeight || (document.documentElement && document.documentElement.clientHeight) || 844;
+          var availW = Math.max(280, vw - 4);
+          var availH = Math.max(380, vh - 86);
+          var pW = Math.min(availW, availH * 0.75);
+          var pH = pW * (4 / 3);
+          posterWrap.style.width = Math.round(pW) + 'px';
+          posterWrap.style.height = Math.round(pH) + 'px';
+          posterWrap.style.aspectRatio = '3 / 4';
+        }
+        fitDailySign();
+        window.addEventListener('resize', fitDailySign);
+      })();
+
       slipContainer.appendChild(posterWrap);
 
       // 自动触发真实 Canvas 动态渲染 (确定性单日诗签)
@@ -2503,6 +2519,22 @@
       imgEl.alt = '东坡人生分享卡';
       imgEl.style.display = 'none';
       posterWrap.appendChild(imgEl);
+
+      (function () {
+        function fitShareCard() {
+          var vw = window.innerWidth || (document.documentElement && document.documentElement.clientWidth) || 390;
+          var vh = window.innerHeight || (document.documentElement && document.documentElement.clientHeight) || 844;
+          var availW = Math.max(280, vw - 4);
+          var availH = Math.max(380, vh - 86);
+          var pW = Math.min(availW, availH * 0.75);
+          var pH = pW * (4 / 3);
+          posterWrap.style.width = Math.round(pW) + 'px';
+          posterWrap.style.height = Math.round(pH) + 'px';
+          posterWrap.style.aspectRatio = '3 / 4';
+        }
+        fitShareCard();
+        window.addEventListener('resize', fitShareCard);
+      })();
 
       displayBox.appendChild(posterWrap);
       wrap.appendChild(displayBox);
