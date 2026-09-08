@@ -8,16 +8,42 @@
     "age_label": "1—20岁",
     "place": "四川眉山",
     "theme": "家庭、底色与少年出发",
-    "keywords": ["底色", "读书", "母亲", "出发"],
+    "keywords": [
+      "底色",
+      "读书",
+      "母亲",
+      "出发"
+    ],
     "summary_fact": "苏轼生于眉山纱縠行，母亲程氏勉以范滂之志，父亲苏洵远行求学，兄弟二人同窗苦读。二十岁随父出蜀赴京赶考。",
     "summary_story": "每个人都有自己的出发地。少年苏轼在岷江畔读圣贤书，母亲教他不慕虚荣、立志报国。家风与乡土赋予他一生的清朗底色。",
     "event_ids": [],
-    "work_ids": [],
+    "work_ids": [
+      "work_he_ziyou_mianchi",
+      "work_xiashu_fu",
+      "work_nanxing_ji_xu",
+      "work_jianganguan",
+      "work_ruxia",
+      "work_wushan",
+      "work_ti_bulaoquan",
+      "work_meizhou_yuanjinglou",
+      "work_chufa_jiazhou",
+      "work_yishi"
+    ],
     "quote_ids": [],
     "dongpo_view": "出发时我们都想走得很远。但真正决定一个人能走多远的，往往是少年时在心里扎下的根。",
     "today_action": "整理一下书桌或床头，把一本很久想读的书翻开读五页。",
-    "source_ids": ["source_songshi_sushi", "source_ssnp_kfl"],
-    "review_status": "approved"
+    "source_ids": [
+      "source_songshi_sushi",
+      "source_ssnp_kfl"
+    ],
+    "review_status": "approved",
+    "text_safe_zone": {
+      "x": 20,
+      "y": 42,
+      "width": 350,
+      "height": 160,
+      "tone": "dark"
+    }
   },
   {
     "id": "station_jingshi",
@@ -28,16 +54,46 @@
     "age_label": "21—25岁",
     "place": "汴京（今河南开封）",
     "theme": "青年才华与被天下看见",
-    "keywords": ["青年", "登第", "理想", "光芒"],
+    "keywords": [
+      "青年",
+      "登第",
+      "理想",
+      "光芒"
+    ],
     "summary_fact": "嘉祐二年苏轼中进士，欧阳修称赞其文字清畅磅礴。嘉祐六年又制科入三等，授大理评事、签书凤翔府判官。",
     "summary_story": "二十一岁名满京华，欧阳修向天下推重他。那是春风得意的青年时代，抱负远大，才华锋芒初露。",
-    "event_ids": ["event_jinshi_kaoshi"],
-    "work_ids": ["work_xingshang_lun"],
-    "quote_ids": ["quote_xingshang_01"],
+    "event_ids": [
+      "event_jinshi_kaoshi"
+    ],
+    "work_ids": [
+      "work_xingshang_lun",
+      "work_jiashuo_songzhanghu",
+      "work_liuhou_lun",
+      "work_fanzeng_lun",
+      "work_shang_huangdishu",
+      "work_yixuexiao_gongjushang",
+      "work_jinche_25",
+      "work_guoxiangzheng_zhushi",
+      "work_side_tangji",
+      "work_xiyu_tingji"
+    ],
+    "quote_ids": [
+      "quote_xingshang_01"
+    ],
     "dongpo_view": "才华被看见固然欣喜，但更难得的是在众声喧哗中保持内心的厚道与清醒。",
     "today_action": "写下一件你最近认真完成、且让自己感到骄傲的小成果。",
-    "source_ids": ["source_songshi_sushi", "source_ssnp_kfl"],
-    "review_status": "approved"
+    "source_ids": [
+      "source_songshi_sushi",
+      "source_ssnp_kfl"
+    ],
+    "review_status": "approved",
+    "text_safe_zone": {
+      "x": 20,
+      "y": 38,
+      "width": 350,
+      "height": 160,
+      "tone": "light"
+    }
   },
   {
     "id": "station_mizhou",
@@ -48,16 +104,51 @@
     "age_label": "38—40岁",
     "place": "山东密州（今诸城）",
     "theme": "中年思亲、担当与初试旷达",
-    "keywords": ["中年", "思亲", "豪情", "明月"],
+    "keywords": [
+      "中年",
+      "思亲",
+      "豪情",
+      "明月"
+    ],
     "summary_fact": "苏轼主动请求外任密州，正逢蝗灾旱灾，亲自率领军民灭蝗救灾；修建超然台，中秋怀念苏辙作《水调歌头》。",
     "summary_story": "到了密州，人到中年，责任压肩，天灾频仍。在清贫与辛劳中，他学会了在城头高台看月亮，在风沙野地打猎抒怀。",
-    "event_ids": ["event_mizhou_chaoran"],
-    "work_ids": ["work_jiangchengzi_mizhou", "work_shuidiaogetou_mingyue", "work_jiangchengzi_yimao", "work_wangjiangnan_chaoran"],
-    "quote_ids": ["quote_jiangchengzi_01", "quote_jiangchengzi_02", "quote_shuidiao_01", "quote_shuidiao_02", "quote_yimao_01", "quote_wangjiangnan_01"],
+    "event_ids": [
+      "event_mizhou_chaoran"
+    ],
+    "work_ids": [
+      "work_jiangchengzi_mizhou",
+      "work_shuidiaogetou_mingyue",
+      "work_jiangchengzi_yimao",
+      "work_wangjiangnan_chaoran",
+      "work_chaoran_taiji",
+      "work_dielianhua_mizhou",
+      "work_chuye_daxue",
+      "work_he_kongmizhou",
+      "work_jianzimulan_lichun",
+      "work_he_ziyou_churi"
+    ],
+    "quote_ids": [
+      "quote_jiangchengzi_01",
+      "quote_jiangchengzi_02",
+      "quote_shuidiao_01",
+      "quote_shuidiao_02",
+      "quote_yimao_01",
+      "quote_wangjiangnan_01"
+    ],
     "dongpo_view": "中年不是热情的终点，而是懂得承担责任的同时，依然有能力为天上一轮明月心动。",
     "today_action": "今晚无论多忙，下班后走到室外抬头看一看月亮，静立一分钟。",
-    "source_ids": ["source_songshi_sushi", "source_dply_cb"],
-    "review_status": "approved"
+    "source_ids": [
+      "source_songshi_sushi",
+      "source_dply_cb"
+    ],
+    "review_status": "approved",
+    "text_safe_zone": {
+      "x": 20,
+      "y": 40,
+      "width": 350,
+      "height": 160,
+      "tone": "dark"
+    }
   },
   {
     "id": "station_wutai",
@@ -68,16 +159,46 @@
     "age_label": "43岁",
     "place": "湖州至京师（御史台）",
     "theme": "断崖变故、误解与生死凝视",
-    "keywords": ["骤雨", "误解", "深渊", "转折"],
+    "keywords": [
+      "骤雨",
+      "误解",
+      "深渊",
+      "转折"
+    ],
     "summary_fact": "因诗作被御史台弹劾讥讪朝政，八月逮捕下狱，受审百余日，作绝笔诗托付苏辙，岁末获释贬往黄州。",
     "summary_story": "平静的生活在一瞬间被彻底撕碎。被捕入狱、面对无情审讯与死生未知，苏轼经历了人生最黑暗漫长的一百三十天。",
-    "event_ids": ["event_wutai_case"],
-    "work_ids": ["work_yuzhong_ziyou"],
-    "quote_ids": ["quote_yuzhong_01"],
+    "event_ids": [
+      "event_wutai_case"
+    ],
+    "work_ids": [
+      "work_yuzhong_ziyou",
+      "work_yuzhong_ziyou_er",
+      "work_bozhou_hukou",
+      "work_chuyu_ciyun_wangdingguo",
+      "work_chuyu_buyue",
+      "work_mengen_chu_huangzhou",
+      "work_chuchu_jinmen",
+      "work_duhuai",
+      "work_zi_daochangshan_gui",
+      "work_huzhou_xie_biao"
+    ],
+    "quote_ids": [
+      "quote_yuzhong_01"
+    ],
     "dongpo_view": "外界的风暴可能突然夺走一切光环，但真正的自我，永远在风暴无法触碰的深处。",
     "today_action": "如果最近被人误解或遭遇挫折，把所有想辩解的话先封存进便签，今天不对任何人解释。",
-    "source_ids": ["source_songshi_sushi", "source_sssc_cb"],
-    "review_status": "approved"
+    "source_ids": [
+      "source_songshi_sushi",
+      "source_sssc_cb"
+    ],
+    "review_status": "approved",
+    "text_safe_zone": {
+      "x": 20,
+      "y": 40,
+      "width": 350,
+      "height": 160,
+      "tone": "dark"
+    }
   },
   {
     "id": "station_huangzhou",
@@ -88,16 +209,63 @@
     "age_label": "43—47岁",
     "place": "湖北黄州（今黄冈）",
     "theme": "低谷重启、躬耕烟火与赤壁超脱",
-    "keywords": ["重启", "徐行", "赤壁", "烟火", "清欢"],
+    "keywords": [
+      "重启",
+      "徐行",
+      "赤壁",
+      "烟火",
+      "清欢"
+    ],
     "summary_fact": "贬黄州团练副使，本州安置。躬耕东坡自号东坡居士，作《定风波》、《前赤壁赋》、《念奴娇·赤壁怀古》等。离黄州赴汝途中游庐山作《题西林壁》。",
     "summary_story": "从九死一生的深渊来到长江畔的小城。没有俸禄就自己开荒种地，猪肉贱就慢火细煨。在这片荒坡上，那个旷达的东坡居士真正诞生了。",
-    "event_ids": ["event_huangzhou_dongpo", "event_huangzhou_chibi"],
-    "work_ids": ["work_chudao_huangzhou", "work_dingfengbo_moting", "work_chibi_fu", "work_niannujiao_chibi", "work_linjiangxian_lingao", "work_zhurou_song", "work_chengtian_yeyou", "work_tixilinbi"],
-    "quote_ids": ["quote_dingfengbo_01", "quote_dingfengbo_02", "quote_dingfengbo_03", "quote_chibi_01", "quote_chibi_02", "quote_chibi_03", "quote_niannujiao_01", "quote_niannujiao_02", "quote_linjiangxian_01", "quote_linjiangxian_02", "quote_zhurou_01", "quote_chudao_01", "quote_chengtian_01", "quote_tixilinbi_01"],
+    "event_ids": [
+      "event_huangzhou_dongpo",
+      "event_huangzhou_chibi"
+    ],
+    "work_ids": [
+      "work_chudao_huangzhou",
+      "work_dingfengbo_moting",
+      "work_chibi_fu",
+      "work_niannujiao_chibi",
+      "work_linjiangxian_lingao",
+      "work_zhurou_song",
+      "work_chengtian_yeyou",
+      "work_tixilinbi",
+      "work_houchibi_fu",
+      "work_bosuanzi_dinghui",
+      "work_hanshi_tie"
+    ],
+    "quote_ids": [
+      "quote_dingfengbo_01",
+      "quote_dingfengbo_02",
+      "quote_dingfengbo_03",
+      "quote_chibi_01",
+      "quote_chibi_02",
+      "quote_chibi_03",
+      "quote_niannujiao_01",
+      "quote_niannujiao_02",
+      "quote_linjiangxian_01",
+      "quote_linjiangxian_02",
+      "quote_zhurou_01",
+      "quote_chudao_01",
+      "quote_chengtian_01",
+      "quote_tixilinbi_01"
+    ],
     "dongpo_view": "跌入低谷并不意味着人生的终结，有时候它只是把我们逼回最真实的生活本身，重新长出力量。",
     "today_action": "把一件今天解决不了、却一直在脑海打转的烦心事放下，换鞋出去散步十分钟。",
-    "source_ids": ["source_songshi_sushi", "source_sswj_cb", "source_dply_cb"],
-    "review_status": "approved"
+    "source_ids": [
+      "source_songshi_sushi",
+      "source_sswj_cb",
+      "source_dply_cb"
+    ],
+    "review_status": "approved",
+    "text_safe_zone": {
+      "x": 20,
+      "y": 42,
+      "width": 350,
+      "height": 160,
+      "tone": "dark"
+    }
   },
   {
     "id": "station_hangzhou",
@@ -108,16 +276,48 @@
     "age_label": "53—55岁",
     "place": "浙江杭州",
     "theme": "做事从容、造福一方与日常之美",
-    "keywords": ["山水", "治水", "从容", "晴雨"],
+    "keywords": [
+      "山水",
+      "治水",
+      "从容",
+      "晴雨"
+    ],
     "summary_fact": "元祐年间苏轼以龙图阁学士知杭州，疏浚西湖葑草淤泥，构筑长堤，百姓感德命名为苏堤。",
     "summary_story": "第二次来到江南杭州，历经风霜后的苏轼既是能踏实疏浚西湖的能臣，也是深爱湖山晴雨的游人。他把做事与生活调和得恰到好处。",
-    "event_ids": ["event_hangzhou_sudi"],
-    "work_ids": ["work_yinhushang_chuning", "work_wanghulong_zuishu"],
-    "quote_ids": ["quote_yinhushang_01", "quote_yinhushang_02", "quote_wanghulong_01"],
+    "event_ids": [
+      "event_hangzhou_sudi"
+    ],
+    "work_ids": [
+      "work_yinhushang_chuning",
+      "work_wanghulong_zuishu",
+      "work_wanghulong_zuishu_er",
+      "work_you_jinshansi",
+      "work_jixiangsi_mo_zhu",
+      "work_haitang",
+      "work_qi_kai_xihu_zhuang",
+      "work_kai_xihu_shi",
+      "work_yu_tongpan_hangzhou_shu",
+      "work_kanchao_wujue"
+    ],
+    "quote_ids": [
+      "quote_yinhushang_01",
+      "quote_yinhushang_02",
+      "quote_wanghulong_01"
+    ],
     "dongpo_view": "认认真真做该做的事，舒舒坦坦过当下的生活。无论晴天雨天，生活都有它应有的清欢。",
     "today_action": "为自己泡一杯茶或冲一杯温水，不看手机，慢慢喝完。",
-    "source_ids": ["source_songshi_sushi", "source_sssc_cb"],
-    "review_status": "approved"
+    "source_ids": [
+      "source_songshi_sushi",
+      "source_sssc_cb"
+    ],
+    "review_status": "approved",
+    "text_safe_zone": {
+      "x": 20,
+      "y": 36,
+      "width": 350,
+      "height": 160,
+      "tone": "light"
+    }
   },
   {
     "id": "station_huizhou",
@@ -128,16 +328,49 @@
     "age_label": "58—61岁",
     "place": "广东惠州",
     "theme": "在异乡扎根、发现日常野趣",
-    "keywords": ["荔枝", "异乡", "心安", "扎根"],
+    "keywords": [
+      "荔枝",
+      "异乡",
+      "心安",
+      "扎根"
+    ],
     "summary_fact": "绍圣初远贬惠州，随遇而安，食荔枝、买羊脊骨煨汤，助修东新桥与西新桥，筑白鹤峰新居。",
     "summary_story": "五十八岁被远掷岭南瘴疬之地，所有人都以为他走不出来了。他却发现荔枝香甜、烤羊脊骨美味，在当地造桥修屋，活得生机勃勃。",
-    "event_ids": ["event_huizhou_zagen"],
-    "work_ids": ["work_huizhou_shilichi", "work_dingfengbo_nanhaigui"],
-    "quote_ids": ["quote_huizhou_01", "quote_dingfengbo_nhg_01", "quote_dingfengbo_nhg_02"],
+    "event_ids": [
+      "event_huizhou_zagen"
+    ],
+    "work_ids": [
+      "work_huizhou_shilichi",
+      "work_dingfengbo_nanhaigui",
+      "work_chushi_lizhi",
+      "work_dongpo_jing_shi",
+      "work_shihao_shu",
+      "work_lizhi_tan",
+      "work_baihefeng_shangliangwen",
+      "work_zeng_huizhou_xiucai",
+      "work_xixinqiao_ji",
+      "work_dinghuiyuan_youji"
+    ],
+    "quote_ids": [
+      "quote_huizhou_01",
+      "quote_dingfengbo_nhg_01",
+      "quote_dingfengbo_nhg_02"
+    ],
     "dongpo_view": "心若没有安放的地方，走到哪里都是流浪；心若安顿下来，哪怕远在天涯也是故乡。",
     "today_action": "今天吃一顿好吃的饭，或者为自己买一份新鲜水果，用心品尝它的滋味。",
-    "source_ids": ["source_songshi_sushi", "source_sssc_cb", "source_dply_cb"],
-    "review_status": "approved"
+    "source_ids": [
+      "source_songshi_sushi",
+      "source_sssc_cb",
+      "source_dply_cb"
+    ],
+    "review_status": "approved",
+    "text_safe_zone": {
+      "x": 20,
+      "y": 38,
+      "width": 350,
+      "height": 160,
+      "tone": "light"
+    }
   },
   {
     "id": "station_danzhou",
@@ -148,16 +381,47 @@
     "age_label": "61—64岁",
     "place": "海南儋州",
     "theme": "极远处创造、播种文教与精神坚韧",
-    "keywords": ["天涯", "书声", "奇绝", "澄清"],
+    "keywords": [
+      "天涯",
+      "书声",
+      "奇绝",
+      "澄清"
+    ],
     "summary_fact": "贬琼州昌化军（今儋州），当地食无肉、病无药。苏轼开办载酒堂教授学子，开海南中进士之先河，遇赦北归作《六月二十日夜渡海》。",
     "summary_story": "六十一岁渡海来到天涯绝岛，政敌意在置其于死地。他却把破屋草房变成传道授业的讲堂，给这片蛮荒之地带去千年的文明书声。",
-    "event_ids": ["event_danzhou_shusheng"],
-    "work_ids": ["work_liuyue_duhai", "work_bie_hainan"],
-    "quote_ids": ["quote_liuyue_01", "quote_liuyue_02"],
+    "event_ids": [
+      "event_danzhou_shusheng"
+    ],
+    "work_ids": [
+      "work_liuyue_duhai",
+      "work_bie_hainan",
+      "work_he_taoyuanming_shi_yin",
+      "work_guanglang_an_ji",
+      "work_dongpo_liji_tu",
+      "work_shengxuan_ji",
+      "work_yu_cheng_tianmou_shu",
+      "work_beijiu_luxing_sili",
+      "work_da_jiang_junbi",
+      "work_haowai_hanshu"
+    ],
+    "quote_ids": [
+      "quote_liuyue_01",
+      "quote_liuyue_02"
+    ],
     "dongpo_view": "环境越是荒凉逼仄，内心的种子越要向阳生长。即使身在天涯，也能创造出不可磨灭的意义。",
     "today_action": "给一个最近很久没联系但挂念的朋友发一句简单的问候。",
-    "source_ids": ["source_songshi_sushi", "source_sssc_cb"],
-    "review_status": "approved"
+    "source_ids": [
+      "source_songshi_sushi",
+      "source_sssc_cb"
+    ],
+    "review_status": "approved",
+    "text_safe_zone": {
+      "x": 20,
+      "y": 40,
+      "width": 350,
+      "height": 160,
+      "tone": "dark"
+    }
   },
   {
     "id": "station_changzhou",
@@ -168,15 +432,46 @@
     "age_label": "65—66岁",
     "place": "江苏常州",
     "theme": "平生回望、万缘放下与从容谢幕",
-    "keywords": ["归途", "谢幕", "功业", "放下"],
+    "keywords": [
+      "归途",
+      "谢幕",
+      "功业",
+      "放下"
+    ],
     "summary_fact": "建中靖国元年，苏轼北归抵常州病重，七月二十八日从容辞世。生前自题画像云：'问汝平生功业，黄州惠州儋州。'",
     "summary_story": "走过大半个中国，经历过巅峰与深渊，苏轼在江南常州静静走完一生。回望一生，他把三次最苦的贬谪当作自己最真实的勋业。",
-    "event_ids": ["event_changzhou_guishi"],
-    "work_ids": ["work_ziti_jinshan"],
-    "quote_ids": ["quote_jinshan_01"],
+    "event_ids": [
+      "event_changzhou_guishi"
+    ],
+    "work_ids": [
+      "work_ziti_jinshan",
+      "work_da_jingshan_linzhanglao",
+      "work_pusaman_yangxian",
+      "work_dujue",
+      "work_changzhou_chuxi",
+      "work_qi_changzhou_juzhu_biao",
+      "work_yu_weilin_juebi",
+      "work_yu_qian_jiming_shu",
+      "work_xingxiangzi_guoqililai",
+      "work_yu_ziyou_zuihou_shu"
+    ],
+    "quote_ids": [
+      "quote_jinshan_01"
+    ],
     "dongpo_view": "人生的终极成功，不是永远站在顺境高处，而是走过全部坎坷之后，能够坦然对自己的一生微笑。",
     "today_action": "睡前对自己说一声：'今天辛苦了，万事皆告一段落，安心睡个好觉。'",
-    "source_ids": ["source_songshi_sushi", "source_sssc_cb", "source_ssnp_kfl"],
-    "review_status": "approved"
+    "source_ids": [
+      "source_songshi_sushi",
+      "source_sssc_cb",
+      "source_ssnp_kfl"
+    ],
+    "review_status": "approved",
+    "text_safe_zone": {
+      "x": 20,
+      "y": 38,
+      "width": 350,
+      "height": 160,
+      "tone": "light"
+    }
   }
 ]

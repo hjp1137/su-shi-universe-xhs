@@ -431,14 +431,14 @@
   }
 
   /**
-   * 绘制类型 2：今日东坡签 (daily_sign)
+   * 绘制类型 2：今日东坡签 (daily_sign) - 诗意、当下、留白、场景先行
    */
   function renderDailySignCard(ctx, vm, width, height, assets) {
     drawBackground(ctx, width, height);
 
-    // 1. 上部融入真实诗词/站点场景大图 (占比提升至 44%，高度 440px，配合水墨羽化)
+    // 1. 上部融入真实诗词/站点场景大图 (占比提升至 50%，高度 500px，配合水墨羽化直出)
     if (assets && assets.scene) {
-      drawImageCover(ctx, assets.scene, 0, 0, width, 440, 160);
+      drawImageCover(ctx, assets.scene, 0, 0, width, 500, 200);
     }
 
     // 2. 右上角绘制明月徽印 (若可用)
@@ -456,37 +456,38 @@
     ctx.fillStyle = '#f5eedc';
     ctx.font = '20px ' + FONT_SANS;
     ctx.textAlign = 'center';
-    ctx.fillText(dateDisplay, width * 0.5, 138);
+    ctx.fillText(dateDisplay, width * 0.5, 140);
 
-    // 诗词名句书法区 (典雅半透光宣纸笺，32px 绝对第一文字视觉)
-    var quoteBoxY = 185;
-    var quoteBoxH = 225;
+    // 诗词名句书法区 (诗句直接进入画面构图，不再使用生硬白/灰矩形框，题字入画)
+    var quoteBoxY = 195;
     var qMargin = 55;
     ctx.save();
-    ctx.fillStyle = 'rgba(245, 238, 220, 0.22)';
-    ctx.strokeStyle = 'rgba(217, 185, 120, 0.45)';
-    ctx.lineWidth = 1;
-    ctx.fillRect(qMargin, quoteBoxY, width - qMargin * 2, quoteBoxH);
-    ctx.strokeRect(qMargin, quoteBoxY, width - qMargin * 2, quoteBoxH);
+    // 局部气韵承托（轻柔宣纸微晕，不超过图面20%）
+    var haloGrad = ctx.createRadialGradient(width * 0.5, quoteBoxY + 70, 20, width * 0.5, quoteBoxY + 70, width * 0.45);
+    haloGrad.addColorStop(0, 'rgba(12, 19, 32, 0.55)');
+    haloGrad.addColorStop(0.8, 'rgba(12, 19, 32, 0.25)');
+    haloGrad.addColorStop(1, 'rgba(12, 19, 32, 0)');
+    ctx.fillStyle = haloGrad;
+    ctx.fillRect(qMargin, quoteBoxY - 10, width - qMargin * 2, 170);
 
     var quoteText = vm.quote_text || '莫听穿林打叶声，何妨吟啸且徐行。';
     ctx.fillStyle = '#fbf8ee';
-    ctx.font = 'bold 32px ' + FONT_SERIF;
-    ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
-    ctx.shadowBlur = 10;
+    ctx.font = 'bold 34px ' + FONT_SERIF;
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+    ctx.shadowBlur = 14;
     ctx.shadowOffsetX = 0;
     ctx.shadowOffsetY = 2;
-    var qTextH = drawWrappedText(ctx, quoteText, width * 0.5, quoteBoxY + 34, width - qMargin * 2 - 40, 48, 3, 'center');
+    var qTextH = drawWrappedText(ctx, quoteText, width * 0.5, quoteBoxY + 28, width - qMargin * 2 - 40, 50, 3, 'center');
     ctx.restore();
 
     var sourceText = (vm.source_text || '《定风波》') + (vm.station_name ? (' · ' + vm.station_name.split('｜')[0]) : '');
     ctx.fillStyle = '#d9b978';
     ctx.font = '18px ' + FONT_SERIF;
     ctx.textAlign = 'center';
-    ctx.fillText(sourceText, width * 0.5, quoteBoxY + 34 + qTextH + 20);
+    ctx.fillText(sourceText, width * 0.5, quoteBoxY + 28 + qTextH + 20);
 
-    // 放到今天 (20px 清朗大字)
-    var viewY = quoteBoxY + quoteBoxH + 30;
+    // 放到今天 (图下自然留白，20px 清朗大字)
+    var viewY = quoteBoxY + 28 + qTextH + 68;
     ctx.fillStyle = '#d9b978';
     ctx.font = 'bold 18px ' + FONT_SANS;
     ctx.textAlign = 'left';
@@ -497,11 +498,11 @@
     ctx.font = '20px ' + FONT_SANS;
     var vH2 = drawWrappedText(ctx, dongpoText, 70, viewY + 28, width - 140, 34, 3, 'left');
 
-    // 今天只做一件小事 (浅色背衬纸笺承托，饱满充实下半区，消除深蓝空白)
-    var actY = viewY + 28 + vH2 + 22;
-    var actCardH = 130;
-    ctx.fillStyle = 'rgba(217, 185, 120, 0.15)';
-    ctx.strokeStyle = 'rgba(217, 185, 120, 0.4)';
+    // 今天只做一件小事 (浅金色微透纸笺承托，饱满充实下半区)
+    var actY = viewY + 28 + vH2 + 24;
+    var actCardH = 125;
+    ctx.fillStyle = 'rgba(217, 185, 120, 0.12)';
+    ctx.strokeStyle = 'rgba(217, 185, 120, 0.35)';
     ctx.lineWidth = 1;
     ctx.fillRect(60, actY, width - 120, actCardH);
     ctx.strokeRect(60, actY, width - 120, actCardH);
@@ -514,7 +515,7 @@
     var actText = vm.today_action || '放下眼前解决不了的焦虑，出门走走十分钟。';
     ctx.fillStyle = '#fbf8ee';
     ctx.font = '19px ' + FONT_SANS;
-    drawWrappedText(ctx, actText, 80, actY + 50, width - 160, 32, 2, 'left');
+    drawWrappedText(ctx, actText, 80, actY + 48, width - 160, 32, 2, 'left');
 
     // 免责标注 (贴合底栏上方，严格保证 height - 116)
     ctx.fillStyle = 'rgba(244, 240, 230, 0.4)';
@@ -525,7 +526,7 @@
   }
 
   /**
-   * 绘制类型 3：人生节点卡 (station_node)
+   * 绘制类型 3：人生节点卡 (station_node) - 历史、纪念、地点、时间
    */
   function renderStationNodeCard(ctx, vm, width, height, assets) {
     drawBackground(ctx, width, height);
@@ -543,6 +544,23 @@
       ctx.restore();
     }
 
+    // 3. 绘制历史节点金石地点印章 (右上方)
+    ctx.save();
+    var sealX = width - 115;
+    var sealY = 65;
+    ctx.strokeStyle = '#c4473a';
+    ctx.fillStyle = 'rgba(196, 71, 58, 0.15)';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(sealX, sealY, 44, 44);
+    ctx.fillRect(sealX, sealY, 44, 44);
+    ctx.fillStyle = '#f5eedc';
+    ctx.font = 'bold 12px ' + FONT_SERIF;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('东坡', sealX + 22, sealY + 14);
+    ctx.fillText('行迹', sealX + 22, sealY + 30);
+    ctx.restore();
+
     drawCardHeader(ctx, width, '苏轼人生宇宙 · 行迹卡', '行迹');
 
     // 站点名称 (38px 宏大书法感)
@@ -552,17 +570,40 @@
     ctx.textAlign = 'center';
     ctx.fillText(stationTitle, width * 0.5, 138);
 
-    // 历史起止时间与地点
+    // 历史起止时间与地点 (年份里程碑)
     var timePlace = (vm.station_time_label ? (vm.station_time_label + ' · ') : '') + (vm.station_place || '湖北黄冈');
     ctx.fillStyle = '#d9b978';
     ctx.font = '17px ' + FONT_SANS;
     ctx.textAlign = 'center';
     ctx.fillText(timePlace, width * 0.5, 185);
 
+    // 4. 左侧纵向时间轴里程碑线 (贯穿 230px 到 620px)
+    ctx.save();
+    ctx.strokeStyle = 'rgba(217, 185, 120, 0.35)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    ctx.moveTo(48, 235);
+    ctx.lineTo(48, 620);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    // 节点圆环
+    ctx.fillStyle = '#d9b978';
+    ctx.beginPath();
+    ctx.arc(48, 235, 4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(48, 435, 3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(48, 620, 4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
     // 核心诗句展示区 (典雅半透光宣纸笺，30px 绝对第一文字视觉)
     var quoteBoxY = 225;
     var quoteBoxH = 205;
-    var qMargin = 55;
+    var qMargin = 58;
     ctx.save();
     ctx.fillStyle = 'rgba(245, 238, 220, 0.22)';
     ctx.strokeStyle = 'rgba(217, 185, 120, 0.45)';

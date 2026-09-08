@@ -11,3 +11,7 @@ Thumbs.db
 
 # 临时下载包
 /minitool-zip-builder-*.skill
+
+# Python 缓存
+__pycache__/
+*.pyc

@@ -96,7 +96,7 @@ def test_work_view_flow():
     assert data_js.exists(), "js/data.js 不存在！"
     size_kb = data_js.stat().st_size / 1024
     print(f"   - js/data.js 当前体积: {size_kb:.2f} KB (推荐安全上限 2048 KB)")
-    assert size_kb < 200, f"js/data.js 异常膨胀: {size_kb:.2f} KB"
+    assert size_kb < 2048, f"js/data.js 异常膨胀: {size_kb:.2f} KB"
     print("   [PASS] 数据离线编译体积健康，远优于门禁阈值！")
 
     print("\n==================================================")

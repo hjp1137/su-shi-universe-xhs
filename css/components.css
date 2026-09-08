@@ -681,13 +681,109 @@
   position: relative;
   width: 100%;
   max-width: 420px;
-  height: 330px;
+  height: 350px;
   margin: var(--space-2) auto;
   border-radius: var(--radius-lg);
   background: transparent;
   border: none;
   box-shadow: none;
   overflow: hidden;
+}
+
+/* 任务15.6.4: 3D 诗词星群沉浸舞台与聚焦微卡片 */
+.poetry-constellation-3d-stage {
+  position: relative;
+  width: 100%;
+  height: 350px;
+  touch-action: none;
+  overflow: hidden;
+  cursor: grab;
+}
+
+.poetry-constellation-3d-stage:active {
+  cursor: grabbing;
+}
+
+.poetry-3d-focus-callout {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  max-width: 270px;
+  padding: 10px 14px;
+  background: rgba(14, 23, 38, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(217, 185, 120, 0.45);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 16px rgba(217, 185, 120, 0.2);
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  animation: calloutFadeIn 0.3s ease forwards;
+}
+
+.poetry-3d-focus-callout > * + * {
+  margin-top: 6px;
+}
+
+@keyframes calloutFadeIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.poetry-3d-focus-callout .callout-header {
+  display: flex;
+  align-items: center;
+}
+
+.poetry-3d-focus-callout .callout-header > * + * {
+  margin-left: 6px;
+}
+
+.poetry-3d-focus-callout .callout-badge {
+  font-size: 10px;
+  color: var(--color-warm, #d9b978);
+  background: rgba(217, 185, 120, 0.15);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.poetry-3d-focus-callout .callout-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  font-family: var(--font-serif, serif);
+}
+
+.poetry-3d-focus-callout .callout-year {
+  font-size: 11px;
+  color: rgba(245, 238, 220, 0.6);
+  margin-left: auto;
+}
+
+.poetry-3d-focus-callout .callout-quote {
+  font-size: 12px;
+  line-height: 1.4;
+  color: #e5d8b8;
+  font-style: italic;
+}
+
+.poetry-3d-focus-callout .callout-enter-btn {
+  align-self: flex-end;
+  background: linear-gradient(135deg, rgba(217, 185, 120, 0.35) 0%, rgba(217, 185, 120, 0.15) 100%);
+  border: 1px solid rgba(217, 185, 120, 0.6);
+  border-radius: 12px;
+  color: #fbf8ee;
+  font-size: 11px;
+  padding: 4px 10px;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: all 0.2s ease;
+}
+
+.poetry-3d-focus-callout .callout-enter-btn:active {
+  transform: scale(0.94);
+  background: rgba(217, 185, 120, 0.5);
 }
 
 .constellation-nebula-glow {

@@ -389,6 +389,20 @@
     var skyStage = document.createElement('div');
     skyStage.className = 'constellation-sky-stage';
 
+    // 任务15.6.4: 优先挂载可手势拖拽旋转、自动最短路径平滑聚焦的 3D 诗词星群
+    var Effects = (root.SuShiUniverse && root.SuShiUniverse.Effects) || {};
+    if (Effects.PoetryConstellation3D) {
+      var stage3D = document.createElement('div');
+      stage3D.className = 'poetry-constellation-3d-stage';
+      var controller3D = new Effects.PoetryConstellation3D(stage3D, works, {
+        onSelectWork: onSelect,
+        primeWork: primeWork || (works.length > 0 ? works[0] : null),
+        stationTheme: stationTheme
+      });
+      skyStage.appendChild(stage3D);
+      cluster._controller3D = controller3D;
+    }
+
     // 背景水墨星尘与微弱星云
     var nebula = document.createElement('div');
     nebula.className = 'constellation-nebula-glow';

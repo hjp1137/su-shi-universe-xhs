@@ -690,7 +690,7 @@
           }
 
           if (chosen && chosenOrb) {
-            triggerOutcome(chosen, currentQ.id, chosenOrb);
+            triggerOutcome(chosen, currentQ.id, chosenOrb, true);
           } else {
             soulStar.style.transform = 'translate(0px, 0px)';
           }
@@ -750,7 +750,7 @@
 
             card.addEventListener('click', function () {
               var orb = stage.querySelector('[data-target-key="' + targetItem.key + '"]');
-              triggerOutcome(targetItem, currentQ.id, orb);
+              triggerOutcome(targetItem, currentQ.id, orb, false);
             });
 
             choiceGrid.appendChild(card);
@@ -758,13 +758,19 @@
         }
       }
 
-      function triggerOutcome(targetItem, qId, orbEl) {
-        if (isTransitioning) return;
+      // 任务15.6.4: 无论拖拽还是直接点击，心识星均触发连续可见的 autoTravel 飞行与宇宙碰撞动效
+      var isLocked = false;
+      function triggerOutcome(targetItem, qId, orbEl, wasDragged) {
+        if (isTransitioning || isLocked) return;
         isTransitioning = true;
+        isLocked = true;
+        wrap.classList.add('is-locked');
 
         var unlockTimer = setTimeout(function () {
           isTransitioning = false;
-        }, 1200);
+          isLocked = false;
+          wrap.classList.remove('is-locked');
+        }, 1600);
 
         var idx = session ? session.getCurrentIndex() : 0;
         var scene = currentScenes[idx] || currentScenes[0];
@@ -772,33 +778,79 @@
                           QuizModule.mapExperimentOutcome(scene.id, targetItem.key) :
                           'opt_' + (idx + 1) + 'a';
 
-        if (session) {
-          if (typeof session.selectOutcome === 'function') {
-            session.selectOutcome(scene.id, targetItem.key, targetItem.scoreVector);
+        var stageBoxEl = wrap.querySelector('.exp-stage-box');
+        if (stageBoxEl) stageBoxEl.classList.add('is-autotraveling');
+
+        var soulStarEl = wrap.querySelector('.exp-soul-star');
+        var reduced = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        // 统一撞击与评分写入处理
+        function onImpact() {
+          if (session) {
+            if (typeof session.selectOutcome === 'function') {
+              session.selectOutcome(scene.id, targetItem.key, targetItem.scoreVector);
+            }
+            session.selectOption(qId, mappedOptId);
           }
-          session.selectOption(qId, mappedOptId);
-        }
 
-        // 播放水墨星芒吸附与定格动效 (0.4秒，兼顾反馈与流畅度)
-        if (orbEl) {
-          orbEl.classList.add('is-selected');
-          orbEl.classList.add('is-absorbed');
-        }
+          var iType = (scene.interactionType || 'proximity').toLowerCase();
+          var fxClass = 'fx-collision';
+          if (iType === 'merge') fxClass = 'fx-merge';
+          else if (iType === 'split') fxClass = 'fx-split';
+          else if (iType === 'gravity') fxClass = 'fx-gravity';
+          else if (iType === 'avoid' || iType === 'cross') fxClass = 'fx-avoid';
+          else if (iType === 'rescue') fxClass = 'fx-rescue';
+          else if (iType === 'orbit') fxClass = 'fx-orbit';
+          else if (iType === 'proximity' || iType === 'approach') fxClass = 'is-absorbed';
 
-        var allCards = choiceGrid.querySelectorAll('.exp-choice-card');
-        for (var c = 0; c < allCards.length; c++) {
-          allCards[c].classList.remove('is-selected');
-        }
+          if (orbEl) {
+            orbEl.classList.add('is-selected');
+            orbEl.classList.add(fxClass);
 
-        setTimeout(function () {
-          clearTimeout(unlockTimer);
-          if (idx < total - 1) {
-            if (session) session.goNext(total);
-            renderExperiment();
-          } else {
-            showCalculatingState();
+            // 产生环形冲击波
+            var shockwave = document.createElement('div');
+            shockwave.className = 'exp-shockwave-ring';
+            orbEl.appendChild(shockwave);
           }
-        }, 420);
+
+          var allCards = choiceGrid.querySelectorAll('.exp-choice-card');
+          for (var c = 0; c < allCards.length; c++) {
+            allCards[c].classList.remove('is-selected');
+          }
+
+          setTimeout(function () {
+            clearTimeout(unlockTimer);
+            if (stageBoxEl) stageBoxEl.classList.remove('is-autotraveling');
+            wrap.classList.remove('is-locked');
+            isLocked = false;
+            isTransitioning = false;
+            if (idx < total - 1) {
+              if (session) session.goNext(total);
+              renderExperiment();
+            } else {
+              showCalculatingState();
+            }
+          }, reduced ? 180 : 360);
+        }
+
+        if (wasDragged || !soulStarEl || !orbEl) {
+          // 拖拽已在目标处，直接触发反馈
+          onImpact();
+        } else {
+          // 点击选项：启动 autoTravel 自动沿引力弧线飞行向目标星 (450~550ms)
+          var orbRect = orbEl.getBoundingClientRect();
+          var soulRect = soulStarEl.getBoundingClientRect();
+          var dx = (orbRect.left + orbRect.width * 0.5) - (soulRect.left + soulRect.width * 0.5);
+          var dy = (orbRect.top + orbRect.height * 0.5) - (soulRect.top + soulRect.height * 0.5);
+
+          soulStarEl.classList.add('is-auto-traveling');
+          soulStarEl.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
+
+          var travelDuration = reduced ? 160 : 480;
+          setTimeout(function () {
+            onImpact();
+          }, travelDuration);
+        }
       }
 
       function showCalculatingState() {
@@ -1569,9 +1621,9 @@
         return wrap;
       }
 
-      // 站点头部卡片
-      var headerCard = document.createElement('div');
-      headerCard.className = 'ink-card result-hero-card station-hero-card';
+      // Scene 0｜站点Hero (全宽场景图原色直出，不做整图统一蒙版，依据安全区tone自适应字色)
+      var heroScene = document.createElement('div');
+      heroScene.className = 'station-scene-hero station-hero-card scene-0-hero';
 
       var sceneImg = (SuShi.ArtAssets && SuShi.ArtAssets.getStationScene(station.id)) || '';
       if (sceneImg) {
@@ -1581,15 +1633,16 @@
         imgEl.className = 'station-hero-cover-img';
         imgEl.src = sceneImg;
         imgEl.alt = station.name;
-        var maskEl = document.createElement('div');
-        maskEl.className = 'station-hero-cover-mask';
         coverBox.appendChild(imgEl);
-        coverBox.appendChild(maskEl);
-        headerCard.appendChild(coverBox);
+        heroScene.appendChild(coverBox);
       }
 
+      var safeZone = station.text_safe_zone || { x: 20, y: 38, width: 350, height: 160, tone: 'dark' };
+      var isDarkTone = safeZone.tone === 'dark';
+
       var headerContent = document.createElement('div');
-      headerContent.className = 'result-hero-content';
+      headerContent.className = 'result-hero-content station-safe-zone-content ' + (isDarkTone ? 'tone-dark-bg' : 'tone-light-bg');
+      headerContent.style.maxWidth = (safeZone.width || 350) + 'px';
 
       var badge = document.createElement('div');
       badge.className = 'result-moment-badge';
@@ -1615,16 +1668,16 @@
       themeText.textContent = '“' + (station.theme || '') + '”';
       headerContent.appendChild(themeText);
 
-      headerCard.appendChild(headerContent);
-      wrap.appendChild(headerCard);
+      heroScene.appendChild(headerContent);
+      wrap.appendChild(heroScene);
 
-      // --- 中段：苏轼人生长卷五部曲 (Immersive Epic Scroll) ---
+      // --- Scene 1 ~ 5：沉浸式连续人生长卷 (Continuous Epic Scroll) ---
       var scrollContainer = document.createElement('div');
       scrollContainer.className = 'station-epic-scroll';
 
-      // 卷一：东坡为什么来到这里 (历史现场 - 竖向时间轨迹轴，长卷去外框)
+      // Scene 1｜历史现场 (纵向时间轨迹轴推进，无整块大底卡，文字沿轨迹分段2~4行呈现)
       var chap1 = document.createElement('div');
-      chap1.className = 'station-scroll-section station-chapter-box station-chapter-1 station-section-history station-chapter-timeline';
+      chap1.className = 'station-scroll-section station-chapter-box station-chapter-1 station-section-history station-chapter-timeline scene-1-history';
       var fBadge = document.createElement('div');
       fBadge.className = 'station-chapter-badge';
       fBadge.textContent = '第一卷 · 历史现场 · 东坡为什么来到这里';
@@ -1634,31 +1687,50 @@
       
       var fTrack = document.createElement('div');
       fTrack.className = 'history-slice-track';
-      var fNode = document.createElement('div');
-      fNode.className = 'history-slice-node';
-      var fTime = document.createElement('span');
-      fTime.className = 'history-slice-time';
-      fTime.textContent = (station.time_label || '') + ' · ' + (station.place || '');
-      var fBody = document.createElement('p');
-      fBody.className = 'station-chapter-body history-slice-body';
-      fBody.textContent = station.summary_fact;
-      fNode.appendChild(fTime);
-      fNode.appendChild(fBody);
-      fTrack.appendChild(fNode);
+
+      // 智能分段呈现历史切片，每段不超过2~4行
+      var factRaw = String(station.summary_fact || '');
+      var factSentences = factRaw.split('。').filter(function (s) { return s.trim().length > 0; });
+      var factChunks = [];
+      var curChunk = '';
+      for (var fc = 0; fc < factSentences.length; fc++) {
+        curChunk += factSentences[fc] + '。';
+        if (curChunk.length >= 45 || fc === factSentences.length - 1) {
+          factChunks.push(curChunk);
+          curChunk = '';
+        }
+      }
+      if (factChunks.length === 0) factChunks.push(factRaw);
+
+      for (var fci = 0; fci < factChunks.length; fci++) {
+        var fNode = document.createElement('div');
+        fNode.className = 'history-slice-node history-passage-item';
+        if (fci === 0) {
+          var fTime = document.createElement('span');
+          fTime.className = 'history-slice-time';
+          fTime.textContent = (station.time_label || '') + ' · ' + (station.place || '');
+          fNode.appendChild(fTime);
+        }
+        var fBody = document.createElement('p');
+        fBody.className = 'station-chapter-body history-slice-body';
+        fBody.textContent = factChunks[fci];
+        fNode.appendChild(fBody);
+        fTrack.appendChild(fNode);
+      }
 
       chap1.appendChild(fBadge);
       chap1.appendChild(fTitle);
       chap1.appendChild(fTrack);
       scrollContainer.appendChild(chap1);
 
-      // 卷二：代表名句场景大图 (大幅意境大图全宽浸润铺展，视觉锚点)
+      // Scene 2｜代表名句大场景 (全宽意境大图直接展示，名句自然融入留白暗部，不整图压暗)
       var quoteId = (station.quote_ids && station.quote_ids[0]) || '';
       var primeQuoteObj = quoteId ? Data.getQuoteById(quoteId) : null;
       var primeWorkObj = (primeQuoteObj && primeQuoteObj.work_id) ? Data.getWorkById(primeQuoteObj.work_id) : null;
       var stationSceneImg = (SuShi.ArtAssets && SuShi.ArtAssets.getStationScene(station.id)) || '';
 
       var chapVerse = document.createElement('div');
-      chapVerse.className = 'station-scroll-section station-section-verse-scene';
+      chapVerse.className = 'station-scroll-section station-section-verse-scene scene-2-quote';
       var vBadge = document.createElement('div');
       vBadge.className = 'station-chapter-badge';
       vBadge.textContent = '第二卷 · 代表名句 · 意境大场景';
@@ -1671,10 +1743,7 @@
         vImg.className = 'station-verse-scene-img';
         vImg.src = stationSceneImg;
         vImg.alt = station.name + ' · 意境场景';
-        var vOverlay = document.createElement('div');
-        vOverlay.className = 'station-verse-scene-overlay';
         verseStage.appendChild(vImg);
-        verseStage.appendChild(vOverlay);
       }
       var verseContent = document.createElement('div');
       verseContent.className = 'station-verse-scene-content';
@@ -1691,9 +1760,9 @@
       chapVerse.appendChild(verseStage);
       scrollContainer.appendChild(chapVerse);
 
-      // 卷三：他在这里怎样生活 (生活实录 - 星轨脉络流线)
+      // Scene 3｜生活实录 (星轨脚步脉络，碎片式生活节点)
       var chap2 = document.createElement('div');
-      chap2.className = 'station-scroll-section station-chapter-box station-chapter-2 station-section-life station-chapter-orbit';
+      chap2.className = 'station-scroll-section station-chapter-box station-chapter-2 station-section-life station-chapter-orbit scene-3-life';
       var sBadge = document.createElement('div');
       sBadge.className = 'station-chapter-badge';
       sBadge.textContent = '第三卷 · 生活实录 · 他在这里怎样度过';
@@ -1703,19 +1772,35 @@
       
       var sStream = document.createElement('div');
       sStream.className = 'life-orbit-stream';
-      var sBody = document.createElement('p');
-      sBody.className = 'station-chapter-body life-orbit-body';
-      sBody.textContent = station.summary_story;
-      sStream.appendChild(sBody);
+
+      var storyRaw = String(station.summary_story || '');
+      var storySentences = storyRaw.split('。').filter(function (s) { return s.trim().length > 0; });
+      var storyChunks = [];
+      var curSChunk = '';
+      for (var sc = 0; sc < storySentences.length; sc++) {
+        curSChunk += storySentences[sc] + '。';
+        if (curSChunk.length >= 45 || sc === storySentences.length - 1) {
+          storyChunks.push(curSChunk);
+          curSChunk = '';
+        }
+      }
+      if (storyChunks.length === 0) storyChunks.push(storyRaw);
+
+      for (var sci = 0; sci < storyChunks.length; sci++) {
+        var sBody = document.createElement('p');
+        sBody.className = 'station-chapter-body life-orbit-body';
+        sBody.textContent = storyChunks[sci];
+        sStream.appendChild(sBody);
+      }
 
       chap2.appendChild(sBadge);
       chap2.appendChild(sTitle);
       chap2.appendChild(sStream);
       scrollContainer.appendChild(chap2);
 
-      // 卷四：本站诗词星群 (去框化星空，精神星核与空间拓扑群星)
+      // Scene 4｜诗词星群 (去框化星空，精神星核与空间拓扑群星，支持3D星群联动)
       var chap3 = document.createElement('div');
-      chap3.className = 'station-scroll-section station-chapter-box station-chapter-3 station-section-constellation station-chapter-constellation';
+      chap3.className = 'station-scroll-section station-chapter-box station-chapter-3 station-section-constellation station-chapter-constellation scene-4-constellation';
       var wBadge = document.createElement('div');
       wBadge.className = 'station-chapter-badge';
       wBadge.textContent = '第四卷 · 诗词星群 · 这一站的精神星宿';
@@ -1749,9 +1834,9 @@
       chap3.appendChild(constellationBox);
       scrollContainer.appendChild(chap3);
 
-      // 卷五：现代共鸣与今日小事 (宣纸便签轻质感，低干扰收束)
+      // Scene 5｜现代共鸣与今日小事 (宣纸便签轻质感，低干扰收束)
       var chap4 = document.createElement('div');
-      chap4.className = 'station-scroll-section station-chapter-box station-chapter-4 station-section-modern station-chapter-parchment';
+      chap4.className = 'station-scroll-section station-chapter-box station-chapter-4 station-section-modern station-chapter-parchment scene-5-resonance';
       var mBadge = document.createElement('div');
       mBadge.className = 'station-chapter-badge';
       mBadge.textContent = '第五卷 · 现代共鸣 · 如果你也在这一站';
@@ -1775,9 +1860,9 @@
       scrollContainer.appendChild(chap4);
       wrap.appendChild(scrollContainer);
 
-      // --- 底部宇宙跨页导航与卡片生成操作区 (弱化大电商感，升华为凝结人生卡) ---
+      // Scene 6｜底部宇宙跨页导航与卡片生成操作区 (弱化大电商感，升华为凝结人生卡)
       var actBox = document.createElement('div');
-      actBox.className = 'result-actions station-actions-refined';
+      actBox.className = 'result-actions station-actions-refined scene-6-action';
 
       var btnShareNode = UI.createPrimaryButton('✦ 凝成一张' + (station.name || '东坡') + '人生卡', function () {
         Router.navigate('share-card', { type: 'station', station_id: station.id });
