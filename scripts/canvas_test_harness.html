@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Canvas 动态渲染门禁测试 Harness</title>
+</head>
+<body style="background: #0b111e; color: #f4f0e6; font-family: sans-serif; padding: 20px;">
+  <h2>Canvas 动态渲染门禁执行中...</h2>
+  <div id="status">正在运行动态渲染测试套件...</div>
+
+  <!-- 依赖库 -->
+  <script src="/js/data.js"></script>
+  <script src="/js/art_assets.js"></script>
+  <script src="/js/bridge.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/card_canvas.js"></script>
+
+  <script>
+    (function () {
+      var results = {
+        success: false,
+        tests: {},
+        images: {},
+        errors: []
+      };
+
+      function updateStatus(msg) {
+        document.getElementById('status').innerText = msg;
+      }
+
+      function finish(success) {
+        results.success = success;
+        updateStatus(success ? '测试全部通过！正在上传结果...' : '测试存在失败项！');
+        fetch('/api/test-result', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(results)
+        }).catch(function (err) {
+          console.error('上传结果失败:', err);
+        });
+      }
+
+      var CardCanvas = window.SuShiUniverse ? window.SuShiUniverse.CardCanvas : null;
+      if (!CardCanvas) {
+        results.errors.push('SuShiUniverse.CardCanvas 未找到');
+        finish(false);
+        return;
+      }
+
+      // 测试用例 1: station_result (人生站点结果卡 - 黄州)
+      function runTest1(next) {
+        updateStatus('正在测试 1: station_result (人生站点结果卡)...');
+        var vm = {
+          type: 'station_result',
+          station_id: 'huangzhou',
+          station_name: '黄州｜重新生活',
+          keywords: ['重新生活', '徐行', '人间烟火'],
+          quote_text: '莫听穿林打叶声，何妨吟啸且徐行。',
+          work_title: '定风波',
+          dongpo_view: '生活可以有风雨，但不必困在风雨里。放慢步调，把日子安顿好。'
+        };
+
+        try {
+          var startTime = Date.now();
+          CardCanvas.renderCard('station_result', vm, function (dataUrl) {
+            var elapsed = Date.now() - startTime;
+            var ok = typeof dataUrl === 'string' &&
+                     dataUrl.indexOf('data:image/png;base64,') === 0 &&
+                     dataUrl.length > 5000;
+            results.tests.station_result = {
+              passed: ok,
+              dataUrlPrefix: (dataUrl || '').substring(0, 30),
+              length: (dataUrl || '').length,
+              elapsedMs: elapsed,
+              error: ok ? null : 'DataURL 无效或长度不足'
+            };
+            if (ok) {
+              results.images.station_result = dataUrl;
+            }
+            next();
+          });
+        } catch (e) {
+          results.tests.station_result = { passed: false, error: e.toString() };
+          results.errors.push('Test 1 抛出异常: ' + e.toString());
+          next();
+        }
+      }
+
+      // 测试用例 2: daily_sign (今日东坡签)
+      function runTest2(next) {
+        updateStatus('正在测试 2: daily_sign (今日东坡签)...');
+        var vm = {
+          type: 'daily_sign',
+          quote_text: '回首向来萧瑟处，归去，也无风雨也无晴。',
+          work_id: 'ding-feng-bo',
+          station_id: 'huangzhou',
+          station_name: '黄州｜重新生活',
+          date_display: '2026年9月8日 · 秋 · 今日小札',
+          dongpo_view: '风雨扑面而来时，越慌乱越容易失足。不让外界动荡打乱呼吸。',
+          today_action: '放下眼前解决不了的焦虑，出门走走十分钟。'
+        };
+
+        try {
+          var startTime = Date.now();
+          CardCanvas.renderCard('daily_sign', vm, function (dataUrl) {
+            var elapsed = Date.now() - startTime;
+            var ok = typeof dataUrl === 'string' &&
+                     dataUrl.indexOf('data:image/png;base64,') === 0 &&
+                     dataUrl.length > 5000;
+            results.tests.daily_sign = {
+              passed: ok,
+              dataUrlPrefix: (dataUrl || '').substring(0, 30),
+              length: (dataUrl || '').length,
+              elapsedMs: elapsed,
+              error: ok ? null : 'DataURL 无效或长度不足'
+            };
+            if (ok) {
+              results.images.daily_sign = dataUrl;
+            }
+            next();
+          });
+        } catch (e) {
+          results.tests.daily_sign = { passed: false, error: e.toString() };
+          results.errors.push('Test 2 抛出异常: ' + e.toString());
+          next();
+        }
+      }
+
+      // 测试用例 3: station_node (人生节点卡)
+      function runTest3(next) {
+        updateStatus('正在测试 3: station_node (人生节点卡)...');
+        var vm = {
+          type: 'station_node',
+          station_id: 'huangzhou',
+          station_name: '黄州 · 重新生活',
+          station_time_label: '1080-1084',
+          station_place: '湖北黄冈',
+          quote_text: '自笑平生为口忙，老来事业转荒唐。',
+          work_title: '初到黄州',
+          summary_fact: '元丰三年苏轼贬谪黄州团练副使，在此耕作东坡，完成精神重构。',
+          dongpo_view: '真正的豁达不是没有痛楚，而是在认清人生的风雨后依然深爱日常。'
+        };
+
+        try {
+          var startTime = Date.now();
+          CardCanvas.renderCard('station_node', vm, function (dataUrl) {
+            var elapsed = Date.now() - startTime;
+            var ok = typeof dataUrl === 'string' &&
+                     dataUrl.indexOf('data:image/png;base64,') === 0 &&
+                     dataUrl.length > 5000;
+            results.tests.station_node = {
+              passed: ok,
+              dataUrlPrefix: (dataUrl || '').substring(0, 30),
+              length: (dataUrl || '').length,
+              elapsedMs: elapsed,
+              error: ok ? null : 'DataURL 无效或长度不足'
+            };
+            if (ok) {
+              results.images.station_node = dataUrl;
+            }
+            next();
+          });
+        } catch (e) {
+          results.tests.station_node = { passed: false, error: e.toString() };
+          results.errors.push('Test 3 抛出异常: ' + e.toString());
+          next();
+        }
+      }
+
+      // 测试用例 4: 图片加载失败水墨渐变 Fallback (主动模拟所有图片加载失败)
+      function runTest4(next) {
+        updateStatus('正在测试 4: 图片加载失败 Fallback (模拟图片错误)...');
+        var RealImage = window.Image;
+
+        // 模拟图片失败拦截器：构造纯虚拟 Image 对象，确保不走浏览器图片缓存
+        window.Image = function () {
+          var fakeImg = {
+            complete: false,
+            naturalWidth: 0,
+            naturalHeight: 0,
+            onload: null,
+            onerror: null,
+            src: ''
+          };
+          setTimeout(function () {
+            if (typeof fakeImg.onerror === 'function') {
+              fakeImg.onerror(new Event('error'));
+            }
+          }, 10);
+          return fakeImg;
+        };
+
+        var vm = {
+          type: 'station_result',
+          station_id: 'huangzhou',
+          station_name: '黄州｜重新生活',
+          keywords: ['重新生活', '徐行', '人间烟火'],
+          quote_text: '莫听穿林打叶声，何妨吟啸且徐行。',
+          work_title: '定风波',
+          dongpo_view: '生活可以有风雨，但不必困在风雨里。放慢步调，把日子安顿好。'
+        };
+
+        try {
+          var startTime = Date.now();
+          CardCanvas.renderCard('station_result', vm, function (dataUrl) {
+            // 立即恢复原始 Image
+            window.Image = RealImage;
+            var elapsed = Date.now() - startTime;
+
+            var ok = typeof dataUrl === 'string' &&
+                     dataUrl.indexOf('data:image/png;base64,') === 0 &&
+                     dataUrl.length > 3000 &&
+                     elapsed < 2000; // 不卡死、不无限等待
+
+            results.tests.image_error_fallback = {
+              passed: ok,
+              dataUrlPrefix: (dataUrl || '').substring(0, 30),
+              length: (dataUrl || '').length,
+              elapsedMs: elapsed,
+              error: ok ? null : 'Fallback 失败或超时'
+            };
+            if (ok) {
+              results.images.fallback = dataUrl;
+            }
+            next();
+          });
+        } catch (e) {
+          window.Image = RealImage;
+          results.tests.image_error_fallback = { passed: false, error: e.toString() };
+          results.errors.push('Test 4 Fallback 抛出异常: ' + e.toString());
+          next();
+        }
+      }
+
+      // 测试用例 5: 验证预览、保存、发布 DataURL 链路一致性
+      function runTest5(next) {
+        updateStatus('正在测试 5: 验证预览/保存/发布 DataURL 一致性...');
+        var testDataUrl = results.images.station_result;
+        if (!testDataUrl) {
+          results.tests.dataurl_consistency = { passed: false, error: '缺少 Test 1 生成的 DataURL' };
+          next();
+          return;
+        }
+
+        var savedUri = null;
+        var postedUri = null;
+        var previewSrc = null;
+
+        // 模拟预览绑定
+        var imgEl = document.createElement('img');
+        imgEl.src = testDataUrl;
+        previewSrc = imgEl.src;
+
+        // 模拟保存操作
+        var currentDataUrl = testDataUrl;
+        var fakeBridge = {
+          saveImage: function (uri, cb) {
+            savedUri = uri;
+            if (cb) cb({ success: true });
+          },
+          postNote: function (opts, cb) {
+            postedUri = opts.dataUri;
+            if (cb) cb({ success: true });
+          }
+        };
+
+        fakeBridge.saveImage(currentDataUrl);
+        fakeBridge.postNote({ dataUri: currentDataUrl });
+
+        var match = (previewSrc === testDataUrl) &&
+                    (savedUri === testDataUrl) &&
+                    (postedUri === testDataUrl);
+
+        results.tests.dataurl_consistency = {
+          passed: match,
+          previewMatch: previewSrc === testDataUrl,
+          saveMatch: savedUri === testDataUrl,
+          postMatch: postedUri === testDataUrl
+        };
+        next();
+      }
+
+      // 顺序执行所有测试
+      runTest1(function () {
+        runTest2(function () {
+          runTest3(function () {
+            runTest4(function () {
+              runTest5(function () {
+                var allPassed = true;
+                for (var key in results.tests) {
+                  if (!results.tests[key].passed) {
+                    allPassed = false;
+                    break;
+                  }
+                }
+                finish(allPassed && results.errors.length === 0);
+              });
+            });
+          });
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

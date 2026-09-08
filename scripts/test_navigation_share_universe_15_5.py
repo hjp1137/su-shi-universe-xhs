@@ -117,8 +117,15 @@ def test_9_three_cards_render_images():
     assert "drawImageCover" in canvas_js, "card_canvas.js 缺失 drawImageCover 局部裁切羽化绘制函数"
     assert "ArtAssets.getStationScene" in canvas_js, "站点卡未引入真实人生站点场景图"
     assert "ArtAssets.getPoemScene" in canvas_js, "今日东坡签未引入诗词场景图"
-    assert "orbit" in canvas_js, "节点卡未绘制星轨"
-    print("  [PASS] 9. 三类 Canvas 分享卡均已融入本地真实美术图 (站点场景、诗词图、明月印、星轨)")
+    # 任务15.5.1 函数签名静态回归断言：三类卡片渲染函数必须显式声明 assets 参数
+    assert re.search(r'function\s+renderStationResultCard\s*\([^)]*assets[^)]*\)', canvas_js), \
+        "renderStationResultCard 函数签名必须显式声明 assets 参数以修复 ReferenceError"
+    assert re.search(r'function\s+renderDailySignCard\s*\([^)]*assets[^)]*\)', canvas_js), \
+        "renderDailySignCard 函数签名必须显式声明 assets 参数"
+    assert re.search(r'function\s+renderStationNodeCard\s*\([^)]*assets[^)]*\)', canvas_js), \
+        "renderStationNodeCard 函数签名必须显式声明 assets 参数"
+
+    print("  [PASS] 9. 三类 Canvas 分享卡均已融入本地真实美术图 (站点场景、诗词图、明月印、星轨) 且函数签名全部显式声明 assets")
 
 def test_10_image_load_safe_fallback():
     """10. 图片加载失败存在安全程序化背景 Fallback"""

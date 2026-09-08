@@ -316,7 +316,7 @@
   /**
    * 绘制类型 1：人生站点卡 (station_result)
    */
-  function renderStationResultCard(ctx, vm, width, height) {
+  function renderStationResultCard(ctx, vm, width, height, assets) {
     drawBackground(ctx, width, height);
 
     // 1. 上部融入真实人生场景素材 (占上部约 40%，配合底部水墨羽化)
