@@ -1261,6 +1261,47 @@
   }
 
   /**
+   * 任务 15.7 核心产品对象：我的东坡答案 (DongpoAnswer)
+   * 满足任务书 2.1 与 2.2 规范：统一领域对象，Result 页面与分享卡同源复用
+   * @param {string} stationId
+   * @param {string} moodId
+   * @returns {Object} 稳定、可复用的 DongpoAnswer 实体
+   */
+  function buildDongpoAnswer(stationId, moodId) {
+    var vm = buildShareCardViewModel(stationId, moodId);
+    if (!vm) return null;
+
+    return {
+      // 统一标准驼峰字段 (任务 15.7 领域对象规范)
+      stationId: vm.station_id,
+      stationName: vm.station_name,
+      stationTheme: vm.theme,
+      stationShortName: vm.station_short_name,
+      stationOrder: (vm.order || 1),
+      quote: vm.quote_text,
+      quoteSource: vm.work_title ? ('《' + vm.work_title + '》') : '',
+      insight: vm.dongpo_view,
+      microAction: vm.today_action || '出去走走十分钟，不解决问题，只让自己慢下来。',
+      topTraits: vm.keywords || [],
+      timePlace: (vm.station_time_label ? (vm.station_time_label + ' · ') : '') + (vm.station_place || ''),
+
+      // 兼具下划线命名（与既有历史测试和 CardCanvas 100% 互通）
+      station_id: vm.station_id,
+      station_name: vm.station_name,
+      station_short_name: vm.station_short_name,
+      theme: vm.theme,
+      keywords: vm.keywords,
+      mood_id: vm.mood_id,
+      quote_text: vm.quote_text,
+      work_title: vm.work_title,
+      dongpo_view: vm.dongpo_view,
+      today_action: vm.today_action,
+      summary_fact: vm.summary_fact,
+      summary_story: vm.summary_story
+    };
+  }
+
+  /**
    * 构建人生节点卡 ViewModel (供漫游九大站点时导出分享卡复用)
    * @param {string} stationId
    * @returns {Object} 节点卡可序列化 ViewModel
@@ -1355,6 +1396,7 @@
   Quiz.calculateQuizResult = calculateQuizResult;
   Quiz.createQuizSession = createQuizSession;
   Quiz.buildShareCardViewModel = buildShareCardViewModel;
+  Quiz.buildDongpoAnswer = buildDongpoAnswer;
   Quiz.buildStationNodeCardViewModel = buildStationNodeCardViewModel;
   Quiz.ExperimentScoring = ExperimentScoring;
   Quiz.mapExperimentOutcome = mapExperimentOutcome;

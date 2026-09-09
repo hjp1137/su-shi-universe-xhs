@@ -4447,3 +4447,149 @@
   bottom: 0;
   background: linear-gradient(180deg, rgba(14, 24, 48, 0.08) 0%, rgba(14, 24, 48, 0.55) 100%);
 }
+
+/* ==========================================================================
+   任务 15.7: 产品价值主线与内容层级重构样式 (Chrome 61 兼容，零 flex gap)
+   ========================================================================== */
+.home-benefits-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 330px;
+  margin-top: 4px;
+  margin-bottom: var(--space-4);
+}
+
+.home-benefit-pill {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: rgba(22, 33, 56, 0.65);
+  border: 1px solid rgba(217, 185, 120, 0.28);
+  border-radius: var(--radius-pill);
+  padding: 6px 14px;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.home-benefit-pill:last-child {
+  margin-bottom: 0;
+}
+
+.home-benefit-pill .benefit-tag {
+  flex-shrink: 0;
+  display: inline-block;
+  padding: 2px 8px;
+  background: rgba(217, 185, 120, 0.18);
+  color: var(--color-warm);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(217, 185, 120, 0.35);
+  margin-right: 10px;
+}
+
+.home-benefit-pill .benefit-txt {
+  flex: 1;
+  font-size: 12px;
+  color: var(--color-moon);
+  letter-spacing: 0.5px;
+  text-align: left;
+}
+
+/* 首页次级探索入口 */
+.home-secondary-explore {
+  width: 100%;
+  margin-top: var(--space-2);
+}
+
+.home-secondary-title {
+  font-size: var(--font-size-caption);
+  color: var(--color-warm);
+  letter-spacing: 1.5px;
+  text-align: center;
+  opacity: 0.9;
+  margin-bottom: var(--space-3);
+}
+
+/* Result 页面“我的东坡答案”专属模块 */
+.result-answer-block {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(217, 185, 120, 0.2);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-3);
+  text-align: left;
+}
+
+.result-answer-subhead {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-warm);
+  letter-spacing: 1.5px;
+  margin-bottom: 6px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid rgba(217, 185, 120, 0.3);
+}
+
+.result-action-text {
+  font-size: 14px;
+  color: var(--color-moon);
+  line-height: 1.6;
+  letter-spacing: 0.5px;
+}
+
+.result-quote-source {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  text-align: right;
+  margin-top: 4px;
+  margin-bottom: var(--space-3);
+  letter-spacing: 1px;
+}
+
+/* 站点详情顶部上下文提示 Banner */
+.station-context-banner {
+  width: 100%;
+  padding: 10px 14px;
+  margin-bottom: var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  line-height: 1.5;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.station-context-banner.is-from-result {
+  background: rgba(217, 185, 120, 0.12);
+  border: 1px solid rgba(217, 185, 120, 0.38);
+  color: #f7eedc;
+}
+
+.station-context-banner.is-from-universe {
+  background: rgba(30, 51, 82, 0.65);
+  border: 1px solid rgba(111, 175, 194, 0.35);
+  color: #e3edf5;
+}
+
+.station-context-banner .context-banner-icon {
+  color: var(--color-warm);
+  margin-right: 8px;
+  font-size: 14px;
+}
+
+/* 人生星河叙事弧线样式 */
+.universe-arc-desc {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  font-style: italic;
+  margin-top: 4px;
+}

@@ -34,8 +34,15 @@
     this.targetTiltX = 0;
     this.targetTiltY = 0;
 
+    this.isDodging = false;
+    this.currentParticleOpacity = 0.32;
+
     this._onPointerMove = this._onPointerMove.bind(this);
   }
+
+  HeroScene.prototype.setDodgeText = function (isDodging) {
+    this.isDodging = !!isDodging;
+  };
 
   HeroScene.prototype.init = function () {
     var cfg = this.qm.getConfig();
@@ -180,8 +187,11 @@
       this.mountains[i].position.x += Math.sin(time * speed) * 0.0008;
     }
 
-    // 微星点缓慢浮动
-    if (this.particles) {
+    // 微星点缓慢浮动并避让
+    if (this.particles && this.particles.material) {
+      var targetParticleOpacity = this.isDodging ? 0.06 : 0.32;
+      this.currentParticleOpacity += (targetParticleOpacity - this.currentParticleOpacity) * 0.1;
+      this.particles.material.opacity = this.currentParticleOpacity;
       this.particles.rotation.y = time * 0.02;
       this.particles.rotation.x = Math.sin(time * 0.015) * 0.05;
     }

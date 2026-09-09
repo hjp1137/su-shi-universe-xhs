@@ -24,6 +24,7 @@
     engine = new Effects.WebGLEngine(qm, fallbackEngine);
 
     var success = engine.init(container);
+    engine.setDodgeText(pendingDodgeText);
     isInitialized = true;
     return success;
   }
@@ -93,6 +94,23 @@
     isInitialized = false;
   }
 
+  var pendingDodgeText = false;
+
+  function setDodgeText(dodge) {
+    pendingDodgeText = !!dodge;
+    if (engine && typeof engine.setDodgeText === 'function') {
+      engine.setDodgeText(dodge);
+    }
+  }
+
+  function isDodgeTextActive() {
+    return engine ? engine.isTextDodging : pendingDodgeText;
+  }
+
+  function getEngine() {
+    return engine;
+  }
+
   // 暴露公共接口
   Effects.init = init;
   Effects.mount = mount;
@@ -103,4 +121,7 @@
   Effects.fallback = fallback;
   Effects.simulateContextLost = simulateContextLost;
   Effects.destroy = destroy;
+  Effects.setDodgeText = setDodgeText;
+  Effects.isDodgeTextActive = isDodgeTextActive;
+  Effects.getEngine = getEngine;
 })();

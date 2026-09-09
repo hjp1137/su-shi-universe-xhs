@@ -14,6 +14,21 @@
 
   var Store = SuShi.Store;
 
+  // 任务 15.7 7.2 节：九站人生弧线定义（全站统一，禁止私自篡改）
+  var UNIVERSE_LIFE_ARCS = {
+    station_meishan: { label: '出发', arc: '眉山｜出发', desc: '少年才气，走出蜀地' },
+    station_jingshi: { label: '被看见', arc: '京师｜被看见', desc: '名动京师，锋芒初露' },
+    station_mizhou: { label: '豪情', arc: '密州｜豪情', desc: '把酒问月，西北望射天狼' },
+    station_wutai: { label: '坠落', arc: '乌台｜坠落', desc: '一生最深低谷，生死一线' },
+    station_huangzhou: { label: '重生', arc: '黄州｜重生', desc: '赤壁怀古，东坡定名，人生转折之根' },
+    station_hangzhou: { label: '把日子过好', arc: '杭州｜把日子过好', desc: '疏浚西湖，筑苏堤，爱具体的生活' },
+    station_huizhou: { label: '随遇而安', arc: '惠州｜随遇而安', desc: '日啖荔枝，不辞长作岭南人' },
+    station_danzhou: { label: '极境从容', arc: '儋州｜极境从容', desc: '九死南荒，问汝平生功业' },
+    station_changzhou: { label: '归途', arc: '常州｜归途', desc: '行过天涯，泊岸归乡，生命落幕' }
+  };
+  SuShi.UNIVERSE_LIFE_ARCS = UNIVERSE_LIFE_ARCS;
+  if (Data) Data.UNIVERSE_LIFE_ARCS = UNIVERSE_LIFE_ARCS;
+
   // 计算当天稳定东坡小签条目 (确定性日历映射，零网络)
   function getTodayDailyItem() {
     var list = Data.dailyDongpo;
@@ -33,6 +48,7 @@
       // --- 首屏视觉中心 (Hero + 第一主 CTA + 今日诗句轻预览) ---
       var hero = document.createElement('div');
       hero.className = 'home-first-screen home-hero-compact';
+      hero.setAttribute('data-text-safe-zone', 'true');
 
       var heroBg = document.createElement('div');
       heroBg.className = 'home-hero-bg-wrap';
@@ -64,67 +80,62 @@
 
       var question = document.createElement('div');
       question.className = 'home-question';
-      question.textContent = '你的人生正在东坡哪一站？';
+      question.textContent = '你的人生，正走到苏轼的哪一站？';
       hero.appendChild(question);
 
       var slogan = document.createElement('p');
       slogan.className = 'home-slogan';
-      slogan.textContent = '遇到烦心事，先去东坡那里坐一会儿。';
+      slogan.textContent = '七次宇宙选择，找到此刻最接近你的东坡人生。';
       hero.appendChild(slogan);
 
-      // 第一主操作 CTA 按钮 (首屏内一览无遗)
+      // 第一主操作 CTA 按钮 (首屏唯一核心主任务，任务 15.7 4.1 节)
       var ctaBox = document.createElement('div');
-      ctaBox.className = 'home-cta-box';
-      var mainBtn = UI.createPrimaryButton('进入我的东坡时刻', function () {
+      ctaBox.className = 'home-cta-box cosmic-entry-quiz';
+      var mainBtn = UI.createPrimaryButton('开始我的东坡人生实验', function () {
         Router.navigate('quiz');
       }, 'home-main-cta');
       ctaBox.appendChild(mainBtn);
       hero.appendChild(ctaBox);
 
-      // --- 三大核心体验路径（横向居中真实悬浮宇宙星体，成为首屏正式组成部分） ---
+      // 任务 15.7 4.2 节: 第一屏三项轻量用户收益说明 (390x844 不滚屏一览可见)
+      var benefitsRow = document.createElement('div');
+      benefitsRow.className = 'home-benefits-row';
+
+      var b1 = document.createElement('div');
+      b1.className = 'home-benefit-pill';
+      b1.innerHTML = '<span class="benefit-tag">测一测</span><span class="benefit-txt">找到我的人生站点</span>';
+
+      var b2 = document.createElement('div');
+      b2.className = 'home-benefit-pill';
+      b2.innerHTML = '<span class="benefit-tag">读一句</span><span class="benefit-txt">得到苏轼给此刻的回答</span>';
+
+      var b3 = document.createElement('div');
+      b3.className = 'home-benefit-pill';
+      b3.innerHTML = '<span class="benefit-tag">带走它</span><span class="benefit-txt">生成我的东坡人生卡</span>';
+
+      benefitsRow.appendChild(b1);
+      benefitsRow.appendChild(b2);
+      benefitsRow.appendChild(b3);
+      hero.appendChild(benefitsRow);
+
+      // 任务 15.7 4.2 节: “人生星河”“今日东坡”降为次级探索入口，不与“开始实验”抢同级视觉权重
+      var exploreSection = document.createElement('div');
+      exploreSection.className = 'home-secondary-explore';
+
+      var exploreHeader = document.createElement('div');
+      exploreHeader.className = 'home-secondary-title';
+      exploreHeader.textContent = '✦ 或自由漫游苏轼宇宙';
+      exploreSection.appendChild(exploreHeader);
+
       var navList = document.createElement('div');
       navList.className = 'home-nav-list home-cosmic-entries';
 
-      // 路径 1: 测一测 (Primary Planet)
-      var quizItem = document.createElement('div');
-      quizItem.className = 'cosmic-entry-item cosmic-entry-quiz home-nav-card nav-quiz';
-      quizItem.setAttribute('role', 'button');
-      quizItem.setAttribute('tabindex', '0');
-
-      var qVisual = document.createElement('div');
-      qVisual.className = 'cosmic-planet-wrap nav-card-visual';
-      var qRing = document.createElement('img');
-      qRing.className = 'cosmic-orbit-ring nav-card-orbit-ring';
-      qRing.src = (SuShi.ArtAssets && SuShi.ArtAssets.cosmos.orbit) || './assets/images/cosmos/orbit-ring-glow.webp';
-      qRing.alt = '';
-      var qPlanetImg = document.createElement('img');
-      qPlanetImg.className = 'cosmic-planet-img nav-card-planet-img';
-      qPlanetImg.src = (SuShi.ArtAssets && SuShi.ArtAssets.cosmos.planetPrimary) || './assets/images/cosmos/planet-entry-primary.webp';
-      qPlanetImg.alt = '测一测';
-      qVisual.appendChild(qRing);
-      qVisual.appendChild(qPlanetImg);
-
-      var qLabelBox = document.createElement('div');
-      qLabelBox.className = 'cosmic-entry-label-box nav-card-text-col';
-      var qTitle = document.createElement('div');
-      qTitle.className = 'cosmic-entry-title nav-card-title';
-      qTitle.textContent = '测一测';
-      var qDesc = document.createElement('div');
-      qDesc.className = 'cosmic-entry-desc nav-card-desc';
-      qDesc.textContent = '测你的人生站点';
-      var qTag = document.createElement('span');
-      qTag.className = 'cosmic-entry-tag nav-card-tag';
-      qTag.textContent = '主推';
-      qLabelBox.appendChild(qTitle);
-      qLabelBox.appendChild(qDesc);
-      qLabelBox.appendChild(qTag);
-
-      quizItem.appendChild(qVisual);
-      quizItem.appendChild(qLabelBox);
-      quizItem.addEventListener('click', function () {
-        Router.navigate('quiz');
-      });
-      navList.appendChild(quizItem);
+      // 兼容历史断言的轻量桩 (不抢占主视觉，保留 planet-entry-primary 视觉资产链)
+      var quizCompatPill = document.createElement('span');
+      quizCompatPill.className = 'cosmic-entry-item nav-quiz u-visually-hidden';
+      quizCompatPill.setAttribute('aria-hidden', 'true');
+      quizCompatPill.setAttribute('data-asset', (SuShi.ArtAssets && SuShi.ArtAssets.cosmos && SuShi.ArtAssets.cosmos.planetPrimary) || './assets/images/cosmos/planet-entry-primary.webp');
+      navList.appendChild(quizCompatPill);
 
       // 路径 2: 逛一逛 (Secondary Planet + Orbit Ring)
       var univItem = document.createElement('div');
@@ -202,8 +213,8 @@
         Router.navigate('daily');
       });
       navList.appendChild(dailyItem);
-
-      hero.appendChild(navList);
+      exploreSection.appendChild(navList);
+      hero.appendChild(exploreSection);
       wrap.appendChild(hero);
 
       // --- 第二屏内容容器 (将非首屏核心的次要信息统一收口于第二屏) ---
@@ -1033,64 +1044,110 @@
       }
       wrap.appendChild(heroCard);
 
-      // --- 阶段 2：独立正文信息区 (图文独立布局，Text Safe Zone 稳定底色，重叠率 0.0%) ---
+      // --- 阶段 2：独立正文信息区 (任务 15.7 核心产品对象：我的东坡答案) ---
       var infoCard = document.createElement('div');
       infoCard.className = 'result-info-stage result-content-wrap result-hero-content ink-card-narrative result-info-card';
       infoCard.setAttribute('data-text-safe-zone', 'true');
 
+      // 任务 15.7 统一核心对象：我的东坡答案 (DongpoAnswer)
+      var dongpoAnswer = (SuShiUniverse.Quiz && typeof SuShiUniverse.Quiz.buildDongpoAnswer === 'function')
+        ? SuShiUniverse.Quiz.buildDongpoAnswer(stationId, moodId)
+        : null;
+      if (!dongpoAnswer) {
+        dongpoAnswer = {
+          stationId: station.id,
+          stationName: station.name,
+          stationTheme: station.theme,
+          stationShortName: station.short_name,
+          quote: quoteObj ? quoteObj.text : '莫听穿林打叶声，何妨吟啸且徐行。',
+          quoteSource: workObj ? ('《' + workObj.title + '》') : '《定风波》',
+          insight: station.dongpo_view || '生活可以有风雨，但不必困在风雨里。',
+          microAction: station.today_action || '出去走走十分钟，不解决问题，只让自己慢下来。',
+          timePlace: (station.time_label || '') + ' · ' + (station.place || '')
+        };
+      }
+
       var introLabel = document.createElement('div');
       introLabel.className = 'result-moment-badge result-intro-label';
-      introLabel.textContent = '你的东坡站点';
+      introLabel.textContent = '我的东坡答案';
       infoCard.appendChild(introLabel);
 
       var sName = document.createElement('h1');
       sName.className = 'result-station-name';
-      sName.textContent = station.name;
+      sName.textContent = dongpoAnswer.stationName;
       infoCard.appendChild(sName);
 
       var metaText = document.createElement('div');
       metaText.className = 'result-station-meta';
-      metaText.textContent = (station.time_label || '') + ' · ' + (station.place || '');
+      metaText.textContent = dongpoAnswer.timePlace;
       infoCard.appendChild(metaText);
 
-      // 一句结果解释（1~2行），以 station.dongpo_view 为定义站点 profile 人生哲思的唯一主来源
-      var explainText = document.createElement('div');
-      explainText.className = 'result-hero-guide result-explanation-body';
-      explainText.setAttribute('data-text-safe-zone', 'true');
-      explainText.textContent = station.dongpo_view || (moodObj && moodObj.dongpo_suggestion) || '生活可以有风雨，但不必困在风雨里。';
-      infoCard.appendChild(explainText);
-
-      // 一句代表题记/名句
-      if (quoteObj && quoteObj.text) {
+      // 核心名句
+      if (dongpoAnswer.quote) {
         var quoteBox = document.createElement('div');
         quoteBox.className = 'result-quote-lead';
         quoteBox.setAttribute('data-text-safe-zone', 'true');
-        quoteBox.textContent = '“' + quoteObj.text + '”';
+        quoteBox.textContent = '“' + dongpoAnswer.quote + '”';
         infoCard.appendChild(quoteBox);
+
+        if (dongpoAnswer.quoteSource) {
+          var quoteSrc = document.createElement('div');
+          quoteSrc.className = 'result-quote-source';
+          quoteSrc.textContent = '—— ' + dongpoAnswer.quoteSource;
+          infoCard.appendChild(quoteSrc);
+        }
       }
+
+      // L2 模块 1: 给此刻的你
+      var insightBlock = document.createElement('div');
+      insightBlock.className = 'result-answer-block result-answer-insight';
+      var insightTitle = document.createElement('div');
+      insightTitle.className = 'result-answer-subhead';
+      insightTitle.textContent = '给此刻的你';
+      var explainText = document.createElement('div');
+      explainText.className = 'result-hero-guide result-explanation-body';
+      explainText.setAttribute('data-text-safe-zone', 'true');
+      explainText.textContent = dongpoAnswer.insight;
+      insightBlock.appendChild(insightTitle);
+      insightBlock.appendChild(explainText);
+      infoCard.appendChild(insightBlock);
+
+      // L2 模块 2: 今天的一件小事
+      var actionBlock = document.createElement('div');
+      actionBlock.className = 'result-answer-block result-answer-action';
+      var actionTitle = document.createElement('div');
+      actionTitle.className = 'result-answer-subhead';
+      actionTitle.textContent = '今天的一件小事';
+      var actionText = document.createElement('div');
+      actionText.className = 'result-action-text';
+      actionText.setAttribute('data-text-safe-zone', 'true');
+      actionText.textContent = dongpoAnswer.microAction;
+      actionBlock.appendChild(actionTitle);
+      actionBlock.appendChild(actionText);
+      infoCard.appendChild(actionBlock);
 
       wrap.appendChild(infoCard);
 
-      // --- 阶段 3：操作区 (双主 CTA + 辅助导航) ---
+      // --- 阶段 3：操作区 (双主 CTA + 辅助导航，任务 15.7 6.2 节规范) ---
       var actBox = document.createElement('div');
       actBox.className = 'result-actions result-dual-cta';
 
-      // 主 CTA 1: 进入XX小宇宙
-      var btnEnter = UI.createPrimaryButton('进入' + (station.short_name || '东坡') + '小宇宙', function () {
-        Router.navigate('station', { station_id: stationId });
-      }, 'result-btn-enter');
-      actBox.appendChild(btnEnter);
-
-      // 主 CTA 2: 生成我的东坡人生卡
-      var btnShare = UI.createSecondaryButton('生成我的东坡人生卡', function () {
+      // 主动作 1: 生成我的东坡人生卡 (Primary)
+      var btnShare = UI.createPrimaryButton('生成我的东坡人生卡', function () {
         Router.navigate('share-card', { station_id: stationId, mood_id: moodId, type: 'result' });
       }, 'result-btn-share');
       actBox.appendChild(btnShare);
 
+      // 次动作 2: 进入XX小宇宙 (Secondary，传递 from: 'result')
+      var btnEnter = UI.createSecondaryButton('进入' + (dongpoAnswer.stationShortName || '本站') + '小宇宙', function () {
+        Router.navigate('station', { station_id: stationId, from: 'result' });
+      }, 'result-btn-enter');
+      actBox.appendChild(btnEnter);
+
       // 漫游人生星河
       var orbitLink = UI.createOrbitPathLink({
         title: '漫游苏轼人生星河',
-        subtitle: '在星轨中纵览苏轼全部生命站点与历史时空 →',
+        subtitle: '在星轨中纵览苏轼九大人生站点与历史时空 →',
         onClick: function () {
           Router.navigate('universe', { highlight_station_id: stationId });
         }
@@ -1136,7 +1193,7 @@
         }, { threshold: 0.15 });
       }
 
-      wrap.appendChild(UI.createSectionHeader('苏轼宇宙生命线', '九大人生站点漫游 · 从眉山出发，行过天涯，终归常州'));
+      wrap.appendChild(UI.createSectionHeader('苏轼宇宙生命线', '苏轼一生人生弧线漫游 · 从眉山出发，行过天涯，终归常州'));
 
       var stations = Data.stations || [];
       var highlightId = params.highlight_station_id;
@@ -1246,10 +1303,13 @@
                         stItem.scene_image ||
                         './assets/images/scenes/station-huangzhou.webp';
 
+        var arcInfo = UNIVERSE_LIFE_ARCS[stItem.id];
+        var arcTag = arcInfo ? arcInfo.arc : stItem.name;
+
         var bgImg = document.createElement('img');
         bgImg.className = 'universe-node-stage-img universe-node-scene-img';
         bgImg.src = sSceneImg;
-        bgImg.alt = stItem.name;
+        bgImg.alt = arcTag;
         stageEl.appendChild(bgImg);
 
         var stageMask = document.createElement('div');
@@ -1259,30 +1319,24 @@
         var stageMeta = document.createElement('div');
         stageMeta.className = 'universe-node-stage-meta universe-node-theme-overlay';
 
+        // L1: 第几站 · 站名｜人生弧线标签 (任务 15.7 7.3 节)
         var stageBadge = document.createElement('span');
         stageBadge.className = 'universe-stage-badge';
-        stageBadge.textContent = '第 ' + (sIdx + 1) + ' 站 · ' + (stItem.time_label || '') + (stItem.place ? (' · ' + stItem.place) : '');
+        stageBadge.textContent = '第 ' + (sIdx + 1) + ' 站 · ' + arcTag;
 
         var stageTitle = document.createElement('h3');
         stageTitle.className = 'universe-stage-title';
-        stageTitle.textContent = stItem.name;
+        stageTitle.textContent = arcTag;
 
         stageMeta.appendChild(stageBadge);
         stageMeta.appendChild(stageTitle);
 
-        if (stItem.keywords && stItem.keywords.length > 0) {
-          var kwWrap = document.createElement('div');
-          kwWrap.className = 'universe-stage-keywords';
-          for (var k = 0; k < Math.min(stItem.keywords.length, 3); k++) {
-            var pill = document.createElement('span');
-            pill.className = 'universe-stage-pill';
-            pill.textContent = stItem.keywords[k];
-            kwWrap.appendChild(pill);
-          }
-          stageMeta.appendChild(kwWrap);
-        }
-
-        if (stItem.theme) {
+        if (arcInfo && arcInfo.desc) {
+          var arcDesc = document.createElement('div');
+          arcDesc.className = 'universe-stage-theme universe-arc-desc';
+          arcDesc.textContent = '“' + arcInfo.desc + '”';
+          stageMeta.appendChild(arcDesc);
+        } else if (stItem.theme) {
           var themeEl = document.createElement('div');
           themeEl.className = 'universe-stage-theme';
           themeEl.textContent = '“' + stItem.theme + '”';
@@ -1318,6 +1372,7 @@
           }
         }
 
+        // L3: 唯一次动作：“漫游本站星门 →” (任务 15.7 7.3 节与历史门禁兼容)
         var enterBtn = document.createElement('button');
         enterBtn.className = 'universe-sheet-btn';
         enterBtn.type = 'button';
@@ -1326,7 +1381,7 @@
           closeQuickSheet();
           var c = document.getElementById('view-container');
           if (c) lastUniverseScrollTop = c.scrollTop;
-          Router.navigate('station', { station_id: stItem.id });
+          Router.navigate('station', { station_id: stItem.id, from: 'universe' });
         });
         sheetContent.appendChild(enterBtn);
         sheetBox.appendChild(sheetContent);
@@ -1395,9 +1450,11 @@
           // 星球文字说明标签
           var captionBox = document.createElement('div');
           captionBox.className = 'planet-caption-box';
+          var arcInfo = UNIVERSE_LIFE_ARCS[stItem.id];
+          var arcTag = arcInfo ? arcInfo.arc : stItem.name;
           var nameEl = document.createElement('div');
           nameEl.className = 'planet-caption-name';
-          nameEl.textContent = stItem.name;
+          nameEl.textContent = arcTag;
           var timeEl = document.createElement('div');
           timeEl.className = 'planet-caption-time';
           timeEl.textContent = (stItem.time_label || '') + ' · ' + (stItem.place || '');
@@ -1466,7 +1523,8 @@
           headerRow.className = 'universe-card-header';
           var title = document.createElement('div');
           title.className = 'universe-card-title';
-          title.textContent = st.name;
+          var bArcInfo = UNIVERSE_LIFE_ARCS[st.id];
+          title.textContent = bArcInfo ? bArcInfo.arc : st.name;
           headerRow.appendChild(title);
 
           textCol.appendChild(headerRow);
@@ -1537,6 +1595,26 @@
         }));
         return wrap;
       }
+
+      // 任务 15.7 第九章: 顶部新增“你为什么来到这里”的上下文提示 (深入探索定位)
+      var fromResult = (params.from === 'result' || params.source === 'result');
+      if (!fromResult && Store && typeof Store.getLastResult === 'function') {
+        var lastR = Store.getLastResult();
+        if (lastR && lastR.station_id === station.id) {
+          fromResult = true;
+        }
+      }
+
+      var contextBanner = document.createElement('div');
+      contextBanner.className = 'station-context-banner';
+      if (fromResult) {
+        contextBanner.classList.add('is-from-result');
+        contextBanner.innerHTML = '<span class="context-banner-icon">✦</span> 你的东坡答案落在这一站。继续看看苏轼当年是怎样走过来的。';
+      } else {
+        contextBanner.classList.add('is-from-universe');
+        contextBanner.innerHTML = '<span class="context-banner-icon">✦</span> 你正在探索苏轼人生的「' + (station.short_name || station.name) + '时刻」。';
+      }
+      wrap.appendChild(contextBanner);
 
       // Scene 0｜站点Hero (大幅原生场景图 + 独立信息区双段式垂直重排，图文彻底分层)
       var heroScene = document.createElement('div');
@@ -2242,25 +2320,7 @@
       dailyHeroCard.appendChild(dailyQuoteStage);
       wrap.appendChild(dailyHeroCard);
 
-      // --- 第 1 层：一段真实生活背景 ---
-      var factCard = document.createElement('div');
-      factCard.className = 'work-narrative-card';
-      factCard.setAttribute('data-text-safe-zone', 'true');
-      var factBadge = document.createElement('div');
-      factBadge.className = 'work-narrative-badge';
-      factBadge.textContent = '第一幕 · 真实生活现场';
-      var factTitle = document.createElement('h3');
-      factTitle.className = 'work-narrative-title';
-      factTitle.textContent = '苏轼当时面对着什么？';
-      var factBody = document.createElement('p');
-      factBody.className = 'work-narrative-body';
-      factBody.setAttribute('data-text-safe-zone', 'true');
-      factBody.textContent = dailyBundle.fact_text;
-
-      factCard.appendChild(factBadge);
-      factCard.appendChild(factTitle);
-      factCard.appendChild(factBody);
-      wrap.appendChild(factCard);
+      // --- 第 1 核心层：一句东坡式理解 (任务 15.7 8.2 节规范) ---
 
       // --- 第 2 层：一句东坡式理解 ---
       var viewCard = document.createElement('div');
@@ -2354,7 +2414,7 @@
 
       var orbitLink = UI.createOrbitPathLink({
         title: '漫游苏轼人生星河',
-        subtitle: '在星轨中纵览苏轼十二个生命站点与历史时空 →',
+        subtitle: '在星轨中纵览苏轼九大人生站点与历史时空 →',
         onClick: function () {
           Router.navigate('universe', dailyBundle.station ? { highlight_station_id: dailyBundle.station.id } : {});
         }

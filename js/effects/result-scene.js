@@ -40,7 +40,14 @@
     this.convergeDuration = 1.0; // 1.0秒收敛动画
     this.elapsedTime = 0;
     this.isSettled = false;
+    this.isDodging = false;
+    this.currentOpacity = 0.36;
+    this.currentHaloOpacity = 0.18;
   }
+
+  ResultScene.prototype.setDodgeText = function (isDodging) {
+    this.isDodging = !!isDodging;
+  };
 
   ResultScene.prototype.init = function (params) {
     var cfg = this.qm.getConfig();
@@ -157,10 +164,22 @@
       }
     }
 
-    // 光晕随汇聚扩散至目标通透度
+    // 任务 15.7 12.1 节: Text Safe Zone 粒子与光晕真实退让机制
+    var targetParticleOpacity = this.isDodging ? 0.08 : 0.36;
+    var targetHaloOpacity = this.isDodging ? 0.02 : 0.18;
+
+    if (this.convergePoints && this.convergePoints.material) {
+      this.currentOpacity += (targetParticleOpacity - this.currentOpacity) * 0.1;
+      this.convergePoints.material.opacity = this.currentOpacity;
+    }
+
+    // 光晕随汇聚扩散至目标通透度并进行避让
     if (this.centerHalo && this.centerHalo.material) {
-      this.centerHalo.material.opacity = 0.05 + ease * 0.18 + Math.sin(time * 1.5) * 0.03;
-      this.centerHalo.scale.setScalar(0.8 + ease * 0.4);
+      this.currentHaloOpacity += (targetHaloOpacity - this.currentHaloOpacity) * 0.1;
+      var baseHaloY = this.isDodging ? 1.8 : 1.2;
+      this.centerHalo.position.y += (baseHaloY - this.centerHalo.position.y) * 0.1;
+      this.centerHalo.material.opacity = (0.05 + ease * this.currentHaloOpacity) * (this.isDodging ? 0.3 : 1.0) + Math.sin(time * 1.5) * (this.isDodging ? 0.005 : 0.03);
+      this.centerHalo.scale.setScalar(0.8 + ease * (this.isDodging ? 0.2 : 0.4));
     }
   };
 

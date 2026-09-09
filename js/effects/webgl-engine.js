@@ -47,6 +47,9 @@
     this.rafId = null;
     this.lastTime = 0;
 
+    this.isTextDodging = false;
+    this._dodgeCheckCounter = 0;
+
     // 绑定上下文
     this._onVisibilityChange = this._onVisibilityChange.bind(this);
     this._onContextLost = this._onContextLost.bind(this);
@@ -173,6 +176,9 @@
     try {
       this.currentSceneInstance = new SceneConstructor(this.scene, this.camera, this.qm);
       this.currentSceneInstance.init(params);
+      if (typeof this.currentSceneInstance.setDodgeText === 'function') {
+        this.currentSceneInstance.setDodgeText(this.isTextDodging);
+      }
       this.resume();
     } catch (e) {
       console.error('[WebGLEngine] 挂载场景失败:', e);
@@ -237,6 +243,12 @@
     this.lastTime = timestamp;
 
     this.qm.recordFrame(deltaMs);
+
+    // 任务 15.7 12.1 节: 实时感知正文安全区并驱动粒子主动退让 (每20帧约333ms检测一次，零开销)
+    this._dodgeCheckCounter++;
+    if (this._dodgeCheckCounter % 20 === 0) {
+      this.checkTextSafeZone();
+    }
 
     if (this.currentSceneInstance && typeof this.currentSceneInstance.update === 'function') {
       this.currentSceneInstance.update(deltaMs / 1000, timestamp / 1000);
@@ -306,6 +318,30 @@
       }
     }
     return false;
+  };
+
+  WebGLEngine.prototype.setDodgeText = function (dodge) {
+    this.isTextDodging = !!dodge;
+    if (this.currentSceneInstance && typeof this.currentSceneInstance.setDodgeText === 'function') {
+      this.currentSceneInstance.setDodgeText(this.isTextDodging);
+    }
+  };
+
+  WebGLEngine.prototype.checkTextSafeZone = function () {
+    if (typeof document === 'undefined') return;
+    var safeEls = document.querySelectorAll('[data-text-safe-zone="true"]');
+    var shouldDodge = false;
+    var vh = window.innerHeight || 844;
+    for (var i = 0; i < safeEls.length; i++) {
+      var rect = safeEls[i].getBoundingClientRect();
+      if (rect.top < vh * 0.85 && rect.bottom > vh * 0.15 && rect.height > 0) {
+        shouldDodge = true;
+        break;
+      }
+    }
+    if (shouldDodge !== this.isTextDodging) {
+      this.setDodgeText(shouldDodge);
+    }
   };
 
   WebGLEngine.prototype.destroy = function () {

@@ -98,7 +98,14 @@
 
     this.flowSpeed = 0.5;
     this.targetSpeed = 0.5;
+    this.isDodging = false;
+    this.currentPointOpacity = 0.35;
+    this.currentHaloOpacity = 0.15;
   }
+
+  UniverseScene.prototype.setDodgeText = function (isDodging) {
+    this.isDodging = !!isDodging;
+  };
 
   UniverseScene.prototype.init = function (params) {
     var cfg = this.qm.getConfig();
@@ -210,17 +217,25 @@
     this.currentHaloColor.lerp(this.targetHaloColor, 0.05);
     this.flowSpeed += (this.targetSpeed - this.flowSpeed) * 0.05;
 
+    // 任务 15.7 12.1 节: Text Safe Zone 粒子与光晕真实退让机制
+    var targetPointOpacity = this.isDodging ? 0.08 : 0.35;
+    var targetHaloOpacity = this.isDodging ? 0.02 : 0.15;
+
     if (this.haloMesh && this.haloMesh.material) {
+      this.currentHaloOpacity += (targetHaloOpacity - this.currentHaloOpacity) * 0.1;
+      this.haloMesh.material.opacity = this.currentHaloOpacity;
       this.haloMesh.material.color.copy(this.currentHaloColor);
-      this.haloMesh.scale.setScalar(1 + Math.sin(time * 1.2) * 0.08);
+      this.haloMesh.scale.setScalar(1 + Math.sin(time * 1.2) * (this.isDodging ? 0.02 : 0.08));
     }
 
     if (this.ambientWater && this.ambientWater.material) {
       this.ambientWater.material.color.copy(this.currentColor);
     }
 
-    // 长河星轨粒子缓缓绕流
-    if (this.riverPoints) {
+    // 长河星轨粒子缓缓绕流并避让
+    if (this.riverPoints && this.riverPoints.material) {
+      this.currentPointOpacity += (targetPointOpacity - this.currentPointOpacity) * 0.1;
+      this.riverPoints.material.opacity = this.currentPointOpacity;
       this.riverPoints.rotation.y = time * 0.08 * this.flowSpeed;
       this.riverPoints.position.y = Math.sin(time * 0.5) * 0.15;
     }
