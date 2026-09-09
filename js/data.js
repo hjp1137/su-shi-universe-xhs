@@ -3192,6 +3192,17 @@
       ],
       "context_note": "青年苏轼以宽厚仁爱之道立身治世之初志。",
       "review_status": "approved"
+    },
+    {
+      "id": "quote_mianchi_01",
+      "text": "人生到处知何似，应似飞鸿踏雪泥。",
+      "quote_type": "original_poem",
+      "work_id": "work_he_ziyou_mianchi",
+      "source_ids": [
+        "source_sssc_cb"
+      ],
+      "context_note": "出蜀初仕忆眉山行役，以飞鸿雪泥寄寓对人生偶遇与出发的旷达释怀。",
+      "review_status": "approved"
     }
   ],
   "events": [
@@ -3407,7 +3418,9 @@
         "work_chufa_jiazhou",
         "work_yishi"
       ],
-      "quote_ids": [],
+      "quote_ids": [
+        "quote_mianchi_01"
+      ],
       "dongpo_view": "出发时我们都想走得很远。但真正决定一个人能走多远的，往往是少年时在心里扎下的根。",
       "today_action": "整理一下书桌或床头，把一本很久想读的书翻开读五页。",
       "source_ids": [

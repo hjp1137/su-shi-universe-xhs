@@ -100,8 +100,8 @@
       this.group.add(this.waterMesh);
     }
 
-    // 4. 稀疏漂浮水墨微星点
-    var pCount = cfg.particles || 40;
+    // 4. 稀疏漂浮水墨微星点 (任务 15.6.8.1 P1-D: 降噪、缩小、柔化)
+    var pCount = cfg.particles || 32;
     if (pCount > 0) {
       var pGeo = new THREE.BufferGeometry();
       var positions = new Float32Array(pCount * 3);
@@ -111,12 +111,35 @@
         positions[p * 3 + 2] = (Math.random() - 0.5) * 6;
       }
       pGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+      var softTex = null;
+      if (typeof document !== 'undefined') {
+        try {
+          var c = document.createElement('canvas');
+          c.width = 32;
+          c.height = 32;
+          var gCtx = c.getContext('2d');
+          if (gCtx) {
+            var rad = gCtx.createRadialGradient(16, 16, 0, 16, 16, 16);
+            rad.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
+            rad.addColorStop(0.35, 'rgba(255, 255, 255, 0.55)');
+            rad.addColorStop(0.7, 'rgba(255, 255, 255, 0.12)');
+            rad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            gCtx.fillStyle = rad;
+            gCtx.fillRect(0, 0, 32, 32);
+            softTex = new THREE.CanvasTexture(c);
+          }
+        } catch (e) {}
+      }
+
       var pMat = new THREE.PointsMaterial({
         color: 0xd8c8b4,
-        size: 0.08,
+        size: 0.048,
+        map: softTex,
         transparent: true,
-        opacity: 0.6,
-        depthWrite: false
+        opacity: 0.32,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending
       });
       this.particles = new THREE.Points(pGeo, pMat);
       this.group.add(this.particles);

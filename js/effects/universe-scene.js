@@ -120,23 +120,46 @@
 
     geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
 
+    var softTex = null;
+    if (typeof document !== 'undefined') {
+      try {
+        var c = document.createElement('canvas');
+        c.width = 32;
+        c.height = 32;
+        var gCtx = c.getContext('2d');
+        if (gCtx) {
+          var rad = gCtx.createRadialGradient(16, 16, 0, 16, 16, 16);
+          rad.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
+          rad.addColorStop(0.35, 'rgba(255, 255, 255, 0.55)');
+          rad.addColorStop(0.7, 'rgba(255, 255, 255, 0.12)');
+          rad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+          gCtx.fillStyle = rad;
+          gCtx.fillRect(0, 0, 32, 32);
+          softTex = new THREE.CanvasTexture(c);
+        }
+      } catch (e) {}
+    }
+
+    // 任务 15.6.8.1 P1-D: 星河粒子尺寸从 0.12 降至 0.055，透明度从 0.75 降至 0.35
     var mat = new THREE.PointsMaterial({
       color: 0xf6dfba,
-      size: 0.12,
+      size: 0.055,
+      map: softTex,
       transparent: true,
-      opacity: 0.75,
-      depthWrite: false
+      opacity: 0.35,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending
     });
 
     this.riverPoints = new THREE.Points(geo, mat);
     this.group.add(this.riverPoints);
 
-    // 2. 站点核心微光气晕 (柔和光圈)
+    // 2. 站点核心微光气晕 (柔和光圈，降低亮度避免干扰文字)
     var haloGeo = new THREE.CircleGeometry(2.5, 32);
     var haloMat = new THREE.MeshBasicMaterial({
       color: 0x4a7c6a,
       transparent: true,
-      opacity: 0.18,
+      opacity: 0.10,
       depthWrite: false
     });
     this.haloMesh = new THREE.Mesh(haloGeo, haloMat);

@@ -29,7 +29,9 @@
       "work_chufa_jiazhou",
       "work_yishi"
     ],
-    "quote_ids": [],
+    "quote_ids": [
+      "quote_mianchi_01"
+    ],
     "dongpo_view": "出发时我们都想走得很远。但真正决定一个人能走多远的，往往是少年时在心里扎下的根。",
     "today_action": "整理一下书桌或床头，把一本很久想读的书翻开读五页。",
     "source_ids": [

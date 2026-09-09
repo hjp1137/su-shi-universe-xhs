@@ -1211,9 +1211,26 @@
     var station = Data.getStationById(stationId) || Data.getStationById('station_huangzhou') || {};
     var mood = moodId ? Data.getMoodById(moodId) : null;
 
-    var quoteId = (mood && mood.recommended_quote_id) ||
-                  (station.quote_ids && station.quote_ids[0]) ||
-                  'quote_dingfengbo_01';
+    // 任务 15.6.8.1 P0: 代表诗句首选当前站点明确收录的代表诗词，严禁跨站点调用
+    var stationQuoteIds = (station && station.quote_ids) || [];
+    var quoteId = null;
+    if (mood && mood.recommended_quote_id && stationQuoteIds.indexOf(mood.recommended_quote_id) !== -1) {
+      quoteId = mood.recommended_quote_id;
+    } else if (stationQuoteIds.length > 0) {
+      quoteId = stationQuoteIds[0];
+    } else if (station && station.work_ids && station.work_ids.length > 0) {
+      for (var wIdx = 0; wIdx < station.work_ids.length; wIdx++) {
+        var wid = station.work_ids[wIdx];
+        var stWork = Data.getWorkById(wid);
+        if (stWork && stWork.quote_ids && stWork.quote_ids.length > 0) {
+          quoteId = stWork.quote_ids[0];
+          break;
+        }
+      }
+    }
+    if (!quoteId) {
+      quoteId = stationQuoteIds[0] || 'quote_dingfengbo_01';
+    }
     var quote = Data.getQuoteById(quoteId) || {};
     var work = quote.work_id ? Data.getWorkById(quote.work_id) : {};
 
@@ -1229,13 +1246,14 @@
       mood_id: mood ? mood.id : '',
       mood_name: mood ? mood.name : '',
       mood_dimension: mood ? mood.dimension : '',
+      mood_suggestion: (mood && mood.dongpo_suggestion) || '',
       quote_id: quote.id || '',
       quote_text: quote.text || '莫听穿林打叶声，何妨吟啸且徐行。',
       quote_context: quote.context_note || '',
       work_id: work.id || '',
       work_title: work.title || '定风波·莫听穿林打叶声',
       work_why: work.why_related || '',
-      dongpo_view: (mood && mood.dongpo_suggestion) || station.dongpo_view || '',
+      dongpo_view: station.dongpo_view || (mood && mood.dongpo_suggestion) || '生活可以有风雨，但不必困在风雨里。',
       today_action: station.today_action || '',
       summary_fact: station.summary_fact || '',
       summary_story: station.summary_story || ''

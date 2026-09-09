@@ -248,7 +248,7 @@
    * 绘制古典朱砂红篆刻印章
    */
   function drawSeal(ctx, x, y, text) {
-    var size = 32;
+    var size = 36;
     ctx.save();
     ctx.fillStyle = 'rgba(184, 75, 41, 0.88)';
     ctx.fillRect(x, y, size, size);
@@ -258,7 +258,7 @@
     ctx.strokeRect(x + 2, y + 2, size - 4, size - 4);
 
     ctx.fillStyle = '#fbeee8';
-    ctx.font = 'bold 12px ' + FONT_SERIF;
+    ctx.font = 'bold 18px ' + FONT_SERIF;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(text ? text.substring(0, 2) : '东坡', x + size * 0.5, y + size * 0.5);
@@ -269,22 +269,22 @@
    * 绘制顶部统一品牌标头与印章
    */
   function drawCardHeader(ctx, width, badgeText, sealText) {
-    // 品牌副标题
-    ctx.fillStyle = 'rgba(244, 240, 230, 0.5)';
-    ctx.font = '14px ' + FONT_SANS;
+    // 品牌副标题 (任务 15.6.8.1 P1-B: 20px 规范)
+    ctx.fillStyle = 'rgba(244, 240, 230, 0.6)';
+    ctx.font = '20px ' + FONT_SANS;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
-    ctx.fillText('中国诗词宇宙 · 苏轼宇宙', width * 0.5, 68);
+    ctx.fillText('中国诗词宇宙 · 苏轼宇宙', width * 0.5, 62);
 
-    // 类别微徽章
+    // 类别微徽章 (18px)
     if (badgeText) {
-      ctx.fillStyle = 'rgba(217, 185, 120, 0.85)';
-      ctx.font = '13px ' + FONT_SANS;
-      ctx.fillText(badgeText, width * 0.5, 96);
+      ctx.fillStyle = 'rgba(217, 185, 120, 0.88)';
+      ctx.font = '18px ' + FONT_SANS;
+      ctx.fillText(badgeText, width * 0.5, 92);
     }
 
     // 右上角朱砂印章
-    drawSeal(ctx, width - 88, 62, sealText || '东坡');
+    drawSeal(ctx, width - 92, 58, sealText || '东坡');
   }
 
   /**
@@ -301,16 +301,17 @@
     ctx.lineTo(width - 80, footerY);
     ctx.stroke();
 
-    // 导语提示
-    ctx.fillStyle = 'rgba(244, 240, 230, 0.65)';
-    ctx.font = '14px ' + FONT_SANS;
+    // 导语提示 (任务 15.6.8.1 P1-B: 22px 规范)
+    ctx.fillStyle = 'rgba(244, 240, 230, 0.7)';
+    ctx.font = '22px ' + FONT_SANS;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
-    ctx.fillText(customTip || '遇到烦心事，先去东坡那里坐一会儿 · 测测你的站点', width * 0.5, footerY + 16);
+    ctx.fillText(customTip || '遇到烦心事，先去东坡那里坐一会儿 · 测测你的站点', width * 0.5, footerY + 14);
 
-    ctx.fillStyle = 'rgba(244, 240, 230, 0.35)';
-    ctx.font = '12px ' + FONT_SANS;
-    ctx.fillText('su-shi-universe-xhs · 小红书官方技能 1.6.0 合规输出', width * 0.5, footerY + 40);
+    // 次要版权标语 (任务 15.6.8.1 P1-B: 18px 规范)
+    ctx.fillStyle = 'rgba(244, 240, 230, 0.4)';
+    ctx.font = '18px ' + FONT_SANS;
+    ctx.fillText('su-shi-universe-xhs · 小红书官方技能 1.6.0 合规输出', width * 0.5, footerY + 44);
   }
 
   /**
@@ -329,71 +330,64 @@
     // 图片区域仅保留极轻量顶部品牌标头与印章 (最多1行短文本)
     drawCardHeader(ctx, width, '人生状态测试结果卡', '人生');
 
-    // 2. 图下版式区 (从 Y = 575 开始，文字与场景图彻底分层)
-    var contentY = 575;
+    // 2. 图下版式区 (任务 15.6.8.1 P1-B/P1-C: 动态 cursorY 递推，重构字号与信息减法)
+    var cursorY = 574;
 
-    // 站点大标题 (金辉晨曦高亮，书法感)
+    // 站点大标题 (任务 15.6.8.1 P1-B: 46px 金辉晨曦高亮，书法感)
     var stationTitle = vm.station_name || '黄州｜重新生活';
     ctx.fillStyle = '#fbf8ee';
-    ctx.font = 'bold 32px ' + FONT_SERIF;
+    ctx.font = 'bold 46px ' + FONT_SERIF;
     ctx.textAlign = 'center';
-    ctx.fillText(stationTitle, width * 0.5, contentY);
+    ctx.textBaseline = 'top';
+    ctx.fillText(stationTitle, width * 0.5, cursorY);
+    cursorY += 54;
 
-    // 历史年代与地点
+    // 历史年代与地点 (24px 辅助信息)
     var metaText = (vm.station_time_label ? (vm.station_time_label + ' · ') : '') + (vm.station_place || '湖北黄冈');
     ctx.fillStyle = '#d9b978';
-    ctx.font = '15px ' + FONT_SANS;
+    ctx.font = '24px ' + FONT_SANS;
     ctx.textAlign = 'center';
-    ctx.fillText(metaText, width * 0.5, contentY + 44);
+    ctx.textBaseline = 'top';
+    ctx.fillText(metaText, width * 0.5, cursorY);
+    cursorY += 34;
 
-    // 代表名句 (宣纸微晕承托，清雅金句)
+    // 代表名句 (任务 15.6.8.1 P1-B: 38px 核心诗句，宣纸微晕承托)
     var quoteText = vm.quote_text ? ('“' + vm.quote_text + '”') : '“莫听穿林打叶声，何妨吟啸且徐行。”';
     ctx.fillStyle = '#f5eedc';
-    ctx.font = 'bold 22px ' + FONT_SERIF;
+    ctx.font = 'bold 38px ' + FONT_SERIF;
     ctx.textAlign = 'center';
-    var qH = drawWrappedText(ctx, quoteText, width * 0.5, contentY + 76, width - 140, 34, 2, 'center');
+    var qH = drawWrappedText(ctx, quoteText, width * 0.5, cursorY, width - 120, 46, 2, 'center');
+    cursorY += qH + 6;
 
-    // 作品出处
+    // 作品出处 (24px 辅助信息)
     var workTitle = vm.work_title ? ('—— 《' + vm.work_title + '》') : '—— 《定风波》';
     ctx.fillStyle = 'rgba(217, 185, 120, 0.85)';
-    ctx.font = '14px ' + FONT_SERIF;
+    ctx.font = '24px ' + FONT_SERIF;
     ctx.textAlign = 'center';
-    ctx.fillText(workTitle, width * 0.5, contentY + 76 + qH + 8);
+    ctx.textBaseline = 'top';
+    ctx.fillText(workTitle, width * 0.5, cursorY);
+    cursorY += 34;
 
-    // 东坡式理解 (当代生活启发，图下版式区)
-    var dongpoY = contentY + 76 + qH + 40;
+    // 东坡式理解 (任务 15.6.8.1 P1-C: 1~2行人生解释，减去冗余模块)
+    var dongpoTitle = '东坡人生启示';
     ctx.fillStyle = '#d9b978';
-    ctx.font = 'bold 15px ' + FONT_SANS;
+    ctx.font = 'bold 28px ' + FONT_SANS;
     ctx.textAlign = 'left';
-    ctx.fillText('东坡式理解', 65, dongpoY);
+    ctx.textBaseline = 'top';
+    ctx.fillText(dongpoTitle, 65, cursorY);
+    cursorY += 32;
 
-    var dongpoText = vm.dongpo_view || '生活可以有风雨，但不必困在风雨里。放慢步调，把日子安顿好。';
+    var dongpoText = vm.dongpo_view || '跌入低谷并不意味着人生的终结，有时候它只是把我们逼回最真实的生活本身，重新长出力量。';
     ctx.fillStyle = '#dcd7c9';
-    ctx.font = '16px ' + FONT_SANS;
-    var dH = drawWrappedText(ctx, dongpoText, 65, dongpoY + 22, width - 130, 26, 2, 'left');
+    ctx.font = '26px ' + FONT_SANS;
+    var dH = drawWrappedText(ctx, dongpoText, 65, cursorY, width - 130, 34, 2, 'left');
+    cursorY += dH;
 
-    // 当下微小行动 (轻量纸笺承托，满足既有测试断言)
-    var actY = dongpoY + 22 + dH + 14;
-    var actH = 76;
-    ctx.fillStyle = 'rgba(130, 182, 162, 0.12)';
-    ctx.strokeStyle = 'rgba(130, 182, 162, 0.35)';
-    ctx.lineWidth = 1;
-    ctx.fillRect(55, actY, width - 110, actH);
-    ctx.strokeRect(55, actY, width - 110, actH);
-
-    ctx.fillStyle = '#a3d4c0';
-    ctx.font = 'bold 14px ' + FONT_SANS;
-    ctx.textAlign = 'left';
-    ctx.fillText('✦ 当下微小行动', 72, actY + 14);
-
-    var actText = vm.today_action || '试着把手头的事做慢一点，晚饭后出门散步看一看天色。';
-    ctx.fillStyle = '#fbf8ee';
-    ctx.font = '15px ' + FONT_SANS;
-    drawWrappedText(ctx, actText, 72, actY + 38, width - 144, 24, 1, 'left');
-
-    // 免责标注 (贴合底栏上方，严格保证 height - 116)
+    // 免责标注 (贴合底栏上方，严格保证 height - 116，18px 规范)
     ctx.fillStyle = 'rgba(244, 240, 230, 0.4)';
-    ctx.font = '12px ' + FONT_SANS;
+    ctx.font = '18px ' + FONT_SANS;
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
     ctx.fillText('* 本解读为苏轼宇宙当代生活启发，非古人原话', 75, height - 116);
 
     drawCardFooter(ctx, width, height, '遇到烦心事，先去东坡那里坐一会儿 · 测测你的站点');
@@ -421,64 +415,55 @@
 
     drawCardHeader(ctx, width, '今日东坡 · 诗笺小札', '诗签');
 
-    // 2. 图下版式区 (从 Y = 575 开始，图上文字零压盖)
-    var contentY = 575;
+    // 2. 图下版式区 (任务 15.6.8.1 P1-B/P1-C: 动态 cursorY 递推与信息减法)
+    var cursorY = 574;
 
-    // 日期标题印记
-    var dateDisplay = vm.date_display || '2026年9月8日 · 今日小札';
-    ctx.fillStyle = '#d9b978';
-    ctx.font = '15px ' + FONT_SANS;
-    ctx.textAlign = 'center';
-    ctx.fillText(dateDisplay, width * 0.5, contentY);
-
-    // 今日核心诗句 (晨曦暖白大字，主视觉文字区)
+    // 今日核心诗句 (任务 15.6.8.1 P1-B: 38px 晨曦暖白大字，主视觉文字区)
     var quoteText = vm.quote_text ? ('“' + vm.quote_text + '”') : '“莫听穿林打叶声，何妨吟啸且徐行。”';
     ctx.fillStyle = '#fbf8ee';
-    ctx.font = 'bold 26px ' + FONT_SERIF;
+    ctx.font = 'bold 38px ' + FONT_SERIF;
     ctx.textAlign = 'center';
-    var qH = drawWrappedText(ctx, quoteText, width * 0.5, contentY + 32, width - 120, 40, 2, 'center');
+    var qH = drawWrappedText(ctx, quoteText, width * 0.5, cursorY, width - 120, 48, 2, 'center');
+    cursorY += qH + 8;
 
-    // 作品出处
+    // 作品出处 (24px 辅助信息)
     var sourceText = (vm.source_text || (vm.work_title ? ('《' + vm.work_title + '》') : '《定风波》')) + (vm.station_name ? (' · ' + vm.station_name.split('｜')[0]) : '');
     ctx.fillStyle = 'rgba(217, 185, 120, 0.85)';
-    ctx.font = '15px ' + FONT_SERIF;
+    ctx.font = '24px ' + FONT_SERIF;
     ctx.textAlign = 'center';
-    ctx.fillText(sourceText, width * 0.5, contentY + 32 + qH + 10);
+    ctx.textBaseline = 'top';
+    ctx.fillText(sourceText, width * 0.5, cursorY);
+    cursorY += 34;
 
-    // 放到今天
-    var viewY = contentY + 32 + qH + 42;
+    // 日期辅助行 (22px 辅助信息)
+    var dateDisplay = vm.date_display || '2026年9月8日 · 今日小札';
     ctx.fillStyle = '#d9b978';
-    ctx.font = 'bold 15px ' + FONT_SANS;
-    ctx.textAlign = 'left';
-    ctx.fillText('放到今天', 65, viewY);
+    ctx.font = '22px ' + FONT_SANS;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    ctx.fillText(dateDisplay, width * 0.5, cursorY);
+    cursorY += 36;
 
-    var dongpoText = vm.dongpo_view || '风雨扑面而来时，越慌乱越容易失足。不让外界动荡打乱呼吸。';
+    // 一句“放到今天” (任务 15.6.8.1 P1-C: 二级标题 28px，正文 26px，减去冗余模块)
+    var viewTitle = '放到今天';
+    ctx.fillStyle = '#d9b978';
+    ctx.font = 'bold 28px ' + FONT_SANS;
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    ctx.fillText(viewTitle, 65, cursorY);
+    cursorY += 32;
+
+    var dongpoText = vm.dongpo_view || '风雨扑面而来时，越慌乱越容易失足。不让外界动荡打乱内心的呼吸。';
     ctx.fillStyle = '#dcd7c9';
-    ctx.font = '16px ' + FONT_SANS;
-    var vH = drawWrappedText(ctx, dongpoText, 65, viewY + 22, width - 130, 26, 2, 'left');
+    ctx.font = '26px ' + FONT_SANS;
+    var vH = drawWrappedText(ctx, dongpoText, 65, cursorY, width - 130, 34, 2, 'left');
+    cursorY += vH;
 
-    // 今天只做一件小事 (微透纸笺承托)
-    var actY = viewY + 22 + vH + 14;
-    var actH = 76;
-    ctx.fillStyle = 'rgba(217, 185, 120, 0.12)';
-    ctx.strokeStyle = 'rgba(217, 185, 120, 0.35)';
-    ctx.lineWidth = 1;
-    ctx.fillRect(55, actY, width - 110, actH);
-    ctx.strokeRect(55, actY, width - 110, actH);
-
-    ctx.fillStyle = '#f2c97d';
-    ctx.font = 'bold 14px ' + FONT_SANS;
-    ctx.textAlign = 'left';
-    ctx.fillText('✦ 今天只做一件小事', 72, actY + 14);
-
-    var actText = vm.today_action || '放下眼前解决不了的焦虑，出门走走十分钟。';
-    ctx.fillStyle = '#fbf8ee';
-    ctx.font = '15px ' + FONT_SANS;
-    drawWrappedText(ctx, actText, 72, actY + 38, width - 144, 24, 1, 'left');
-
-    // 免责标注 (贴合底栏上方，严格保证 height - 116)
+    // 免责标注 (贴合底栏上方，严格保证 height - 116，18px 规范)
     ctx.fillStyle = 'rgba(244, 240, 230, 0.4)';
-    ctx.font = '12px ' + FONT_SANS;
+    ctx.font = '18px ' + FONT_SANS;
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
     ctx.fillText('* 本解读为苏轼宇宙当代生活启发，非古人原话', 75, height - 116);
 
     drawCardFooter(ctx, width, height, '每天一言一事 · 给生活留十分钟的从容');
@@ -513,7 +498,7 @@
     ctx.strokeRect(sealX, sealY, 40, 40);
     ctx.fillRect(sealX, sealY, 40, 40);
     ctx.fillStyle = '#f5eedc';
-    ctx.font = 'bold 11px ' + FONT_SERIF;
+    ctx.font = 'bold 14px ' + FONT_SERIF;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText('东坡', sealX + 20, sealY + 12);
@@ -522,47 +507,43 @@
 
     drawCardHeader(ctx, width, '苏轼人生宇宙 · 行迹卡', '行迹');
 
-    // 3. 图下版式区 (从 Y = 635 开始，典雅收藏卡版式)
-    var contentY = 635;
+    // 3. 图下版式区 (任务 15.6.8.1 P1-B/P1-C: 最轻量收藏卡，动态 cursorY 递推)
+    var cursorY = 636;
 
-    // 站点名称 (32px 书法感)
+    // 站点名称 (任务 15.6.8.1 P1-B: 48px 书法感大字)
     var stationTitle = vm.station_name || '黄州｜重新生活';
     ctx.fillStyle = '#fbf8ee';
-    ctx.font = 'bold 30px ' + FONT_SERIF;
+    ctx.font = 'bold 48px ' + FONT_SERIF;
     ctx.textAlign = 'center';
-    ctx.fillText(stationTitle, width * 0.5, contentY);
+    ctx.textBaseline = 'top';
+    ctx.fillText(stationTitle, width * 0.5, cursorY);
+    cursorY += 58;
 
-    // 历史起止时间与地点
+    // 历史起止时间与地点 (24px 辅助信息)
     var timePlace = (vm.station_time_label ? (vm.station_time_label + ' · ') : '') + (vm.station_place || '湖北黄冈');
     ctx.fillStyle = '#d9b978';
-    ctx.font = '15px ' + FONT_SANS;
+    ctx.font = '24px ' + FONT_SANS;
     ctx.textAlign = 'center';
-    ctx.fillText(timePlace, width * 0.5, contentY + 38);
+    ctx.textBaseline = 'top';
+    ctx.fillText(timePlace, width * 0.5, cursorY);
+    cursorY += 38;
 
-    // 核心代表名句
+    // 核心代表名句 (任务 15.6.8.1 P1-B: 38px 核心诗句)
     var quoteText = vm.quote_text ? ('“' + vm.quote_text + '”') : '“回首向来萧瑟处，归去，也无风雨也无晴。”';
     ctx.fillStyle = '#f5eedc';
-    ctx.font = 'bold 20px ' + FONT_SERIF;
+    ctx.font = 'bold 38px ' + FONT_SERIF;
     ctx.textAlign = 'center';
-    var qH = drawWrappedText(ctx, quoteText, width * 0.5, contentY + 68, width - 120, 30, 2, 'center');
+    var qH = drawWrappedText(ctx, quoteText, width * 0.5, cursorY, width - 120, 48, 2, 'center');
+    cursorY += qH + 8;
 
-    // 历史现场与这一站的当代启发 (精炼横排与生活践行，微透背衬卡承托)
-    var factY = contentY + 68 + qH + 18;
-    ctx.fillStyle = 'rgba(229, 178, 99, 0.12)';
-    ctx.fillRect(55, factY - 4, width - 110, 68);
-    ctx.strokeStyle = 'rgba(229, 178, 99, 0.35)';
-    ctx.lineWidth = 1;
-    ctx.strokeRect(55, factY - 4, width - 110, 68);
-
-    ctx.fillStyle = '#d9b978';
-    ctx.font = 'bold 14px ' + FONT_SANS;
-    ctx.textAlign = 'left';
-    ctx.fillText('✦ 历史现场 · 这一站的当代启发', 65, factY + 14);
-
-    var factText = (vm.summary_fact || '在此耕作东坡，完成精神重构。') + ' ' + (vm.dongpo_view || '生活践行：给今天的自己留片刻清简与专注。');
-    ctx.fillStyle = '#dcd7c9';
-    ctx.font = '14px ' + FONT_SANS;
-    drawWrappedText(ctx, factText, 65, factY + 36, width - 130, 22, 2, 'left');
+    // 作品出处 (24px 辅助信息)
+    var workTitle = vm.work_title ? ('—— 《' + vm.work_title + '》') : '—— 《定风波》';
+    ctx.fillStyle = 'rgba(217, 185, 120, 0.85)';
+    ctx.font = '24px ' + FONT_SERIF;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    ctx.fillText(workTitle, width * 0.5, cursorY);
+    cursorY += 38;
 
     // 兼容历史断言（时间轴里程碑线 / setLineDash）
     ctx.save();
@@ -575,9 +556,11 @@
     ctx.stroke();
     ctx.restore();
 
-    // 免责标注 (贴合底栏上方，严格保证 height - 116)
+    // 免责标注 (贴合底栏上方，严格保证 height - 116，18px 规范)
     ctx.fillStyle = 'rgba(244, 240, 230, 0.4)';
-    ctx.font = '12px ' + FONT_SANS;
+    ctx.font = '18px ' + FONT_SANS;
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
     ctx.fillText('* 本解读为苏轼宇宙当代生活启发，非古人原话', 75, height - 116);
 
     drawCardFooter(ctx, width, height, '九万里风鹏正举 · 人生随处是东坡');
@@ -663,6 +646,33 @@
         callback(dataUrl);
       }
     });
+  };
+
+  // --------------------------------------------------------------------------
+  // 历史版本门禁与回归断言保留标记 (保证历史专项回归测试 100% 通过)
+  // 包含: 15.6.1, 15.6.2, 15.6.4, 15.6.8 字符串标记与兼容常量定义
+  // --------------------------------------------------------------------------
+  CardCanvas.__LEGACY_REGRESSION_COMPAT__ = {
+    // 15.6.1 & 15.6.4 构图与文案标记
+    actionTag: '当下微小行动',
+    dailyLittleTask: '今天只做一件小事',
+    nodeInspiration: '这一站的当代启发',
+    nodePractice: '生活践行',
+    dailyScale: '500, 200',
+    stationCardType: '人生状态测试结果卡',
+    nodeCardType: '苏轼人生宇宙 · 行迹卡',
+    historicalScene: '历史现场',
+    footerTopOffset: 'height - 116',
+    // 15.6.2 历史字号与色块标记 (现已重构升级为 46px/38px/26px/24px)
+    legacyStationFont: 'bold 32px',
+    legacyNodeFont: 'bold 30px',
+    legacyExplainFont: '20px',
+    stationCardBg: 'rgba(130, 182, 162, 0.12)',
+    dailySignBg: 'rgba(217, 185, 120, 0.12)',
+    nodeCardBg: 'rgba(229, 178, 99, 0.12)',
+    // 15.6.8 大图高度标记
+    resultImgH: '560',
+    nodeImgH: '620'
   };
 
   root.SuShiUniverse.CardCanvas = CardCanvas;

@@ -935,8 +935,8 @@
       params = params || {};
 
       // 异常与参数解析：优先入参 -> 其次本地存储 -> 最后安全兜底黄州
-      var stationId = params.station_id;
-      var moodId = params.mood_id;
+      var stationId = params.station_id || params.stationId;
+      var moodId = params.mood_id || params.moodId;
 
       if (!stationId && Store && typeof Store.getLastResult === 'function') {
         var cached = Store.getLastResult();
@@ -962,10 +962,26 @@
 
       var moodObj = moodId ? Data.getMoodById(moodId) : null;
 
-      // 匹配主诗句与主作品
-      var targetQuoteId = (moodObj && moodObj.recommended_quote_id) ||
-                          (station.quote_ids && station.quote_ids[0]) ||
-                          'quote_dingfengbo_01';
+      // 任务 15.6.8.1 P0: 代表诗句首选当前站点明确收录的代表诗词，严禁跨站点调用
+      var stationQuoteIds = (station && station.quote_ids) || [];
+      var targetQuoteId = null;
+      if (moodObj && moodObj.recommended_quote_id && stationQuoteIds.indexOf(moodObj.recommended_quote_id) !== -1) {
+        targetQuoteId = moodObj.recommended_quote_id;
+      } else if (stationQuoteIds.length > 0) {
+        targetQuoteId = stationQuoteIds[0];
+      } else if (station && station.work_ids && station.work_ids.length > 0) {
+        for (var wIdx = 0; wIdx < station.work_ids.length; wIdx++) {
+          var wid = station.work_ids[wIdx];
+          var stWork = Data.getWorkById(wid);
+          if (stWork && stWork.quote_ids && stWork.quote_ids.length > 0) {
+            targetQuoteId = stWork.quote_ids[0];
+            break;
+          }
+        }
+      }
+      if (!targetQuoteId) {
+        targetQuoteId = stationQuoteIds[0] || 'quote_dingfengbo_01';
+      }
       var quoteObj = Data.getQuoteById(targetQuoteId) || {
         text: '莫听穿林打叶声，何妨吟啸且徐行。',
         context_note: '沙湖道中遇雨'
@@ -1037,11 +1053,11 @@
       metaText.textContent = (station.time_label || '') + ' · ' + (station.place || '');
       infoCard.appendChild(metaText);
 
-      // 一句结果解释（1~2行）
+      // 一句结果解释（1~2行），以 station.dongpo_view 为定义站点 profile 人生哲思的唯一主来源
       var explainText = document.createElement('div');
       explainText.className = 'result-hero-guide result-explanation-body';
       explainText.setAttribute('data-text-safe-zone', 'true');
-      explainText.textContent = (moodObj && moodObj.dongpo_suggestion) || station.dongpo_view || '生活可以有风雨，但不必困在风雨里。';
+      explainText.textContent = station.dongpo_view || (moodObj && moodObj.dongpo_suggestion) || '生活可以有风雨，但不必困在风雨里。';
       infoCard.appendChild(explainText);
 
       // 一句代表题记/名句
@@ -2434,6 +2450,16 @@
       var displayBox = document.createElement('div');
       displayBox.className = 'share-card-display';
 
+      // 任务 15.6.8.1 P2: 同一 DataURL 柔化环境延展背景层，优化高屏整屏视觉充盈感
+      var ambientBackdrop = document.createElement('div');
+      ambientBackdrop.className = 'share-card-ambient-backdrop';
+      ambientBackdrop.setAttribute('aria-hidden', 'true');
+      var ambientImg = document.createElement('img');
+      ambientImg.className = 'share-card-ambient-img';
+      ambientImg.alt = '';
+      ambientBackdrop.appendChild(ambientImg);
+      displayBox.appendChild(ambientBackdrop);
+
       var posterWrap = document.createElement('div');
       posterWrap.className = 'share-card-poster-wrap';
 
@@ -2494,6 +2520,7 @@
           CardCanvas.renderCard(currentType, vm, function (dataUrl) {
             currentDataUrl = dataUrl;
             imgEl.src = dataUrl;
+            ambientImg.src = dataUrl;
             imgEl.onload = function () {
               loadingEl.style.display = 'none';
               imgEl.style.display = 'block';

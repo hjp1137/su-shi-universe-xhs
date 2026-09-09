@@ -91,12 +91,35 @@
 
     geo.setAttribute('position', new THREE.BufferAttribute(currentPos, 3));
 
+    var softTex = null;
+    if (typeof document !== 'undefined') {
+      try {
+        var c = document.createElement('canvas');
+        c.width = 32;
+        c.height = 32;
+        var gCtx = c.getContext('2d');
+        if (gCtx) {
+          var rad = gCtx.createRadialGradient(16, 16, 0, 16, 16, 16);
+          rad.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
+          rad.addColorStop(0.35, 'rgba(255, 255, 255, 0.55)');
+          rad.addColorStop(0.7, 'rgba(255, 255, 255, 0.12)');
+          rad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+          gCtx.fillStyle = rad;
+          gCtx.fillRect(0, 0, 32, 32);
+          softTex = new THREE.CanvasTexture(c);
+        }
+      } catch (e) {}
+    }
+
+    // 任务 15.6.8.1 P1-D: 结果页粒子尺寸从 0.10 降至 0.052，透明度从 0.8 降至 0.36
     var mat = new THREE.PointsMaterial({
       color: 0xf5dfb8,
-      size: 0.1,
+      size: 0.052,
+      map: softTex,
       transparent: true,
-      opacity: 0.8,
-      depthWrite: false
+      opacity: 0.36,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending
     });
 
     this.convergePoints = new THREE.Points(geo, mat);
